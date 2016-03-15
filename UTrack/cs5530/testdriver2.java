@@ -14,8 +14,10 @@ public class testdriver2 {
 	{
 	    System.out.println("        Welcome to the UTrack System     ");
 	    System.out.println("1. search a course by cname and dname:");
-	    System.out.println("2. enter your own query:");
-	    System.out.println("3. exit:");
+	    System.out.println("2. Add a user:");
+	    System.out.println("3. Get Users:");
+	    System.out.println("4. enter your own query:");
+	    System.out.println("5. exit:");
 	    System.out.println("pleasse enter your choice:");
 	}
 	
@@ -47,8 +49,34 @@ public class testdriver2 {
 	            		 
 				    continue;
 				}
-			    if (c<1 | c>3)
+			    if (c<1 | c>5)
 				continue;
+			    if (c == 2)
+				{
+				    String name;
+				    String login;
+				    String password;
+				    String address;
+				    String phone_num;
+
+				    System.out.println("Enter your user login:");
+				    while ((login = in.readLine()) == null && login.length() == 0);
+				    
+				    System.out.println("Enter your full name:");
+				    while ((name = in.readLine()) == null && name.length() == 0);
+
+				    System.out.println("Enter your password:");
+				    while ((password = in.readLine()) == null && password.length() == 0);
+
+				    System.out.println("Enter your address:");
+				    while ((address = in.readLine()) == null && address.length() == 0);
+
+				    System.out.println("Enter your phone number:");
+				    while ((phone_num = in.readLine()) == null && phone_num.length() == 0);
+				    
+				    User user = new User();
+				    System.out.println(user.registerUser(login, name, true, password, address, phone_num, con._con, con.stmt));
+				}
 			    if (c==1)
 				{
 				    System.out.println("please enter a cname:");
@@ -58,7 +86,16 @@ public class testdriver2 {
 				    Course course=new Course();
 				    System.out.println(course.getCourse(cname, dname, con.stmt));
 				}
-			    else if (c==2)
+			    if (c==3)
+				{
+				    
+				    User user = new User();
+				    System.out.println(user.registerUser("", "", true,"", "", "", con._con, con.stmt));
+
+				    //User user = new User();
+				    //System.out.println(user.getUsers(con.stmt));
+				}
+			    else if (c == 4)
 				{	 
 				    System.out.println("please enter your query below:");
 				    while ((sql = in.readLine()) == null && sql.length() == 0)
