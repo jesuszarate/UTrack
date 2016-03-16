@@ -22,16 +22,16 @@ public class testdriver2 {
 	public static void main(String[] args) {
 	    // TODO Auto-generated method stub
 	    System.out.println("Example for cs5530");
-	    Connector con=null;
+	    Connector con = null;
 	    String choice;
 	    String cname;
 	    String dname;
-	    String sql=null;
-	    int c=0;
+	    String sql = null;
+	    int c = 0;
 	    try
 		{
 		    //remember to replace the password
-		    con= new Connector();
+		    con = new Connector();
 		    System.out.println ("Database connection established");
 		    
 		    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
