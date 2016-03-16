@@ -24,6 +24,11 @@ INSERT INTO POI
 VALUES
 (200, 'Jack Mormon', 'coffee shop');
 
+INSERT INTO POI
+(name, category)
+VALUES
+('Toshs Ramen', 'Restaurant');
+
 -----------------------------------------------------------------------------------------------
 
 CREATE TABLE VisEvent(
@@ -54,6 +59,8 @@ INSERT INTO Visit
 (login, pid, vid, visitdate)
 VALUES
 ('chuy8jay', 200, 300, to_date(03142016));
+
+ALTER TABLE VisEvent MODIFY COLUMN vid INT auto_increment;
 -----------------------------------------------------------------------------------------------
 
 CREATE TABLE Trust(
@@ -103,6 +110,8 @@ INSERT INTO Feedback
 VALUES
 (400, 200, 'chuy8jay', 'Best coffee ever','2016-14-03', 10);
 
+ALTER TABLE Feedback MODIFY COLUMN fid INT auto_increment;
+ALTER TABLE Feedback AUTO_INCREMENT=300;
 -----------------------------------------------------------------------------------------------
 
 CREATE TABLE Favorites(
@@ -131,6 +140,7 @@ INSERT INTO Keywords
 VALUES
 (500, 'coffee', 'English');
 
+
 -----------------------------------------------------------------------------------------------
 
 CREATE TABLE HasKeywords(
@@ -145,4 +155,9 @@ INSERT INTO HasKeywords
 VALUES
 (200, 500);
 
+ALTER TABLE Keywords AUTO_INCREMENT=400;
+ALTER TABLE Keywords MODIFY COLUMN wid INT auto_increment;
 
+-----------------------------------------------------------------------------------------------
+-- To delete without the constraints
+SET foreign_key_checks = 1; 

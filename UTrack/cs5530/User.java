@@ -123,7 +123,7 @@ public class User {
     public String addVisit(String _pname, int _cost, int _numberOfPeople, String _date,
 			   Statement stmt, Connection con){
 	int pid = -1;
-	int vid = 301; // Auto increment this number
+	//int vid = 301; // Auto increment this number
 
 	
 	String sql = "SELECT pid FROM POI WHERE name LIKE '%" + _pname +"%'";
@@ -150,18 +150,25 @@ public class User {
 	    }
 	}
 
-
 	String output = "";
 	try{       
-	    sql = "INSERT INTO VisEvent (vid, cost, numberofheads)" +
-	    "VALUES (?, ?, ?)";
+	    sql = "INSERT INTO VisEvent (cost, numberofheads)" +
+	    "VALUES (?, ?)";
 
-	    PreparedStatement preparedStatement = con.prepareStatement(sql);
-	    preparedStatement.setInt(1, vid);
-	    preparedStatement.setInt(2, _cost);
-	    preparedStatement.setInt(3, _numberOfPeople);
+	    PreparedStatement preparedStatement = 
+		con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+	    preparedStatement.setInt(1, _cost);
+	    preparedStatement.setInt(2, _numberOfPeople);
 
 	    preparedStatement.executeUpdate();
+
+	    rs = preparedStatement.getGeneratedKeys();
+	    	
+	    int vid = 0;
+	    if (rs.next()){
+		vid = rs.getInt(1);
+	    }
 
 	    sql = "INSERT INTO Visit (login, pid, vid, visitdate)" +
 	    "VALUES (?, ?, ?, ?)";
@@ -174,6 +181,7 @@ public class User {
 	    preparedStatement.setDate(4, java.sql.Date.valueOf("2013-09-04"));
 
 	    preparedStatement.executeUpdate();
+	    System.out.println("Successfully added your visit to " + _pname);
 	}
 	catch(Exception e){	    
 	    System.out.println(e.toString());
