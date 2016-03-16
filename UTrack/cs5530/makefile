@@ -1,5 +1,5 @@
 all:
-	rm *~
+	rm *~ *.class
 
 com:
 	javac *.java
