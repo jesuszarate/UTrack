@@ -170,6 +170,43 @@ public class POI {
 	return output;
     }
 
+
+    public int getFid(int pid, String login, Statement stmt){
+	String sql = "SELECT fid " +
+	    "FROM Feedback " +
+	    "WHERE login = '" + login + "' " + 
+	    "AND pid = '" + pid  + "'";
+
+	String fid = "";
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    if (rs.next()){
+		fid = rs.getString("fid");
+	    }	    	    
+	    rs.close();
+	    
+	    return Integer.parseInt(fid);
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return -1;
+    }
     public String giveFeedback(String pname, String login, String text, int score,
 			       Statement stmt, Connection con){
 	int pid = getPid(pname, stmt);
@@ -188,6 +225,75 @@ public class POI {
 	    preparedStatement.setString(3, text);
 	    preparedStatement.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
 	    preparedStatement.setInt(5, score);
+
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
+	return output;
+    }
+
+    public String getFeedbackRecords(Statement stmt, Connection con){
+	String sql = "SELECT * " +
+	    "FROM Feedback F, POI P " + 
+	    "WHERE F.pid = P.pid";
+
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    while (rs.next()){
+		output += 
+		    "Username:  " + rs.getString("login") +  ",\t " + 
+		    "POI: " + rs.getString("name") + ",\t" +
+		    "Text: " + rs.getString("text") + ",\t" +
+		    //		    "Date: " + rs.getString("fbdate") + ", " + 
+		    "Score: " + rs.getString("score") + "\n";
+	    }			     
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return output;
+    }
+
+    public String addUsefulnessRating(String login, String uname, String pname, String rating,
+				      Statement stmt, Connection con){
+	
+	int pid = getPid(pname, stmt);
+	int fid = getFid(pid, login, stmt);
+
+	System.out.println(pid);
+	String date;
+	String sql = "INSERT INTO Rates (login, fid, rating)" + 
+	    "VALUES (?, ?, ?)";
+       
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{       
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setString(1, login);
+	    preparedStatement.setInt(2, fid);
+	    preparedStatement.setString(3, rating);
 
 	    preparedStatement.executeUpdate();
 	}

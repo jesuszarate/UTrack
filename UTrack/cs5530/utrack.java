@@ -33,7 +33,9 @@ public class utrack {
 	System.out.println("5. Update POI:");
 	System.out.println("6. Set favorite POI:");
 	System.out.println("7. Give feedback to a POI:");
-	System.out.println("8. exit:");
+	System.out.println("8. Rate feedback:");
+	System.out.println("9. Set user as trusted or untrusted:");
+	System.out.println("10. exit:");
 	System.out.println("please enter your choice:");
     }
 	
@@ -63,16 +65,21 @@ public class utrack {
 			POI poi =  new POI();
 			user.setLogin("jay8chuy");
 			
+			System.out.println(
+					   user.setTrustOrUntrust("chuy8jay", false, 
+								  con.stmt, con._con));
+			/*			
 			String pname = "Starbucks";
 			System.out.println(pname +" pid => " + 
 					   poi.getPid(pname, con.stmt));
 			
 			poi.setFavoritePOI(pname, user.getLogin(), con.stmt, con._con);
-			/*
+
 			poi.addPOI("Tony's", "Restaurant", "222 s main", "tonys.com", 
 				   "(801)123-45678", 1990, "10am-3am", 10,
 				   con._con, con.stmt);
-			*/	   
+			*/	 
+			continue;
 		    }
 		    
 		    //if (c<1 | c>5)
@@ -93,14 +100,14 @@ public class utrack {
 					       "You are not logged in. Log in and try again.");
 			break;
 		    case 4:
-			if(logedIn)
+			if(logedIn && user.isAdmin())
 			    addPOI(in);
 			else
 			    System.out.println(
 					       "You are not logged in. Log in and try again.");
 			    break;
 		    case 5:
-			if(logedIn)
+			if(logedIn && user.isAdmin())
 			    updatePOI(in);
 			else
 			    System.out.println(
@@ -120,6 +127,21 @@ public class utrack {
 			    System.out.println(
 					       "You are not logged in. Log in and try again.");
 			break;
+		    case 8:
+			if(logedIn)
+			    addUsefulnessRating(in);
+			else
+			    System.out.println(
+					       "You are not logged in. Log in and try again.");
+			break;
+		    case 9:
+			if(logedIn)
+			    setTrustOrUntrust(in);
+			else
+			    System.out.println(
+					       "You are not logged in. Log in and try again.");
+			break;
+
 		    default:
 			System.out.println("Remeber to pay us!");
 			con.stmt.close(); 				    
@@ -360,6 +382,26 @@ public class utrack {
 	poi.giveFeedback(pname, login, text, score, con.stmt, con._con);
     }
 
+    public static void addUsefulnessRating(BufferedReader in) throws IOException{
+	String uname;
+	String pname;
+	String rating;
+
+	POI poi = new POI();
+	System.out.println(poi.getFeedbackRecords(con.stmt, con._con));
+
+	System.out.println("What is the name of the user that gave the feedback:");
+	while ((uname = in.readLine()) == null && uname.length() == 0);
+
+	System.out.println("What is the name of the feedback POI:");
+	while ((pname = in.readLine()) == null && pname.length() == 0);
+
+	System.out.println("What rating would you give this feedback:");
+	while ((rating = in.readLine()) == null && rating.length() == 0);
+	
+	poi.addUsefulnessRating(user.getLogin(), uname, pname, rating, con.stmt, con._con);
+    }
+
     public static void addVisit(BufferedReader in) throws IOException{
 	POI poi = new POI();
 	String pname;
@@ -402,5 +444,30 @@ public class utrack {
 	if (answer.equals("yes")){
 	    user.addVisit(pname, cost, numOfPeople, date, con.stmt, con._con);
 	}
+    }
+    
+    public static void setTrustOrUntrust(BufferedReader in) throws IOException{
+	String other_login;
+	boolean isTrusted = true;
+	System.out.println("Which user would you like to set: ");
+	while ((other_login = in.readLine()) == null && other_login.length() == 0);
+
+	String t;
+	System.out.println("Is this user trusted: " + 
+			   "\nyes/no?");
+	while ((t = in.readLine()) == null && t.length() == 0);	
+	
+	if (t.equals("yes")){
+	    isTrusted = true;
+	}
+	else if (t.equals("no")){
+	    isTrusted = false;
+	}
+	else {
+	    System.out.println("Answer must be yes or no");
+	    return;
+	}
+	
+	user.setTrustOrUntrust(other_login, isTrusted, con.stmt, con._con);
     }
 }

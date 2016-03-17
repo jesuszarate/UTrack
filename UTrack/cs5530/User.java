@@ -4,8 +4,9 @@ import java.sql.*;
 
 public class User {
 
-    String login;
-    String name;
+    private String login;
+    private String name;
+    private boolean isAdmin;
     
     public User()
     {}
@@ -16,6 +17,11 @@ public class User {
     public void setLogin(String login){
 	this.login = login;
     }
+
+    public boolean isAdmin(){
+	return this.isAdmin;
+    }
+    
     
     public String registerUser(String _login, String _name,  boolean _userType, String _password, 
 			       String _address, String _phone_num, Connection con, Statement stmt){
@@ -197,5 +203,109 @@ public class User {
 
     }
     
+    public String setTrustOrUntrust(String other_login, boolean isTrusted, 
+				    Statement stmt, Connection con){
+		
+	if (hasTrust(other_login, stmt, con)){
+	    return updateTrustOrUntrust(other_login, isTrusted, stmt, con);
+	}
 
+	String sql = "INSERT INTO Trust (login1, login2, isTrusted)" +
+	    "VALUES (?, ?, ?)";
+	
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{       
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setString(1, this.login);
+	    preparedStatement.setString(2, other_login);
+	    preparedStatement.setBoolean(3, isTrusted);
+
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
+	if (isTrusted)
+	    System.out.println(other_login + " is now Trusted by you now");
+	else
+	    System.out.println(other_login + " not Trusted by you now");
+	return output;
+    }
+
+    public String updateTrustOrUntrust(String other_login, boolean isTrusted, 
+				    Statement stmt, Connection con){		
+		    
+	String sql = 
+	    "UPDATE Trust" +
+	    " SET isTrusted = ?" +
+	    " WHERE login1 = ?" + 
+	    " AND login2 = ?";
+
+       
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{  
+	    
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setBoolean(1, isTrusted);
+	    preparedStatement.setString(2, this.login);
+	    preparedStatement.setString(3, other_login);
+
+
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
+	if (isTrusted)
+	    System.out.println(other_login + " is now Trusted by you now");
+	else
+	    System.out.println(other_login + " not Trusted by you now");
+	return output;
+    }
+    
+
+    public boolean hasTrust(String other_login, Statement stmt, Connection con){
+	
+	String sql = "SELECT EXISTS(SELECT 1 FROM Trust WHERE login1 ='" + this.login  + "' " +
+	    " AND login2 = '"+ other_login +"')";
+	
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;	    
+	    while (rs.next()){
+		int i = rs.getInt(1);
+
+		return i == 1 ? true : false;
+	    }			     
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return false;
+    }
+    
 }
