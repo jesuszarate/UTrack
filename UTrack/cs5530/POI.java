@@ -117,7 +117,6 @@ public class POI {
 	ResultSet rs = null;
 	System.out.println("Executing: " + sql);
 	try{
-	    // Execute sql query
 	    rs = stmt.executeQuery(sql);
 
 	    String p;
