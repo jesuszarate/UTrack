@@ -32,7 +32,8 @@ public class utrack {
 	System.out.println("4. Add new POI:");
 	System.out.println("5. Update POI:");
 	System.out.println("6. Set favorite POI:");
-	System.out.println("7. exit:");
+	System.out.println("7. Give feedback to a POI:");
+	System.out.println("8. exit:");
 	System.out.println("please enter your choice:");
     }
 	
@@ -99,11 +100,25 @@ public class utrack {
 					       "You are not logged in. Log in and try again.");
 			    break;
 		    case 5:
-			updatePOI(in);
+			if(logedIn)
+			    updatePOI(in);
+			else
+			    System.out.println(
+					       "You are not logged in. Log in and try again.");
 			break;
 		    case 6:
-			System.out.println("here");
-			setFavoritePOI(in);
+			if(logedIn)
+			    setFavoritePOI(in);
+			else
+			    System.out.println(
+					       "You are not logged in. Log in and try again.");
+			break;
+		    case 7:
+			if(logedIn)
+			    giveFeedback(in);
+			else
+			    System.out.println(
+					       "You are not logged in. Log in and try again.");
 			break;
 		    default:
 			System.out.println("Remeber to pay us!");
@@ -314,6 +329,35 @@ public class utrack {
 	while ((pname = in.readLine()) == null && pname.length() == 0);
 	
 	poi.setFavoritePOI(pname, user.getLogin(), con.stmt, con._con);
+    }
+
+    public static void giveFeedback(BufferedReader in) throws IOException{
+	String pname;
+	String text;
+	int score;
+	POI poi = new POI();
+	System.out.println(poi.getPOIs(con.stmt));
+
+	System.out.println("What is the name of the POI you want to give feedback:");
+	while ((pname = in.readLine()) == null && pname.length() == 0);
+
+	String s;
+	System.out.println("What score would you give this POI:\n" + 
+			   "0= terrible, 10= excellent");
+	while ((s = in.readLine()) == null && s.length() == 0);
+
+	try{
+	    score = Integer.parseInt(s);
+	}
+	catch(Exception e){
+	    System.out.println("Score must be a number");
+	    return;
+	}
+
+	System.out.println("Text:");
+	while ((text = in.readLine()) == null && text.length() == 0);
+	
+	poi.giveFeedback(pname, login, text, score, con.stmt, con._con);
     }
 
     public static void addVisit(BufferedReader in) throws IOException{

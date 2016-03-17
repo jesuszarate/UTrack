@@ -169,4 +169,33 @@ public class POI {
 
 	return output;
     }
+
+    public String giveFeedback(String pname, String login, String text, int score,
+			       Statement stmt, Connection con){
+	int pid = getPid(pname, stmt);
+	System.out.println(pid);
+	String date;
+	String sql = "INSERT INTO Feedback (pid, login, text, fbdate, score)" + 
+	    "VALUES (?, ?, ?, ?, ?)";
+       
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{       
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setInt(1, pid);
+	    preparedStatement.setString(2, login);
+	    preparedStatement.setString(3, text);
+	    preparedStatement.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
+	    preparedStatement.setInt(5, score);
+
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
+	return output;
+    }
 }
