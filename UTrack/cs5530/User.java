@@ -75,8 +75,9 @@ public class User {
     }
 
 
-    public boolean loginUser(String login, String password, Statement stmt){
-    
+    public boolean loginUser(String _login, String password, Statement stmt){
+	this.login = _login;
+
 	String sql = "SELECT * " +
 	    "FROM Users " +
 	    "WHERE login = '" + login + "'";
