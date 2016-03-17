@@ -1,6 +1,7 @@
 package cs5530;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class POI {
 
@@ -9,6 +10,74 @@ public class POI {
     
     public POI()
     {}
+
+    public String addPOI(String _name, String _category, String _address, String _URL, 
+			 String _tel_num, int _yr_est, String _hours, int _price, 
+			 Connection con, Statement stmt){
+
+	String sql = 
+	    "INSERT INTO POI (name, category, address, URL, tel_num, yr_est, hours, price)" +
+	    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+       
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{       
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+	    preparedStatement.setString(1, _name);
+	    preparedStatement.setString(2, _category);
+	    preparedStatement.setString(3, _address);
+	    preparedStatement.setString(4, _URL);
+	    preparedStatement.setString(5, _tel_num);
+	    preparedStatement.setInt(6, _yr_est);
+	    preparedStatement.setString(7, _hours);
+	    preparedStatement.setInt(8, _price);
+
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
+	return output;
+    }
+
+    public String updatePOI(String poiName,
+			    String setQuery,
+			    Connection con, Statement stmt){
+
+	String sql = 
+	    "UPDATE POI" +
+	    " SET " + setQuery + 
+	    " WHERE name = '" + poiName + "'";
+       
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{       
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    /*
+	    preparedStatement.setString(1, _name);
+	    preparedStatement.setString(2, _category);
+	    preparedStatement.setString(3, _address);
+	    preparedStatement.setString(4, _URL);
+	    preparedStatement.setString(5, _tel_num);
+	    preparedStatement.setInt(6, _yr_est);
+	    preparedStatement.setString(7, _hours);
+	    preparedStatement.setInt(8, _price);
+	    */
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
+	return output;
+    }
+
 
     public String getPOIs(Statement stmt){
     
