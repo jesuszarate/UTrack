@@ -58,16 +58,6 @@ public class POI {
 	System.out.println("executing " + sql);
 	try{       
 	    PreparedStatement preparedStatement = con.prepareStatement(sql);
-	    /*
-	    preparedStatement.setString(1, _name);
-	    preparedStatement.setString(2, _category);
-	    preparedStatement.setString(3, _address);
-	    preparedStatement.setString(4, _URL);
-	    preparedStatement.setString(5, _tel_num);
-	    preparedStatement.setInt(6, _yr_est);
-	    preparedStatement.setString(7, _hours);
-	    preparedStatement.setInt(8, _price);
-	    */
 	    preparedStatement.executeUpdate();
 	}
 	catch(Exception e){	    
@@ -115,6 +105,69 @@ public class POI {
 		System.out.println("Cannot close resultset");
 	    }
 	}
+	return output;
+    }
+    
+    public int getPid(String pname, Statement stmt){
+	String sql = "SELECT pid " +
+	    "FROM POI " +
+	    "WHERE name = '" + pname + "'";
+
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    if (rs.next()){
+		pid = rs.getString("pid");
+	    }	    	    
+	    rs.close();
+	    
+	    return Integer.parseInt(pid);
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return -1;
+    }
+
+    public String setFavoritePOI(String pname, String login,
+				 Statement stmt, Connection con){		
+	int pid = getPid(pname, stmt);
+	System.out.println(pid);
+	String date;
+	String sql = "INSERT INTO Favorites (pid, login, fvdate)" + 
+	    "VALUES (?, ?, ?)";
+       
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("executing " + sql);
+	try{       
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setInt(1, pid);
+	    preparedStatement.setString(2, login);
+	    preparedStatement.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+
+	    preparedStatement.executeUpdate();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+
 	return output;
     }
 }

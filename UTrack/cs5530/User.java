@@ -10,6 +10,13 @@ public class User {
     public User()
     {}
     
+    public String getLogin(){
+	return this.login;
+    }
+    public void setLogin(String login){
+	this.login = login;
+    }
+    
     public String registerUser(String _login, String _name,  boolean _userType, String _password, 
 			       String _address, String _phone_num, Connection con, Statement stmt){
 	login = _login;
@@ -77,7 +84,6 @@ public class User {
 
     public boolean loginUser(String _login, String password, Statement stmt){
 	this.login = _login;
-
 	String sql = "SELECT * " +
 	    "FROM Users " +
 	    "WHERE login = '" + login + "'";
@@ -124,8 +130,6 @@ public class User {
     public String addVisit(String _pname, int _cost, int _numberOfPeople, String _date,
 			   Statement stmt, Connection con){
 	int pid = -1;
-	//int vid = 301; // Auto increment this number
-
 	
 	String sql = "SELECT pid FROM POI WHERE name LIKE '%" + _pname +"%'";
 	ResultSet rs = null;

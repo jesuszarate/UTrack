@@ -31,7 +31,8 @@ public class utrack {
 	System.out.println("3. Add Visit to POI:");
 	System.out.println("4. Add new POI:");
 	System.out.println("5. Update POI:");
-	System.out.println("6. exit:");
+	System.out.println("6. Set favorite POI:");
+	System.out.println("7. exit:");
 	System.out.println("please enter your choice:");
     }
 	
@@ -59,15 +60,22 @@ public class utrack {
 		    
 		    if (c == 0){
 			POI poi =  new POI();
-			user.login = "jay8chuy";
+			user.setLogin("jay8chuy");
+			
+			String pname = "Starbucks";
+			System.out.println(pname +" pid => " + 
+					   poi.getPid(pname, con.stmt));
+			
+			poi.setFavoritePOI(pname, user.getLogin(), con.stmt, con._con);
+			/*
 			poi.addPOI("Tony's", "Restaurant", "222 s main", "tonys.com", 
 				   "(801)123-45678", 1990, "10am-3am", 10,
 				   con._con, con.stmt);
-				   
+			*/	   
 		    }
 		    
-		    if (c<1 | c>5)
-			continue;
+		    //if (c<1 | c>5)
+		    //continue;
 
 		    switch (c){
 		    case 1: // Login
@@ -92,6 +100,11 @@ public class utrack {
 			    break;
 		    case 5:
 			updatePOI(in);
+			break;
+		    case 6:
+			System.out.println("here");
+			setFavoritePOI(in);
+			break;
 		    default:
 			System.out.println("Remeber to pay us!");
 			con.stmt.close(); 				    
@@ -290,6 +303,17 @@ public class utrack {
 	    System.out.println("Must provide a number");
 	}       
 	
+    }
+
+    public static void setFavoritePOI(BufferedReader in) throws IOException{
+	String pname;
+	POI poi = new POI();
+	System.out.println(poi.getPOIs(con.stmt));
+
+	System.out.println("What is the name of the POI you want to favorite:");
+	while ((pname = in.readLine()) == null && pname.length() == 0);
+	
+	poi.setFavoritePOI(pname, user.getLogin(), con.stmt, con._con);
     }
 
     public static void addVisit(BufferedReader in) throws IOException{
