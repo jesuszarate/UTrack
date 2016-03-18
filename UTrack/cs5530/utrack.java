@@ -35,7 +35,7 @@ public class utrack {
 	System.out.println("7. Give feedback to a POI:");
 	System.out.println("8. Rate feedback:");
 	System.out.println("9. Set user as trusted or untrusted:");
-	System.out.println("10. exit:");
+	System.out.println("10. Show useful feedback:");
 	System.out.println("please enter your choice:");
     }
 	
@@ -66,7 +66,7 @@ public class utrack {
 			user.setLogin("jay8chuy");
 			
 			System.out.println(
-					   user.setTrustOrUntrust("chuy8jay", false, 
+					   poi.getTopFeedback("Jack Mormon", 2,
 								  con.stmt, con._con));
 			/*			
 			String pname = "Starbucks";
@@ -137,6 +137,13 @@ public class utrack {
 		    case 9:
 			if(logedIn)
 			    setTrustOrUntrust(in);
+			else
+			    System.out.println(
+					       "You are not logged in. Log in and try again.");
+			break;
+		    case 10:
+			if(logedIn)
+			    getTopFeedback(in);
 			else
 			    System.out.println(
 					       "You are not logged in. Log in and try again.");
@@ -383,7 +390,7 @@ public class utrack {
     }
 
     public static void addUsefulnessRating(BufferedReader in) throws IOException{
-	String uname;
+	String ulogin;
 	String pname;
 	String rating;
 
@@ -391,15 +398,35 @@ public class utrack {
 	System.out.println(poi.getFeedbackRecords(con.stmt, con._con));
 
 	System.out.println("What is the name of the user that gave the feedback:");
-	while ((uname = in.readLine()) == null && uname.length() == 0);
+	while ((ulogin = in.readLine()) == null && ulogin.length() == 0);
 
 	System.out.println("What is the name of the feedback POI:");
 	while ((pname = in.readLine()) == null && pname.length() == 0);
 
-	System.out.println("What rating would you give this feedback:");
+	System.out.println("What rating would you give this feedback:\n"+
+			   "useless, useful, or very useful");
 	while ((rating = in.readLine()) == null && rating.length() == 0);
 	
-	poi.addUsefulnessRating(user.getLogin(), uname, pname, rating, con.stmt, con._con);
+	int r = 0;
+	try{
+	    rating = rating.toLowerCase();
+	    if(rating.equals("useless"))
+		r = 0;
+	    else if (rating.equals("useful"))
+		r = 1;
+	    else if (rating.equals("very useful"))
+		r = 2;
+	    else{
+		System.out.println("Please pick one of the choices provided");
+		return;
+	    }
+	    
+	}
+	catch(Exception e){
+	    System.out.println("Rating must be a number");
+	}
+	
+	poi.addUsefulnessRating(user.getLogin(), ulogin, pname, r, con.stmt, con._con);
     }
 
     public static void addVisit(BufferedReader in) throws IOException{
@@ -469,5 +496,28 @@ public class utrack {
 	}
 	
 	user.setTrustOrUntrust(other_login, isTrusted, con.stmt, con._con);
+    }
+    
+    public static void getTopFeedback(BufferedReader in) throws IOException{	
+	POI poi = new POI();
+	String pname;
+	int n;
+	
+	System.out.println("Which POI's feedbacks would you like to see: ");
+	while ((pname = in.readLine()) == null && pname.length() == 0);
+
+	String num;
+	System.out.println("How many items: ");
+	while ((num = in.readLine()) == null && num.length() == 0);
+
+	try{
+	    n = Integer.parseInt(num);
+	}
+	catch(Exception e){
+	    	System.out.println("\nNumber of items should be a number\n");
+		return;
+	}
+	System.out.println(
+			   poi.getTopFeedback(pname, n, con.stmt, con._con));
     }
 }

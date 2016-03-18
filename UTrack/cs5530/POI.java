@@ -143,6 +143,78 @@ public class POI {
 	return -1;
     }
 
+
+    public String getTopFeedback(String pname, int n,
+				 Statement stmt, Connection con){
+
+	/*
+	String sql  = 
+	    "SELECT * " +
+	    "FROM Feedback F, " + 
+	    "(SELECT fid, rating, AVG(rating) avg_score " + 
+	    "FROM Rates GROUP BY fid) av " + 
+	    "where F.fid = av.fid " + 
+	    "ORDER BY av.avg_score DESC " + 
+	    "LIMIT " + n;
+	*/
+	String sql  = 
+	    "SELECT P.pid, P.name pname, F.login, F.text, F.fbdate, F.score, av.avg_score " +
+	    "FROM Feedback F, POI P, " + 
+	    "(SELECT fid, rating, AVG(rating) avg_score " +
+	    "FROM Rates GROUP BY fid) av " + 
+	    "where F.fid = av.fid " +
+	    "AND P.pid = F.pid " +
+	    "AND P.name = '" + pname + "' " +
+	    "ORDER BY av.avg_score DESC " + 
+	    "LIMIT " + n;
+
+
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    while (rs.next()){
+
+		output += 
+		    "Login: " + rs.getString("login") + " " +
+		    "Text: " + rs.getString("text") + " " +
+		    "Date: " + rs.getString("fbdate") + " " +
+		    "Score: " + rs.getString("score") + " " +
+		    "Average Score: " + rs.getString("avg_score") + "\n";
+		/*
+		output += 
+		    "Name: " + rs.getString("name") + " " +
+		    "Category: " + rs.getString("category") + " " +
+		    "Address: " + rs.getString("address") + " " +
+		    "URL: " + rs.getString("URL") + " " +
+		    "Phone: " + rs.getString("tel_num") + " " +
+		    "Hours: " + rs.getString("hours") + " " +
+		    "Price: " + rs.getString("price") + " " +
+		    "Average Score: " + rs.getString("avg_score") + "\n";
+		*/
+	    }			     
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return output;
+    }
+
     public String setFavoritePOI(String pname, String login,
 				 Statement stmt, Connection con){		
 	int pid = getPid(pname, stmt);
@@ -275,13 +347,14 @@ public class POI {
 	return output;
     }
 
-    public String addUsefulnessRating(String login, String uname, String pname, String rating,
+    public String addUsefulnessRating(String login, String ulogin, String pname, int rating,
 				      Statement stmt, Connection con){
 	
 	int pid = getPid(pname, stmt);
-	int fid = getFid(pid, login, stmt);
+	int fid = getFid(pid, ulogin, stmt);
 
 	System.out.println(pid);
+	System.out.println(fid);
 	String date;
 	String sql = "INSERT INTO Rates (login, fid, rating)" + 
 	    "VALUES (?, ?, ?)";
@@ -293,7 +366,7 @@ public class POI {
 	    PreparedStatement preparedStatement = con.prepareStatement(sql);
 	    preparedStatement.setString(1, login);
 	    preparedStatement.setInt(2, fid);
-	    preparedStatement.setString(3, rating);
+	    preparedStatement.setInt(3, rating);
 
 	    preparedStatement.executeUpdate();
 	}

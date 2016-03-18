@@ -161,3 +161,46 @@ ALTER TABLE Keywords MODIFY COLUMN wid INT auto_increment;
 -----------------------------------------------------------------------------------------------
 -- To delete without the constraints
 SET foreign_key_checks = 1; 
+
+
+-----------------------------------------------------------------------------------------------
+-- Modifying column type
+ALTER TABLE tablename MODIFY columnname INTEGER;
+
+
+-----------------------------------------------------------------------------------------------
+-- 10 useful feedback
+
+select F.fid, P.pid, P.name, F.login, F.score, AVG(F.score) avgerage
+from Feedback F, POI P 
+Where F.pid = P.pid
+order by P.pid;
+
+select F.fid, P.pid, P.name, F.login, F.score
+from Feedback F, POI P 
+Where F.pid = P.pid
+
+select pid, AVG(score)
+from Feedback
+group by pid;
+
+SELECT * FROM
+       POI P,
+       (SELECT *, AVG(score) a
+       FROM Feedback 
+       GROUP BY pid) av 
+       WHERE av.pid = P.pid
+       ORDER BY av.a DESC
+       LIMIT 2;
+
+(select fid, rating, AVG(rating) avg_score
+ from Rates group by fid) av
+
+SELECT P.pid, P.name pname, F.login, F.text, F.fbdate, F.score, av.avg_score
+FROM Feedback F, POI P,
+     (SELECT fid, rating, AVG(rating) avg_score 
+     FROM Rates GROUP BY fid) av
+where F.fid = av.fid
+AND P.pid = F.pid
+ORDER BY av.avg_score DESC;
+
