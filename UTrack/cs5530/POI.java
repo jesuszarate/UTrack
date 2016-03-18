@@ -146,17 +146,6 @@ public class POI {
 
     public String getTopFeedback(String pname, int n,
 				 Statement stmt, Connection con){
-
-	/*
-	String sql  = 
-	    "SELECT * " +
-	    "FROM Feedback F, " + 
-	    "(SELECT fid, rating, AVG(rating) avg_score " + 
-	    "FROM Rates GROUP BY fid) av " + 
-	    "where F.fid = av.fid " + 
-	    "ORDER BY av.avg_score DESC " + 
-	    "LIMIT " + n;
-	*/
 	String sql  = 
 	    "SELECT P.pid, P.name pname, F.login, F.text, F.fbdate, F.score, av.avg_score " +
 	    "FROM Feedback F, POI P, " + 
@@ -167,7 +156,6 @@ public class POI {
 	    "AND P.name = '" + pname + "' " +
 	    "ORDER BY av.avg_score DESC " + 
 	    "LIMIT " + n;
-
 
 	String output = "";
 	ResultSet rs = null;
@@ -184,18 +172,7 @@ public class POI {
 		    "Text: " + rs.getString("text") + " " +
 		    "Date: " + rs.getString("fbdate") + " " +
 		    "Score: " + rs.getString("score") + " " +
-		    "Average Score: " + rs.getString("avg_score") + "\n";
-		/*
-		output += 
-		    "Name: " + rs.getString("name") + " " +
-		    "Category: " + rs.getString("category") + " " +
-		    "Address: " + rs.getString("address") + " " +
-		    "URL: " + rs.getString("URL") + " " +
-		    "Phone: " + rs.getString("tel_num") + " " +
-		    "Hours: " + rs.getString("hours") + " " +
-		    "Price: " + rs.getString("price") + " " +
-		    "Average Score: " + rs.getString("avg_score") + "\n";
-		*/
+		    "Average Score: " + rs.getString("avg_score") + "\n";	
 	    }			     
 	    rs.close();
 	}
@@ -375,6 +352,65 @@ public class POI {
 	    System.out.println("Cannot execute the query");
 	}
 
+	return output;
+    }
+
+    public String createRangeQuery(int min, int max){	
+	return min <= 0 &&  max <= 0 ? "" :
+	    "price >= " + min + 
+	    " AND price <= " + max;
+    }
+
+    public String createAddressQuery(String query, String address){	
+	if(!address.equals("")){
+	    if(query.equals(""))
+		return " address LIKE '%" + address + "%'";	
+	    else
+		return " AND address LIKE '%" + address + "%'";   
+	}
+	return "";
+	    
+    }
+
+    public String poiBrowsing(String query, Statement stmt, Connection con){
+	String sql = "SELECT * " +
+	    "FROM POI P " + 
+	    "WHERE " + query;
+
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    while (rs.next()){
+
+		output += 
+		    "Name: " + rs.getString("name") + " " +
+		    "Category: " + rs.getString("category") + " " +
+		    "Address: " + rs.getString("address") + " " +
+		    "URL: " + rs.getString("URL") + " " +
+		    "Phone Number: " + rs.getString("tel_num") + 
+		    "Hours: " + rs.getString("hours") + " " +
+		    "Price: " + rs.getInt("price") + "\n";
+	    }			     
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
 	return output;
     }
 }

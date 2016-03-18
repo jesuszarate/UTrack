@@ -36,6 +36,7 @@ public class utrack {
 	System.out.println("8. Rate feedback:");
 	System.out.println("9. Set user as trusted or untrusted:");
 	System.out.println("10. Show useful feedback:");
+	System.out.println("11. POI browsing:");
 	System.out.println("please enter your choice:");
     }
 	
@@ -147,6 +148,13 @@ public class utrack {
 			else
 			    System.out.println(
 					       "You are not logged in. Log in and try again.");
+			break;
+		    case 11:
+			//if(logedIn)
+			    poiBrowsing(in);
+			    //else
+			    //System.out.println(
+			    //"You are not logged in. Log in and try again.");
 			break;
 
 		    default:
@@ -519,5 +527,93 @@ public class utrack {
 	}
 	System.out.println(
 			   poi.getTopFeedback(pname, n, con.stmt, con._con));
+    }
+
+    public static void poiBrowsing(BufferedReader in) throws IOException{
+	// Get rid of me after testing
+	user.setLogin("jay8chuy");
+	
+	POI poi = new POI();
+	String query;
+	System.out.println("Pick your search queries by their number" +
+			   "(Seperate your answers by a comma)");
+	System.out.println("1. Price Range");
+	System.out.println("2. Address City/State");
+	System.out.println("3. Name");
+	System.out.println("4. Keywords");
+	System.out.println("5. Category");
+	while ((query = in.readLine()) == null && query.length() == 0);
+
+	String[] queries = query.split(",");
+	
+	int num;
+	int minRange = 0;
+	int maxRange = 0;
+	String keywords;
+	String address;
+	String pname;
+	String category;
+	query = "";
+	for (int i = 0; i < queries.length; i++){
+	    try{
+		num = Integer.parseInt(queries[i]);
+		
+		switch(num){
+		case 1:	
+		    String min;
+		    String max;
+		    System.out.println("Min price range");
+		    while ((min = in.readLine()) == null && min.length() == 0);
+
+		    System.out.println("Max price range");
+		    while ((max = in.readLine()) == null && max.length() == 0);
+		    
+		    try{
+			minRange = Integer.parseInt(min);
+			maxRange = Integer.parseInt(max);			
+		    }
+		    catch(Exception e){
+			System.out.println("Ranges should be a number");
+		    }
+		    query += poi.createRangeQuery(minRange, maxRange);
+		    
+		    System.out.println(poi.poiBrowsing(query, con.stmt, con._con));
+		    break;
+		case 2:
+		    System.out.println("City or State");
+		    while ((address = in.readLine()) == null && address.length() == 0);
+		    query += poi.createAddressQuery(query, address);
+		    
+		    System.out.println(poi.poiBrowsing(query, con.stmt, con._con));
+		    break;
+		case 3:
+		    System.out.println("POI name");
+		    while ((pname = in.readLine()) == null && pname.length() == 0);
+		    break;
+		case 4:
+		    System.out.println("Keywords (please seperate by a comma)");
+		    while ((keywords = in.readLine()) == null && keywords.length() == 0);
+		    break;
+		case 5:	
+		    System.out.println("Category");
+		    while ((category = in.readLine()) == null && category.length() == 0);
+		    break;
+		default:
+		    System.out.println("Your number must be in the range");
+		}
+	    }
+	    catch(Exception e){
+		System.out.print("All of your choices must be numbers");
+	    }
+	}
+
+	String sortby;
+	System.out.println("Sort by:");
+	System.out.println("(a) by price\n" + 
+			   "(b) by average numerical score of feedback\n" +
+			   "(c) by the average numerical score of the trusted user feedbacks: ");
+	while ((sortby = in.readLine()) == null && sortby.length() == 0);
+
+	
     }
 }
