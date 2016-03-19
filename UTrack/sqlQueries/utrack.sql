@@ -308,3 +308,40 @@ where V.pid = 200 and V.login != 'chuy8jay' limit 1) S, Visit V
 where S.login = V.login
 and V.pid <> 200) upoi
 where P.pid = upoi.pid;
+
+-----------------------------------------------------------------------------------------------
+-- Degrees of seperation
+select * 
+from 
+     (select distinct * from Favorites where login='jay8chuy') R1,
+     (select distinct * from Favorites where login='chuy8jay') R2
+where
+R1.pid = R2.pid
+having count(*) > 0;
+
+
+select count(*) from      (select distinct * from Favorites where login='jay8chuy') R1,      (select distinct * from Favorites where login='chuy8jay') R2 where R1.pid = R2.pid;
+
+
+select count(*)
+from
+(select R2.pid, R2.login, R2.fvdate
+from
+	(select distinct F1.pid, F1.login, F1.fvdate from Favorites F1 where login='Test') R1, 
+	Favorites R2
+where
+R1.pid = R2.pid
+and R2.login <> 'Test') P1,
+
+
+(select R2.pid, R2.login, R2.fvdate
+from
+        (select distinct F1.pid, F1.login, F1.fvdate from Favorites F1 where login='hello') R1,
+	Favorites R2
+where
+R1.pid = R2.pid
+and R2.login <>	'hello') P2
+
+WHERE P1.login = P2.login
+
+-- Now combine the two and join them where their logins are the same!
