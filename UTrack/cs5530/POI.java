@@ -359,23 +359,82 @@ public class POI {
 	return min <= 0 &&  max <= 0 ? "" :
 	    "price >= " + min + 
 	    " AND price <= " + max;
-    }
+    }  
 
-    public String createAddressQuery(String query, String address){	
-	if(!address.equals("")){
+    public String createQuery(String query, String name, String value){
+	if(!value.equals("")){
 	    if(query.equals(""))
-		return " address LIKE '%" + address + "%'";	
+		return " " + name + " LIKE '%" + value + "%'";	
 	    else
-		return " AND address LIKE '%" + address + "%'";   
+		return " AND " + name + " LIKE '%" + value + "%'";   
 	}
 	return "";
-	    
     }
 
-    public String poiBrowsing(String query, Statement stmt, Connection con){
-	String sql = "SELECT * " +
-	    "FROM POI P " + 
-	    "WHERE " + query;
+    public String createSortbyQuery(String query, String name, String value){
+	if(!value.equals("")){
+	    if(query.equals(""))
+		return " " + name + " LIKE '%" + value + "%'";	
+	    else
+		return " AND " + name + " LIKE '%" + value + "%'";   
+	}
+	return "";
+    }
+
+    public String createSortbyFeedbackQuery(String query){
+
+	return "SELECT P.pid, P.name, P.category, P.address, P.URL," +
+	    " P.tel_num, P.yr_est, P.hours, P.price,  av.avg_score" + 
+	    " FROM (" + query  + ") P," + 
+	    " (SELECT pid, AVG(score) avg_score" + 
+	    " FROM Feedback GROUP BY pid) av" + 
+	    " WHERE P.pid = av.pid" + 
+	    " ORDER BY av.avg_score DESC;";
+    }
+    
+    public String createSortbyTrustedFeedbackQuery (String query){
+	return "SELECT P.pid, P.name, P.category, P.address, P.URL," + 
+	    " P.tel_num, P.yr_est, P.hours, P.price, av.avg_score" + 
+	    " FROM (" +  query + ") P," + 
+	    " (SELECT pid, F.login, F.text, AVG(score) avg_score" + 
+	    " FROM Feedback F, Trust T" + 
+	    " WHERE T.login2 = F.login" + 
+	    " AND isTrusted = 1" + 
+	    " GROUP BY pid) av" + 
+	    " WHERE P.pid = av.pid" +
+	    " ORDER BY av.avg_score DESC";
+    }
+
+    public String getKeywordTableQuery(String keyword){
+	return " ,(SELECT h.pid" + 
+	    " FROM HasKeywords h, Keywords k" +
+	    " WHERE h.wid = k.wid" + 
+	    " AND k.word LIKE '%" + keyword + "%') K";
+    }
+
+    public String createKeywordQuery(String query){
+	if(query.equals(""))
+	    return "  K.pid = P.pid";	
+	else
+	    return " AND K.pid = P.pid";
+
+    }
+    
+    public String poiBrowsing(String query, String keywordQuery, String sortby,
+			      Statement stmt, Connection con){
+	String sql = "SELECT * " +	   
+	    "FROM POI P " + keywordQuery + 
+	    " WHERE " + query;
+
+	if(sortby.equals("a")){
+	    sql += " ORDER BY price DESC";
+	}
+	if(sortby.equals("b")){
+	    sql = createSortbyFeedbackQuery(sql);		
+	}
+	if(sortby.equals("c")){
+	    sql = createSortbyTrustedFeedbackQuery(sql);		
+	}
 
 	String output = "";
 	ResultSet rs = null;
@@ -388,13 +447,13 @@ public class POI {
 	    while (rs.next()){
 
 		output += 
-		    "Name: " + rs.getString("name") + " " +
-		    "Category: " + rs.getString("category") + " " +
-		    "Address: " + rs.getString("address") + " " +
-		    "URL: " + rs.getString("URL") + " " +
-		    "Phone Number: " + rs.getString("tel_num") + 
-		    "Hours: " + rs.getString("hours") + " " +
-		    "Price: " + rs.getInt("price") + "\n";
+		    "Name: " + rs.getString("name") +
+		    " Category: " + rs.getString("category") + 
+		    " Address: " + rs.getString("address") + 
+		    " URL: " + rs.getString("URL") + 
+		    " Phone Number: " + rs.getString("tel_num") + 
+		    " Hours: " + rs.getString("hours") +
+		    " Price: " + rs.getInt("price") + "\n";
 	    }			     
 	    rs.close();
 	}

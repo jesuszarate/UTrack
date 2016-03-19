@@ -553,6 +553,8 @@ public class utrack {
 	String address;
 	String pname;
 	String category;
+	boolean haskeyword = false;
+	String keywordQuery = "";
 	query = "";
 	for (int i = 0; i < queries.length; i++){
 	    try{
@@ -573,30 +575,37 @@ public class utrack {
 			maxRange = Integer.parseInt(max);			
 		    }
 		    catch(Exception e){
-			System.out.println("Ranges should be a number");
+			System.out.println("Ranges should be a number: ");
 		    }
 		    query += poi.createRangeQuery(minRange, maxRange);
 		    
-		    System.out.println(poi.poiBrowsing(query, con.stmt, con._con));
 		    break;
 		case 2:
-		    System.out.println("City or State");
+		    System.out.println("City or State: ");
 		    while ((address = in.readLine()) == null && address.length() == 0);
-		    query += poi.createAddressQuery(query, address);
-		    
-		    System.out.println(poi.poiBrowsing(query, con.stmt, con._con));
+		    query += poi.createQuery(query, "address", address);
+		    		    
 		    break;
 		case 3:
-		    System.out.println("POI name");
+		    System.out.println("POI name: ");
 		    while ((pname = in.readLine()) == null && pname.length() == 0);
+		    query += poi.createQuery(query, "name", pname);
+
 		    break;
 		case 4:
-		    System.out.println("Keywords (please seperate by a comma)");
+		    System.out.println("What Keyword:");
 		    while ((keywords = in.readLine()) == null && keywords.length() == 0);
+		    keywordQuery = poi.getKeywordTableQuery(keywords);
+
+		    query += poi.createKeywordQuery(query);
+		    haskeyword = true;
 		    break;
 		case 5:	
-		    System.out.println("Category");
+		    System.out.println("What Category: ");
 		    while ((category = in.readLine()) == null && category.length() == 0);
+
+		    query += poi.createQuery(query, "category", category);
+
 		    break;
 		default:
 		    System.out.println("Your number must be in the range");
@@ -605,15 +614,29 @@ public class utrack {
 	    catch(Exception e){
 		System.out.print("All of your choices must be numbers");
 	    }
-	}
+	}	
 
 	String sortby;
 	System.out.println("Sort by:");
 	System.out.println("(a) by price\n" + 
 			   "(b) by average numerical score of feedback\n" +
-			   "(c) by the average numerical score of the trusted user feedbacks: ");
+			   "(c) by the average numerical score of the trusted user feedbacks\n" +
+			   "(d) Any order: ");
 	while ((sortby = in.readLine()) == null && sortby.length() == 0);
-
+	
+	if(sortby.equals("a") | sortby.equals("b") | sortby.equals("c") | sortby.equals("d")){
+	    
+	    if(haskeyword)
+		System.out.println(poi.poiBrowsing(query, keywordQuery, sortby, 
+						   con.stmt, con._con));
+	    else
+		System.out.println(poi.poiBrowsing(query, "", sortby, con.stmt, con._con));
+	}
+	else{
+	    System.out.println("Input must be a-d");
+	    return;
+	}
+	    
 	
     }
 }

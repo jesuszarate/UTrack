@@ -196,11 +196,48 @@ SELECT * FROM
 (select fid, rating, AVG(rating) avg_score
  from Rates group by fid) av
 
-SELECT P.pid, P.name pname, F.login, F.text, F.fbdate, F.score, av.avg_score
+SELECT P.pid, P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price, av.avg_score
 FROM Feedback F, POI P,
-     (SELECT fid, rating, AVG(rating) avg_score 
+     (SELECT fid, AVG(rating) avg_score 
      FROM Rates GROUP BY fid) av
 where F.fid = av.fid
 AND P.pid = F.pid
 ORDER BY av.avg_score DESC;
 
+-----------------------------------------------------------------------------------------------
+-- by average numerical score of feedback
+
+
+SELECT P.pid, P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price, av.avg_score
+FROM (SELECT * FROM POI P WHERE price >= 1 AND price <= 20) P,
+     (SELECT pid, AVG(score) avg_score
+     FROM Feedback GROUP BY pid) av
+WHERE P.pid = av.pid
+ORDER BY av.avg_score DESC;
+
+SELECT P.pid, P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price,  av.avg_score 
+FROM (SELECT * FROM POI P WHERE price >= 1 AND price <= 20) P (SELECT pid, AVG(score) avg_score FROM Feedback GROUP BY pid) av WHERE P.pid = av.pid ORDER BY av.avg_score DESC;
+
+-----------------------------------------------------------------------------------------------
+-- by the average numerical score of the trusted user feedbacks
+
+SELECT P.pid, P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price, av.avg_score
+FROM POI P,
+     (SELECT pid, F.login, F.text, AVG(score) avg_score
+     FROM Feedback F, Trust T 
+     WHERE T.login2 = F.login 
+     AND isTrusted = 1
+     GROUP BY pid) av
+WHERE P.pid = av.pid
+ORDER BY av.avg_score DESC;
+
+
+-----------------------------------------------------------------------------------------------
+-- keywords
+
+select * 
+from HasKeywords h, Keywords k 
+where h.wid = k.wid;
+AND k.word LIKE '%coffee%'
+
+SELECT * FROM POI P  (SELECT h.pid FROM HasKeywords h, Keywords k WHERE h.wid = k.wid AND k.word LIKE '%coffee%') K WHERE   K.pid = P.pid ORDER BY price DESC
