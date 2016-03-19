@@ -472,4 +472,133 @@ public class POI {
 	}
 	return output;
     }
+
+    
+
+    public String getRecomendedPOIs(String login, int pid, Statement stmt){
+
+	String sql = 
+	    " select *" +
+	    " from POI P," +
+	    " (select distinct V.pid" +
+	    " from" +
+	    " (select V.login" +
+            " from Visit V, (select login, count(*) cnt from Visit group by login) mto" +
+            " where V.pid = " + pid +
+            " and V.login != '" + login + "'" +
+            " and V.login = mto.login" +
+	    " and mto.cnt > 1 limit 1) S, Visit V" +
+	    " where S.login = V.login" +
+	    " and V.pid <> " + pid + ") upoi" +
+	    " where P.pid = upoi.pid;";
+
+	sql =
+	    "select *" +
+	    " from" +
+	    " (select v1.login, v1.pid v1pid, count(*) num_visits" +
+	    " from Visit v1" +
+	    " group by v1.login, v1.pid) C1," +
+	    " (select P.pid c2pid, upoi.login, " +
+	    " P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price" +
+	    " from POI P," +
+	    " (select distinct V.pid, S.login" +
+	    " from" +
+	    " (select V.login" +
+	    " from Visit V " +
+	    " where V.pid = "+ pid +" and V.login != '"+ login +"' limit 1) S, Visit V" +
+	    " where S.login = V.login" +
+	    " and V.pid <> "+ pid  +") upoi" +
+	    " where P.pid = upoi.pid) C2" +
+	    " where C1.v1pid = C2.c2pid" +
+	    " and C1.login = C2.login" +
+	    " order by C1.num_visits DESC;";
+
+	String output = "*****RECOMENDED POI'S FOR YOU*****\n\n\n";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Name: " + rs.getString("name") +
+		    " Category: " + rs.getString("category") + 
+		    " Address: " + rs.getString("address") + 
+		    " URL: " + rs.getString("URL") + 
+		    " Phone Number: " + rs.getString("tel_num") + 
+		    " Hours: " + rs.getString("hours") +
+		    " Price: " + rs.getInt("price") + 
+		    " Visits: " + rs.getInt("num_visits") + "\n";
+
+	    }
+	    output += "\n\n*****************************\n";
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return output;
+    }
+
+    public String getUserPOIVisitCount(){
+	String sql = 
+	    "select login, pid, count(*)" +
+	    " from Visit" + 
+	    " group by login, pid;";
+
+	    return sql;
+	    /*
+	String output = "*****RECOMENDED POI'S FOR YOU*****\n\n\n";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Name: " + rs.getString("name") +
+		    " Category: " + rs.getString("category") + 
+		    " Address: " + rs.getString("address") + 
+		    " URL: " + rs.getString("URL") + 
+		    " Phone Number: " + rs.getString("tel_num") + 
+		    " Hours: " + rs.getString("hours") +
+		    " Price: " + rs.getInt("price") + "\n";
+
+	    }
+	    output += "\n\n*****************************\n";
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return output;
+	    */
+    }
+
 }

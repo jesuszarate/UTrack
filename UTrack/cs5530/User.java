@@ -185,14 +185,14 @@ public class User {
 	    "VALUES (?, ?, ?, ?)";
 
 	    preparedStatement = con.prepareStatement(sql);
-	    preparedStatement.setString(1, login);
+	    preparedStatement.setString(1, this.login);
 	    preparedStatement.setInt(2, pid);
 	    preparedStatement.setInt(3, vid);
 	    // Todo: Change this to _date
 	    preparedStatement.setDate(4, java.sql.Date.valueOf("2013-09-04"));
 
 	    preparedStatement.executeUpdate();
-	    System.out.println("Successfully added your visit to " + _pname);
+	    System.out.println(this.login + ": Successfully added your visit to " + _pname);
 	}
 	catch(Exception e){	    
 	    System.out.println(e.toString());

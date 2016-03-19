@@ -240,4 +240,71 @@ from HasKeywords h, Keywords k
 where h.wid = k.wid;
 AND k.word LIKE '%coffee%'
 
-SELECT * FROM POI P  (SELECT h.pid FROM HasKeywords h, Keywords k WHERE h.wid = k.wid AND k.word LIKE '%coffee%') K WHERE   K.pid = P.pid ORDER BY price DESC
+
+SELECT P.pid, P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price,  av.avg_score 
+FROM 
+	(SELECT * 
+	 FROM POI poi,
+		(SELECT h.pid 
+		FROM HasKeywords h, Keywords k 
+		WHERE h.wid = k.wid 
+		AND k.word LIKE '%coffee%') Kw
+	 WHERE  address LIKE '%E%' AND Kw.pid = poi.pid) P,
+(SELECT fb.pid, AVG(fb.score) avg_score FROM Feedback fb GROUP BY fb.pid) av 
+ WHERE P.pid = av.pid ORDER BY av.avg_score DESC;
+
+-----------------------------------------------------------------------------------------------
+-- Get similar pois
+
+select distinct pid 
+from (select distinct login 
+     from Visit 
+     where pid = 200) S, Visit V 
+where S.login = V.login 
+and V.pid <> 200;
+
+select *
+from POI P,
+     (select distinct V.pid
+	from
+	(select V.login
+	    from Visit V 
+	    where V.pid = 200 and V.login != 'chuy8jay' limit 1) S, Visit V
+	 where S.login = V.login
+	 and V.pid <> 200) upoi
+where P.pid = upoi.pid;
+
+select *
+from
+(select v1.login, v1.pid v1pid, count(*) num_visits
+from Visit v1
+group by v1.login, v1.pid) C1,
+
+(select P.pid c2pid, upoi.login, 
+P.name, P.category, P.address, P.URL, P.tel_num, P.yr_est, P.hours, P.price
+from POI P,
+     (select distinct V.pid, S.login
+	from
+	(select V.login
+	    from Visit V 
+	    where V.pid = 202 and V.login != 'chuy8jay' limit 1) S, Visit V
+	 where S.login = V.login
+	 and V.pid <> 202) upoi
+where P.pid = upoi.pid) C2
+
+where C1.v1pid = C2.c2pid
+and C1.login = C2.login
+order by C1.num_visits DESC;
+
+
+
+select *
+from POI P,
+(select distinct V.pid
+from
+(select V.login
+from Visit V 
+where V.pid = 200 and V.login != 'chuy8jay' limit 1) S, Visit V
+where S.login = V.login
+and V.pid <> 200) upoi
+where P.pid = upoi.pid;

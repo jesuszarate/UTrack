@@ -67,8 +67,8 @@ public class utrack {
 			user.setLogin("jay8chuy");
 			
 			System.out.println(
-					   poi.getTopFeedback("Jack Mormon", 2,
-								  con.stmt, con._con));
+					   poi.getRecomendedPOIs("chuy8jay", 200,
+								 con.stmt));
 			/*			
 			String pname = "Starbucks";
 			System.out.println(pname +" pid => " + 
@@ -595,10 +595,12 @@ public class utrack {
 		case 4:
 		    System.out.println("What Keyword:");
 		    while ((keywords = in.readLine()) == null && keywords.length() == 0);
+		    /*** Not quite working yer ***\
 		    keywordQuery = poi.getKeywordTableQuery(keywords);
 
 		    query += poi.createKeywordQuery(query);
 		    haskeyword = true;
+		    */
 		    break;
 		case 5:	
 		    System.out.println("What Category: ");
