@@ -40,7 +40,8 @@ public class POI {
 	    System.out.println(e.toString());
 	    System.out.println("Cannot execute the query");
 	}
-
+	
+	System.out.println("Successfully added " + _name  + "as a new POI");
 	return output;
     }
 
@@ -65,6 +66,7 @@ public class POI {
 	    System.out.println("Cannot execute the query");
 	}
 
+	System.out.println("Successfully updated " + poiName);
 	return output;
     }
 
@@ -212,8 +214,8 @@ public class POI {
 	    preparedStatement.executeUpdate();
 	}
 	catch(Exception e){	    
-	    System.out.println(e.toString());
-	    System.out.println("Cannot execute the query");
+	    //System.out.println(e.toString());
+	    System.out.println("This POI is already in your favorites");
 	}
 
 	return output;
