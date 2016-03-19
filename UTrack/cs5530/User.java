@@ -308,5 +308,112 @@ public class User {
 	}
 	return false;
     }
+
+    public int degreesOfSeperation(String login1, String login2, Statement stmt){
+	int res = 0;
+	if(isOneDegreeOfSeperation(login1, login2, stmt)){
+	    res = 1;
+	}
+	else if(isTwoDegreesOfSeperation(login1, login2, stmt)){
+	    res = 2;
+	}
+	return res;
+
+    }
+
     
+    
+    public boolean isOneDegreeOfSeperation(String login1, String login2, Statement stmt){
+	String sql = "select count(*) from" +
+	    " (select distinct * " +
+	    " from Favorites " +
+	    " where login='"+login1+"') R1," +
+	    " (select distinct * " +
+	    " from Favorites " +
+	    " where login='"+login2+"') R2 " +
+	    " where R1.pid = R2.pid;";
+	    
+	String output = "";
+	ResultSet rs = null;
+	//System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;	    
+	    while (rs.next()){
+		int i = rs.getInt(1);
+
+		return i > 0 ? true : false;
+	    }			     
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return false;	   
+    }
+    public boolean isTwoDegreesOfSeperation(String login1, String login2, Statement stmt){
+
+	String sql = "select count(*)" +
+	    " from" +
+	    " (select R2.pid, R2.login, R2.fvdate" +
+	    " from" +
+	    " (select distinct F1.pid, F1.login, F1.fvdate" +
+	    " from Favorites F1 where login='"+login1+"') R1," +
+	    " Favorites R2" +
+	    " where" +
+	    " R1.pid = R2.pid" +
+	    " and R2.login <> '"+login1+"') P1," +
+	    " (select R2.pid, R2.login, R2.fvdate" +
+	    " from" +
+	    " (select distinct F1.pid, F1.login, F1.fvdate" + 
+	    " from Favorites F1 where login='"+login2+"') R1," +
+	    " Favorites R2" +
+	    " where" +
+	    " R1.pid = R2.pid" +
+	    " and R2.login <> '"+login2+"') P2" +
+	    " WHERE P1.login = P2.login";
+	    
+	String output = "";
+	ResultSet rs = null;
+	System.out.println("Executing: " + sql);
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;	    
+	    while (rs.next()){
+		int i = rs.getInt(1);
+
+		return i > 0 ? true : false;
+	    }			     
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return false;	   
+    }
+
 }
