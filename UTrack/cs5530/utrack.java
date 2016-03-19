@@ -66,10 +66,21 @@ public class utrack {
 			POI poi =  new POI();
 			user.setLogin("jay8chuy");
 			
+
+			String _date = "09-22-1990";
+			System.out.println(_date + " to: ");
+			String[] d = _date.split("-");
+			_date = d[2] +"-"+d[0]+"-"+d[1];
+
+			System.out.println(_date);
+			//java.sql.Date.valueOf("2013-09-04");
+			System.out.println(java.sql.Date.valueOf(_date));
+
+			/*			
 			System.out.println(
 					   poi.getRecomendedPOIs("chuy8jay", 200,
 								 con.stmt));
-			/*			
+
 			String pname = "Starbucks";
 			System.out.println(pname +" pid => " + 
 					   poi.getPid(pname, con.stmt));
@@ -457,10 +468,12 @@ public class utrack {
 	while ((snumOfPeople = in.readLine()) == null && snumOfPeople.length() == 0);
 
 	System.out.println("What was the date of the visit\n"+
-			   "add in this format (YYYYDDMM):");
+			   "Add in this format with no spaces (MM-DD-YYYY):");
 	while ((date = in.readLine()) == null && date.length() == 0);	
 
-	System.out.println("You visited " + pname + " on " + date + 
+	System.out.println("You visited " + pname + " on " + date + "\n" +
+			   snumOfPeople + " attended\n" +
+			   "Cost: " + scost  + "\n " +
 			   "\nAre you sure you want to add this to your visits?" + 
 			   "\nType yes/no");
 	while ((answer = in.readLine()) == null && answer.length() == 0);	
@@ -477,7 +490,9 @@ public class utrack {
 	}
 	answer = answer.toLowerCase();
 	if (answer.equals("yes")){
-	    user.addVisit(pname, cost, numOfPeople, date, con.stmt, con._con);
+	    int pid = user.addVisit(pname, cost, numOfPeople, date, con.stmt, con._con);
+	    System.out.println(poi.getRecomendedPOIs(user.getLogin(), pid, con.stmt));
+				  
 	}
     }
     

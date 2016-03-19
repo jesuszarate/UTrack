@@ -133,7 +133,7 @@ public class User {
 	return false;
     }
     
-    public String addVisit(String _pname, int _cost, int _numberOfPeople, String _date,
+    public int addVisit(String _pname, int _cost, int _numberOfPeople, String _date,
 			   Statement stmt, Connection con){
 	int pid = -1;
 	
@@ -161,7 +161,6 @@ public class User {
 	    }
 	}
 
-	String output = "";
 	try{       
 	    sql = "INSERT INTO VisEvent (cost, numberofheads)" +
 	    "VALUES (?, ?)";
@@ -184,22 +183,24 @@ public class User {
 	    sql = "INSERT INTO Visit (login, pid, vid, visitdate)" +
 	    "VALUES (?, ?, ?, ?)";
 
+	    String[] d = _date.split("-");
+	    _date = d[2] +"-"+d[0]+"-"+d[1];
+
 	    preparedStatement = con.prepareStatement(sql);
 	    preparedStatement.setString(1, this.login);
 	    preparedStatement.setInt(2, pid);
 	    preparedStatement.setInt(3, vid);
-	    // Todo: Change this to _date
-	    preparedStatement.setDate(4, java.sql.Date.valueOf("2013-09-04"));
+	    preparedStatement.setDate(4, Date.valueOf(_date));
 
 	    preparedStatement.executeUpdate();
 	    System.out.println(this.login + ": Successfully added your visit to " + _pname);
 	}
 	catch(Exception e){	    
 	    System.out.println(e.toString());
-	    System.out.println("Cannot execute the query 2");
+	    System.out.println("\n\n*****Unable to add "+ _pname +" to Vistis *****\n\n");
 	}
 	
-	return output;
+	return pid;
 
     }
     
