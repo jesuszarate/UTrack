@@ -37,6 +37,7 @@ public class utrack {
 	System.out.println("9. Set user as trusted or untrusted:");
 	System.out.println("10. Show useful feedback:");
 	System.out.println("11. POI browsing:");
+	System.out.println("12. Degrees of seperation:");
 	System.out.println("please enter your choice:");
     }
 	
@@ -66,21 +67,18 @@ public class utrack {
 			POI poi =  new POI();
 			user.setLogin("jay8chuy");
 			
+			System.out.println("One degree of seperation? " + 
+					   user.degreesOfSeperation("chuy8jay",
+								     "Test prepared", con.stmt));
 
-			String _date = "09-22-1990";
-			System.out.println(_date + " to: ");
-			String[] d = _date.split("-");
-			_date = d[2] +"-"+d[0]+"-"+d[1];
-
-			System.out.println(_date);
-			//java.sql.Date.valueOf("2013-09-04");
-			System.out.println(java.sql.Date.valueOf(_date));
-
+			
 			/*			
+			System.out.println("One degree of seperation? " + 
+					   user.degreesOfSeperation("jay8chuy", "chuy8jay", 
+								    con.stmt));
 			System.out.println(
 					   poi.getRecomendedPOIs("chuy8jay", 200,
 								 con.stmt));
-
 			String pname = "Starbucks";
 			System.out.println(pname +" pid => " + 
 					   poi.getPid(pname, con.stmt));
@@ -94,9 +92,6 @@ public class utrack {
 			continue;
 		    }
 		    
-		    //if (c<1 | c>5)
-		    //continue;
-
 		    switch (c){
 		    case 1: // Login
 			login(in);
@@ -112,7 +107,7 @@ public class utrack {
 					       "You are not logged in. Log in and try again.");
 			break;
 		    case 4:
-			if(logedIn && user.isAdmin())
+			if(logedIn)// && user.isAdmin())
 			    addPOI(in);
 			else
 			    System.out.println(
@@ -167,7 +162,9 @@ public class utrack {
 			    //System.out.println(
 			    //"You are not logged in. Log in and try again.");
 			break;
-
+		    case 12:
+			degreesOfSeperation(in);
+			break;
 		    default:
 			System.out.println("Remeber to pay us!");
 			con.stmt.close(); 				    
@@ -652,8 +649,22 @@ public class utrack {
 	else{
 	    System.out.println("Input must be a-d");
 	    return;
-	}
-	    
-	
+	}	    	
+    }
+
+    public static void degreesOfSeperation(BufferedReader in) throws IOException{
+	String login1;
+	String login2;
+
+	System.out.println("Get degrees of seperation on what two users:");
+	System.out.println("User login 1:");
+	while ((login1 = in.readLine()) == null && login1.length() == 0);
+
+	System.out.println("User login 2:");
+	while ((login2 = in.readLine()) == null && login2.length() == 0);
+
+	System.out.println(login1  + " and " + login2 + " have " + 
+			   user.degreesOfSeperation(login1, login2, con.stmt) + 
+			   " degrees of seperation");
     }
 }
