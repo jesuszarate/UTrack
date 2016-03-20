@@ -3,6 +3,7 @@ package cs5530;
 import java.lang.*;
 import java.sql.*;
 import java.io.*;
+import java.util.*;
 
 public class utrack {
 
@@ -67,12 +68,18 @@ public class utrack {
 			POI poi =  new POI();
 			user.setLogin("jay8chuy");
 			
+
+			System.out.println("Categories: " +
+
+					   poi.getPopularPOIbyCategory("Restaurant", 1, con.stmt, con._con));
+
+					   
+			
+			/*			
 			System.out.println("One degree of seperation? " + 
 					   user.degreesOfSeperation("chuy8jay",
 								     "Test prepared", con.stmt));
 
-			
-			/*			
 			System.out.println("One degree of seperation? " + 
 					   user.degreesOfSeperation("jay8chuy", "chuy8jay", 
 								    con.stmt));

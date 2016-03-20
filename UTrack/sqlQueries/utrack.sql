@@ -345,3 +345,12 @@ and R2.login <>	'hello') P2
 WHERE P1.login = P2.login
 
 -- Now combine the two and join them where their logins are the same!
+
+-----------------------------------------------------------------------------------------------
+-- Statistics
+select * 
+from POI P, 
+(select pid, count(*) cnt from Visit group by pid) V 
+where V.pid = P.pid 
+and P.category = 'Restaurant'
+order by V.cnt DESC;

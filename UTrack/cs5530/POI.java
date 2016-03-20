@@ -1,7 +1,8 @@
 package cs5530;
 
 import java.sql.*;
-import java.util.HashMap;
+import java.util.*;
+
 
 public class POI {
 
@@ -502,7 +503,6 @@ public class POI {
 
 	String output = "*****RECOMENDED POI'S FOR YOU*****\n\n\n";
 	ResultSet rs = null;
-	//System.out.println("Executing: " + sql);
 	try{
 	    // Execute sql query
 	    rs = stmt.executeQuery(sql);
@@ -539,4 +539,98 @@ public class POI {
 	}
 	return output;
     }
+
+    public String getPopularForEach(int limit, Statement stmt, Connection con){
+	/*
+	ArrayList<String> cats = getCategories(stmt);
+	
+	for(String s : cats)
+	    getPopularPOIbyCategory(s, limit, )
+	*/
+	return "";
+    }
+
+    public String getPopularPOIbyCategory(String category, int limit, 
+					  Statement stmt, Connection con){
+	String sql = "select * " +
+	    "from POI P, " +
+	    "(select pid, count(*) num_visits from Visit group by pid) V " +
+	    "where V.pid = P.pid " +
+	    "and P.category = ? " +
+	    "order by V.num_visits DESC " + 
+	    "limit ?";
+
+	String output = "";
+	ResultSet rs = null;       
+	try{  
+	    
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setString(1, category);
+	    preparedStatement.setInt(2, limit);
+
+	    rs = preparedStatement.executeQuery();
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Name: " + rs.getString("name") +
+		    " Category: " + rs.getString("category") + 
+		    " Address: " + rs.getString("address") + 
+		    " URL: " + rs.getString("URL") + 
+		    " Phone Number: " + rs.getString("tel_num") + 
+		    " Hours: " + rs.getString("hours") +
+		    " Price: " + rs.getInt("price") + 
+		    " Visits: " + rs.getInt("num_visits") + "\n";
+	    }
+	    rs.close();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+
+
+	return output;
+    }
+    
+    public ArrayList<String> getCategories(Statement stmt){
+	String sql = "select category from POI group by category";
+	ResultSet rs = null;
+	ArrayList<String> categories = new ArrayList<String>();
+	try{
+	    // Execute sql query
+	    rs = stmt.executeQuery(sql);
+
+	    String p;
+	    while (rs.next()){		
+		categories.add(rs.getString("category"));
+	    }
+	    rs.close();
+	}
+	catch(Exception e){
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+	return categories;
+    }
+
 }
