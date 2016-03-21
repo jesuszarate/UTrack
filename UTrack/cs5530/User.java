@@ -6,7 +6,7 @@ public class User {
 
     private String login;
     private String name;
-    private boolean isAdmin;
+    private boolean isAdmin = false;
     
     public User()
     {}
@@ -28,8 +28,8 @@ public class User {
 	login = _login;
 	name = _name;	
 
-	String sql = "INSERT INTO Users (login, name, userType, password, address, phone_num)" +
-	    "VALUES (?, ?, ?, ?, ?, ?)";
+	String sql = "INSERT INTO Users (login, name, userType, password, address, phone_num, isAdmin)" +
+	    "VALUES (?, ?, ?, ?, ?, ?, ?)";
        
 	String output = "";
 	ResultSet rs = null;
@@ -42,6 +42,7 @@ public class User {
 	    preparedStatement.setString(4, _password);
 	    preparedStatement.setString(5, _address);
 	    preparedStatement.setString(6, _phone_num);
+	    preparedStatement.setBoolean(7, false);
 	    preparedStatement.executeUpdate();
 	}
 	catch(Exception e){	    
@@ -110,8 +111,10 @@ public class User {
 		    "Username: " + login +  "\n" + 
 		    "Password: " + p + "\n";
 
-		if(password.equals(p))
+		if(password.equals(p)){
+		    isAdmin = rs.getBoolean("isAdmin");
 		    return true;
+		}
 	    }			     
 	    rs.close();
 	}
