@@ -76,8 +76,11 @@ public class utrack {
 			user.setLogin("jay8chuy");
 			
 
-			System.out.println(
-					   user.getUserTrust("jay8chuy", con.stmt, con._con));
+			for(String s : user.getUsers(4, con.stmt, con._con))
+			    System.out.println(s);
+					   
+			System.out.println("MOST TRUSTED\n" +
+					   user.getMostTrusted(5, con.stmt, con._con));
 					   
 			
 			/*			
@@ -194,10 +197,16 @@ public class utrack {
 		    case 15:
 			viewBestRatedByCategory(in);
 			break;
+		    case 16:
+			getMostTrusted(in);
+			break;
+		    case 17:
+			getMostUsefulUsers(in);
+			break;
 		    default:
 			System.out.println("Remeber to pay us!");
 			con.stmt.close(); 				    
-			break;
+			return;
 		    }
 		}
 	}
@@ -741,4 +750,31 @@ public class utrack {
 	}	
     }
 
+    public static void getMostTrusted(BufferedReader in)  throws IOException{
+	System.out.println("How many users would you like to see: ");
+	String limit;
+	while ((limit = in.readLine()) == null && limit.length() == 0);
+
+	try{
+	    int l = Integer.parseInt(limit);
+	    System.out.println(user.getMostTrusted(l, con.stmt, con._con));
+	}
+	catch(Exception e){
+	    System.out.println("Limit must be a number");
+	}		    
+    }
+
+    public static void getMostUsefulUsers(BufferedReader in)  throws IOException{
+	System.out.println("How many users would you like to see: ");
+	String limit;
+	while ((limit = in.readLine()) == null && limit.length() == 0);
+
+	try{
+	    int l = Integer.parseInt(limit);
+	    System.out.println(user.getMostUsefulUsers(l, con.stmt, con._con));
+	}
+	catch(Exception e){
+	    System.out.println("Limit must be a number");
+	}		    
+    }
 }
