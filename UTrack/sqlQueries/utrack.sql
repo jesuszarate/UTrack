@@ -375,6 +375,8 @@ order by V.cnt DESC;
 
 
 -- most trusted
+select 
+from Users U
 select Trusted.L, Trusted.trusted, NTrusted.not_trusted from
 (select T1.L, T1.trust trusted
 from 
@@ -390,3 +392,35 @@ and T2.L = 'jay8chuy') NTrusted
 
 where Trusted.L = NTrusted.L
 
+--
+
+select (case when TT.L = NULL then NT.L end) login, TT.trusted, NT.not_trusted, TT.trusted - NT.not_trusted from
+(select T1.L, T1.trust trusted
+from 
+(select login2 L, isTrusted, count(isTrusted) trust from Trust group by isTrusted, login2) T1
+where T1.isTrusted = 1) TT
+right outer join
+(select T2.L, T2.trust not_trusted
+from
+(select login2 L, isTrusted, count(isTrusted) trust from Trust group by isTrusted, login2) T2
+where T2.isTrusted = 0) NT
+
+on TT.L = NT.L
+
+
+
+select TT.Login, TT.trust - TT.not_trust trust
+from
+(select login2 Login,
+count(case when isTrusted = 1 then 1 end) trust, 
+count(case when isTrusted = 0 then 1 end) not_trust
+from Trust 
+group by login2) TT
+order by TT.trust - TT.not_trust desc;
+
+
+-- Most useful users
+
+select F.login, AVG(R.rating) avg_rtg 
+from Rates R, Feedback F 
+where R.fid = F.fid group by login order by avg_rtg desc; 
