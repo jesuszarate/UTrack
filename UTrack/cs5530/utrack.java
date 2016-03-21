@@ -69,43 +69,7 @@ public class utrack {
 			c = Integer.parseInt(choice);
 		    }catch (Exception e){	            		 
 			continue;
-		    }
-		    
-		    if (c == 0){
-			POI poi =  new POI();
-			user.setLogin("jay8chuy");
-			
-
-			for(String s : user.getUsers(4, con.stmt, con._con))
-			    System.out.println(s);
-					   
-			System.out.println("MOST TRUSTED\n" +
-					   user.getMostTrusted(5, con.stmt, con._con));
-					   
-			
-			/*			
-			System.out.println("One degree of seperation? " + 
-					   user.degreesOfSeperation("chuy8jay",
-								     "Test prepared", con.stmt));
-
-			System.out.println("One degree of seperation? " + 
-					   user.degreesOfSeperation("jay8chuy", "chuy8jay", 
-								    con.stmt));
-			System.out.println(
-					   poi.getRecomendedPOIs("chuy8jay", 200,
-								 con.stmt));
-			String pname = "Starbucks";
-			System.out.println(pname +" pid => " + 
-					   poi.getPid(pname, con.stmt));
-			
-			poi.setFavoritePOI(pname, user.getLogin(), con.stmt, con._con);
-
-			poi.addPOI("Tony's", "Restaurant", "222 s main", "tonys.com", 
-				   "(801)123-45678", 1990, "10am-3am", 10,
-				   con._con, con.stmt);
-			*/	 
-			continue;
-		    }
+		    }		    
 		    
 		    switch (c){
 		    case 1: // Login
@@ -179,11 +143,11 @@ public class utrack {
 					       "You are not logged in. Log in and try again.");
 			break;
 		    case 11:
-			//if(logedIn)
+			if(logedIn)
 			    poiBrowsing(in);
-			    //else
-			    //System.out.println(
-			    //"You are not logged in. Log in and try again.");
+			else
+			    System.out.println(
+			    "You are not logged in. Log in and try again.");
 			break;
 		    case 12:
 			degreesOfSeperation(in);
