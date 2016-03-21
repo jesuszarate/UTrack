@@ -419,4 +419,57 @@ public class User {
 	return false;	   
     }
 
+    public String getUserTrust(String login, Statement stmt, Connection con){
+	String sql = "select Trusted.L, Trusted.trusted, NTrusted.not_trusted from " +
+	    "(select T1.L, T1.trust trusted " +
+	    "from " +
+	    "(select login2 L, isTrusted, count(isTrusted) trust from Trust  " +
+	    "group by isTrusted, login2) T1 " +
+	    "where T1.isTrusted = 1 " +
+	    "and T1.L = ?) Trusted, " + 
+	    "(select T2.L, T2.trust not_trusted " +
+	    "from " +
+	    "(select login2 L, isTrusted, count(isTrusted) trust from Trust  " +
+	    "group by isTrusted, login2) T2 " +
+	    "where T2.isTrusted = 0 " +
+	    "and T2.L = ?) NTrusted " +
+	    "where Trusted.L	= NTrusted.L ";
+
+	String output = "";
+	ResultSet rs = null;       
+	try{  
+	    
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setString(1, login);
+	    preparedStatement.setString(2, login);
+
+	    rs = preparedStatement.executeQuery();
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Name: " + rs.getString("L") +
+		    " T: " + rs.getString("trusted") + 
+		    " NT: " + rs.getString("not_trusted") +  "\n";
+	    }
+	    rs.close();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+
+
+	return output;
+    }
 }

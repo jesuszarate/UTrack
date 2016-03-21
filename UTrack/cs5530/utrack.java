@@ -43,7 +43,8 @@ public class utrack {
 			   "for each category");
 	System.out.println("14: View the list of m most expensive POIs for each category");
 	System.out.println("15: the list of m highly rated POIs for each category");
-	
+	System.out.println("16: View the top m most ‘trusted’ users");
+	System.out.println("17: View the top m most ‘useful’ users");
 
 	System.out.println("please enter your choice:");
     }
@@ -76,7 +77,7 @@ public class utrack {
 			
 
 			System.out.println(
-					   poi.getPopularForEachCategory(2, con.stmt, con._con));
+					   user.getUserTrust("jay8chuy", con.stmt, con._con));
 					   
 			
 			/*			
