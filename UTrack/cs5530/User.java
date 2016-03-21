@@ -1,5 +1,6 @@
 package cs5530;
 
+import java.util.*;
 import java.sql.*;
 
 public class User {
@@ -53,20 +54,23 @@ public class User {
 	return output;
     }
 
-    public String getUsers(Statement stmt){
+    public ArrayList<String> getUsers(int limit, Statement stmt, Connection con){
 	
-	String sql = "select * from Users";
-	String output = "";
+	String sql = "select * from Users limit ?";
+	//String output = "";
 	ResultSet rs = null;
-	System.out.println("executing "+sql);
+	ArrayList<String> users = new ArrayList<String>();
 	try{
 	    // Execute sql query
-	    rs = stmt.executeQuery(sql);
+	    //rs = stmt.executeQuery(sql);
 
-	    while (rs.next())
-		{
-		    output+=rs.getString("login")+"   "+rs.getString("name")+"\n"; 
-		}
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setInt(1, limit);
+	    rs = preparedStatement.executeQuery();
+
+	    while (rs.next()){
+		users.add(rs.getString("login"));
+	    }
 			     
 	    rs.close();
 	}
@@ -85,7 +89,7 @@ public class User {
 			System.out.println("Cannot close resultset");
 		    }
 	    }
-	return output;
+	return users;
     }
 
 
@@ -193,7 +197,7 @@ public class User {
 	    preparedStatement.setString(1, this.login);
 	    preparedStatement.setInt(2, pid);
 	    preparedStatement.setInt(3, vid);
-	    preparedStatement.setDate(4, Date.valueOf(_date));
+	    preparedStatement.setDate(4, java.sql.Date.valueOf(_date));
 
 	    preparedStatement.executeUpdate();
 	    System.out.println(this.login + ": Successfully added your visit to " + _pname);
@@ -419,29 +423,25 @@ public class User {
 	return false;	   
     }
 
-    public String getUserTrust(String login, Statement stmt, Connection con){
-	String sql = "select Trusted.L, Trusted.trusted, NTrusted.not_trusted from " +
-	    "(select T1.L, T1.trust trusted " +
+    public String getMostTrusted(int limit, Statement stmt, Connection con){
+
+	String sql = 
+	    "select TT.Login, TT.trust - TT.not_trust trust " +
 	    "from " +
-	    "(select login2 L, isTrusted, count(isTrusted) trust from Trust  " +
-	    "group by isTrusted, login2) T1 " +
-	    "where T1.isTrusted = 1 " +
-	    "and T1.L = ?) Trusted, " + 
-	    "(select T2.L, T2.trust not_trusted " +
-	    "from " +
-	    "(select login2 L, isTrusted, count(isTrusted) trust from Trust  " +
-	    "group by isTrusted, login2) T2 " +
-	    "where T2.isTrusted = 0 " +
-	    "and T2.L = ?) NTrusted " +
-	    "where Trusted.L	= NTrusted.L ";
+	    "(select login2 Login, " +
+	    "count(case when isTrusted = 1 then 1 end) trust,  " +
+	    "count(case when isTrusted = 0 then 1 end) not_trust " +
+	    "from Trust " +
+	    "group by login2) TT " +
+	    "order by TT.trust - TT.not_trust desc " +
+	    "limit ?";
 
 	String output = "";
 	ResultSet rs = null;       
 	try{  
 	    
 	    PreparedStatement preparedStatement = con.prepareStatement(sql);
-	    preparedStatement.setString(1, login);
-	    preparedStatement.setString(2, login);
+	    preparedStatement.setInt(1, limit);
 
 	    rs = preparedStatement.executeQuery();
 
@@ -449,9 +449,9 @@ public class User {
 	    while (rs.next()){
 		
 		output += 
-		    "Name: " + rs.getString("L") +
-		    " T: " + rs.getString("trusted") + 
-		    " NT: " + rs.getString("not_trusted") +  "\n";
+		    "Login name: " + rs.getString("Login") +
+		    " Trust level: " + rs.getString("trust") + "\n";
+
 	    }
 	    rs.close();
 	}
@@ -468,8 +468,50 @@ public class User {
 		System.out.println("Cannot close resultset");
 	    }
 	}
+	return output;
+    }
 
+    public String getMostUsefulUsers(int limit, Statement stmt, Connection con){
 
+	String sql = 
+	    "select F.login, AVG(R.rating) avg_rtg " +
+	    "from Rates R, Feedback F " +
+	    "where R.fid = F.fid group by login " +
+	    "order by avg_rtg desc " + 
+	    "limit ?";
+
+	String output = "";
+	ResultSet rs = null;       
+	try{  
+	    
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setInt(1, limit);
+
+	    rs = preparedStatement.executeQuery();
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Login name: " + rs.getString("Login") + "\n" + 
+		    "Usefulness level: " + rs.getString("avg_rtg") + "\n\n";
+
+	    }
+	    rs.close();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
 	return output;
     }
 }
