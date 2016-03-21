@@ -354,3 +354,21 @@ from POI P,
 where V.pid = P.pid 
 and P.category = 'Restaurant'
 order by V.cnt DESC;
+
+-- costliest per category
+select *
+from POI P, 
+(select V.login, V.pid, AVG(cost/numberofheads) cst_per_head 
+from Visit V, VisEvent ve where V.vid =ve.vid 
+group by pid) V
+where V.pid = P.pid 
+and P.category = 'Restaurant'
+order by V.cst_per_head DESC;
+
+-- best rated
+select *
+from POI P,
+(select pid, AVG(score) cnt from Feedback group by pid) V
+where V.pid = P.pid 
+and P.category = 'Restaurant'
+order by V.cnt DESC;
