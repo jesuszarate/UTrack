@@ -89,8 +89,7 @@ public class POI {
 		pid = rs.getString("pid");
 		name = rs.getString("name");
 
-		output += 
-		    "pid: " + pid +  " -> " + 
+		output += 		  
 		    "name: " + name  + "\n";
 	    }			     
 	    rs.close();
@@ -162,7 +161,6 @@ public class POI {
 
 	String output = "";
 	ResultSet rs = null;
-	System.out.println("Executing: " + sql);
 	try{
 	    // Execute sql query
 	    rs = stmt.executeQuery(sql);
@@ -540,15 +538,18 @@ public class POI {
 	return output;
     }
 
-    public String getPopularForEach(int limit, Statement stmt, Connection con){
-	/*
+    public String getPopularForEachCategory(int limit, Statement stmt, Connection con){
+
 	ArrayList<String> cats = getCategories(stmt);
 	
+	String output = "";
 	for(String s : cats)
-	    getPopularPOIbyCategory(s, limit, )
-	*/
-	return "";
+	    
+	    output += s + ":\n" + getPopularPOIbyCategory(s, limit, stmt, con) + "\n";
+	
+	return output;
     }
+   
 
     public String getPopularPOIbyCategory(String category, int limit, 
 					  Statement stmt, Connection con){
@@ -632,5 +633,138 @@ public class POI {
 	}
 	return categories;
     }
+    
+    public String getCostliestForEachCategory(int limit, Statement stmt, Connection con){
 
+	ArrayList<String> cats = getCategories(stmt);
+	
+	String output = "";
+	for(String s : cats)
+	    
+	    output += s + ":\n" + getMostExpensiveByCategory(s, limit, stmt, con) + "\n";
+	
+	return output;
+    }
+
+    public String getMostExpensiveByCategory(String category, int limit, 
+					     Statement stmt, Connection con){
+	String sql = 
+	    "select * " +
+	    "from POI P, " +
+	    "(select V.login, V.pid, AVG(cost/numberofheads) cst_per_head " +
+	    "from Visit V, VisEvent ve where V.vid =ve.vid " +
+	    "group by pid) V " +
+	    "where V.pid = P.pid " +
+	    "and P.category = ? " +
+	    "order by V.cst_per_head DESC " +
+	    "limit ?;";
+	    
+	String output = "";
+	ResultSet rs = null;       
+	try{  
+	    
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setString(1, category);
+	    preparedStatement.setInt(2, limit);
+
+	    rs = preparedStatement.executeQuery();
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Name: " + rs.getString("name") +
+		    " Category: " + rs.getString("category") + 
+		    " Address: " + rs.getString("address") + 
+		    " URL: " + rs.getString("URL") + 
+		    " Phone Number: " + rs.getString("tel_num") + 
+		    " Hours: " + rs.getString("hours") +
+		    " Price: " + rs.getInt("price") + 
+		    " Average Cost / Person: " + rs.getInt("cst_per_head") + "\n";
+	    }
+	    rs.close();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+
+
+	return output;
+    }
+
+public String getBestRatedForEachCategory(int limit, Statement stmt, Connection con){
+
+	ArrayList<String> cats = getCategories(stmt);
+	
+	String output = "";
+	for(String s : cats)
+	    
+	    output += s + ":\n" + getBestRatedByCategory(s, limit, stmt, con) + "\n";
+	
+	return output;
+    }
+
+    public String getBestRatedByCategory(String category, int limit, 
+					     Statement stmt, Connection con){
+	String sql = 
+	    "select * " +
+	    "from POI P, " +
+	    "(select pid, AVG(score) cnt from Feedback group by pid)	V " +
+	    "where V.pid = P.pid " +
+	    "and P.category = ? " +
+	    "order by V.cnt DESC " +
+	    "limit ?";
+	    	    
+	String output = "";
+	ResultSet rs = null;       
+	try{  
+	    
+	    PreparedStatement preparedStatement = con.prepareStatement(sql);
+	    preparedStatement.setString(1, category);
+	    preparedStatement.setInt(2, limit);
+
+	    rs = preparedStatement.executeQuery();
+
+	    String p;
+	    while (rs.next()){
+		
+		output += 
+		    "Name: " + rs.getString("name") +
+		    " Category: " + rs.getString("category") + 
+		    " Address: " + rs.getString("address") + 
+		    " URL: " + rs.getString("URL") + 
+		    " Phone Number: " + rs.getString("tel_num") + 
+		    " Hours: " + rs.getString("hours") +
+		    " Price: " + rs.getInt("price") + 
+		    " Average Feedback score: " + rs.getInt("cnt") + "\n";
+	    }
+	    rs.close();
+	}
+	catch(Exception e){	    
+	    System.out.println(e.toString());
+	    System.out.println("Cannot execute the query");
+	}
+	finally{	 
+	    try{
+		if (rs!=null && !rs.isClosed())
+		    rs.close();
+	    }
+	    catch(Exception e){
+		System.out.println("Cannot close resultset");
+	    }
+	}
+
+
+	return output;
+    }
 }
