@@ -39,6 +39,12 @@ public class utrack {
 	System.out.println("10. Show useful feedback:");
 	System.out.println("11. POI browsing:");
 	System.out.println("12. Degrees of seperation:");
+	System.out.println("13. View the list of the most popular POIs " +
+			   "for each category");
+	System.out.println("14: View the list of m most expensive POIs for each category");
+	System.out.println("15: the list of m highly rated POIs for each category");
+	
+
 	System.out.println("please enter your choice:");
     }
 	
@@ -69,10 +75,8 @@ public class utrack {
 			user.setLogin("jay8chuy");
 			
 
-			System.out.println("Categories: " +
-
-					   poi.getPopularPOIbyCategory("Restaurant", 1, con.stmt, con._con));
-
+			System.out.println(
+					   poi.getPopularForEachCategory(2, con.stmt, con._con));
 					   
 			
 			/*			
@@ -114,15 +118,23 @@ public class utrack {
 					       "You are not logged in. Log in and try again.");
 			break;
 		    case 4:
-			if(logedIn)// && user.isAdmin())
-			    addPOI(in);
+			if(logedIn)
+			    if(user.isAdmin())
+				addPOI(in);
+			    else
+				System.out.println(
+						   "You don't have permission to add POIs");
 			else
 			    System.out.println(
 					       "You are not logged in. Log in and try again.");
 			    break;
 		    case 5:
-			if(logedIn && user.isAdmin())
-			    updatePOI(in);
+			if(logedIn )
+			    if(user.isAdmin())
+				updatePOI(in);
+			    else
+				System.out.println(
+						   "You don't have permission to update POIs");
 			else
 			    System.out.println(
 					       "You are not logged in. Log in and try again.");
@@ -171,6 +183,15 @@ public class utrack {
 			break;
 		    case 12:
 			degreesOfSeperation(in);
+			break;
+		    case 13:
+			viewPopularByCategory(in);
+			break;
+		    case 14:
+			viewMostExpensiveByCategory(in);
+			break;
+		    case 15:
+			viewBestRatedByCategory(in);
 			break;
 		    default:
 			System.out.println("Remeber to pay us!");
@@ -529,6 +550,7 @@ public class utrack {
 	POI poi = new POI();
 	String pname;
 	int n;
+	System.out.println("\n" + poi.getPOIs(con.stmt));
 	
 	System.out.println("Which POI's feedbacks would you like to see: ");
 	while ((pname = in.readLine()) == null && pname.length() == 0);
@@ -674,4 +696,48 @@ public class utrack {
 			   user.degreesOfSeperation(login1, login2, con.stmt) + 
 			   " degrees of seperation");
     }
+
+    public static void viewPopularByCategory(BufferedReader in) throws IOException{
+	POI poi = new POI();
+	String limit;
+	System.out.println("How many POIs per category would you like to see: ");
+	while ((limit = in.readLine()) == null && limit.length() == 0);
+
+	try{
+	    int l = Integer.parseInt(limit);
+	    System.out.println(poi.getPopularForEachCategory(l, con.stmt, con._con));
+	}
+	catch(Exception e){
+	    System.out.println("Limit must be a number");
+	}	
+    }
+    public static void viewMostExpensiveByCategory(BufferedReader in)  throws IOException{
+	POI poi = new POI();
+	String limit;
+	System.out.println("How many POIs per category would you like to see: ");
+	while ((limit = in.readLine()) == null && limit.length() == 0);
+
+	try{
+	    int l = Integer.parseInt(limit);
+	    System.out.println(poi.getCostliestForEachCategory(l, con.stmt, con._con));
+	}
+	catch(Exception e){
+	    System.out.println("Limit must be a number");
+	}	
+    }
+    public static void viewBestRatedByCategory(BufferedReader in)  throws IOException{
+	POI poi = new POI();
+	String limit;
+	System.out.println("How many POIs per category would you like to see: ");
+	while ((limit = in.readLine()) == null && limit.length() == 0);
+
+	try{
+	    int l = Integer.parseInt(limit);
+	    System.out.println(poi.getBestRatedForEachCategory(l, con.stmt, con._con));
+	}
+	catch(Exception e){
+	    System.out.println("Limit must be a number");
+	}	
+    }
+
 }
