@@ -206,9 +206,10 @@ public class utrack {
 	System.out.println("Enter your phone number:");
 	while ((phone_num = in.readLine()) == null && phone_num.length() == 0);
 				           
-	System.out.println(
-			   user.registerUser(login, name, true, password, address, 
-					     phone_num, con._con, con.stmt));
+	logedIn = user.registerUser(login, name, password, address, 
+				    phone_num, con._con, con.stmt);
+	if (logedIn)
+	    System.out.println("Successfully registered, and are now loged in!");
     }
 
     public static void login(BufferedReader in) throws IOException {

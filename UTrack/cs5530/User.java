@@ -24,13 +24,13 @@ public class User {
     }
     
     
-    public String registerUser(String _login, String _name,  boolean _userType, String _password, 
+    public boolean registerUser(String _login, String _name, String _password, 
 			       String _address, String _phone_num, Connection con, Statement stmt){
 	login = _login;
 	name = _name;	
 
-	String sql = "INSERT INTO Users (login, name, userType, password, address, phone_num, isAdmin)" +
-	    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+	String sql = "INSERT INTO Users (login, name, password, address, phone_num, isAdmin)" +
+	    "VALUES (?, ?, ?, ?, ?, ?)";
        
 	String output = "";
 	ResultSet rs = null;
@@ -39,19 +39,19 @@ public class User {
 	    PreparedStatement preparedStatement = con.prepareStatement(sql);
 	    preparedStatement.setString(1, _login);
 	    preparedStatement.setString(2, _name);
-	    preparedStatement.setBoolean(3, _userType);
-	    preparedStatement.setString(4, _password);
-	    preparedStatement.setString(5, _address);
-	    preparedStatement.setString(6, _phone_num);
-	    preparedStatement.setBoolean(7, false);
+	    preparedStatement.setString(3, _password);
+	    preparedStatement.setString(4, _address);
+	    preparedStatement.setString(5, _phone_num);
+	    preparedStatement.setBoolean(6, false);
 	    preparedStatement.executeUpdate();
 	}
 	catch(Exception e){	    
 	    System.out.println(e.toString());
-	    System.out.println("Cannot execute the query");
+	    System.out.println("Login name already taken");
+	    return false;
 	}
-
-	return output;
+	
+	return true;
     }
 
     public ArrayList<String> getUsers(int limit, Statement stmt, Connection con){
