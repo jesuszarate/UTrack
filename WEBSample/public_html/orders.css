@@ -3,3 +3,8 @@ body {
   padding-top: 50px;
   padding-bottom: 20px;
 }
+
+.jumbotron {
+    background-color:#B71C1C !important;
+    border-color:#ffffff
+}
