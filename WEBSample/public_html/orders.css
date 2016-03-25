@@ -8,3 +8,12 @@ body {
     background-color:#B71C1C !important;
     border-color:#ffffff
 }
+
+.btn-success{
+    border-color:#ffffff;
+    background-color:#B71c1c !important;
+}
+
+.btn-success:hover{
+    border-color:#B71c1c;
+}
