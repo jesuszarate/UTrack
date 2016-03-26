@@ -6,7 +6,8 @@ body {
 
 .jumbotron {
     background-color:#B71C1C !important;
-    border-color:#ffffff
+    border-color:#ffffff;
+    color:#ffffff;
 }
 
 .btn-success{
