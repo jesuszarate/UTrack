@@ -2,6 +2,8 @@ package cs5530;
 
 import java.util.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+
 
 public class User {
 
@@ -10,7 +12,9 @@ public class User {
     private boolean isAdmin = false;
     
     public User()
-    {}
+    {
+	System.out.println(new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime()));
+    }
     
     public String getLogin(){
 	return this.login;
