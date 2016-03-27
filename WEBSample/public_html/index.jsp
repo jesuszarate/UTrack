@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ page language="java" import="cs5530.*" %>
 <html lang="en">
   <head>
       <meta charset="utf-8">
@@ -34,16 +35,15 @@
       <div class="jumbotron">
           <h1>UTrack</h1>
       </div>
-  </div>
 
     <div class="container">
 
-      <form class="form-signin">
+      <form class="form-signin" method="post" action="index.jsp">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <input name="email-input" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input name="pwd-input" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
@@ -54,6 +54,34 @@
 
     </div> <!-- /container -->
 
+  <%
+  Connector connector = new Connector();
+  User user = new User();
+
+  String email = request.getParameter("email-input");
+  String password = request.getParameter("pwd-input");
+  if( email != null && password != null){
+  %>
+
+      <%
+      if (user.loginUser(email, password, connector.stmt)){
+      %>
+
+      <jsp:forward page="orders.jsp"/>
+
+      User: <b><%=email%></b>, is successfully logged in!
+      <%
+      } else {%>
+
+      Incorrect username or password, please try again!
+
+      <%
+      }
+      %>
+  <%
+  }
+  %>
+  </div>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
