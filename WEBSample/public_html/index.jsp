@@ -72,9 +72,9 @@
       User: <b><%=email%></b>, is successfully logged in!
       <%
       } else {%>
-
-      Incorrect username or password, please try again!
-
+    <div class="form-signin">
+      Incorrect username or password, please try again
+    </div>
       <%
       }
       %>
