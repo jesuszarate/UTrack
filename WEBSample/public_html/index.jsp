@@ -2,13 +2,21 @@
 <%@ page language="java" import="cs5530.*" %>
 <html lang="en">
   <head>
+      <!-- Bootstrap -->
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+      <!-- MDL -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+      <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <meta name="description" content="">
     <meta name="author" content="">
@@ -40,16 +48,30 @@
 
       <form class="form-signin" method="post" action="index.jsp">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input name="email-input" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input name="pwd-input" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+          <!--
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input name="email-input" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input name="pwd-input" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          -->
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input name="email-input" class="mdl-textfield__input" type="text" id="username">
+              <label class="mdl-textfield__label input_label" for="username">Username</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input name="pwd-input" class="mdl-textfield__input" type="text" id="password">
+              <label class="mdl-textfield__label input_label" for="password">Password</label>
+          </div>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="btn btn-theme btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          <button class="btn-lg mdl-button btn-theme btn-block btn-primary mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              Sign in
+          </button>
+          <!--<button class="btn btn-theme btn-lg btn-primary btn-block" type="submit">Sign in</button> -->
       </form>
 
     </div> <!-- /container -->
@@ -73,7 +95,7 @@
       <%
       } else {%>
     <div class="form-signin">
-      Incorrect username or password, please try again
+      Incorrect username or password, please try again!
     </div>
       <%
       }

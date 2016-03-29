@@ -48,10 +48,21 @@
 
       <form class="form-signin" method="post" action="index.jsp">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input name="email-input" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input name="pwd-input" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+          <!--
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input name="email-input" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input name="pwd-input" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          -->
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input name="email-input" class="mdl-textfield__input" type="text" id="username">
+              <label class="mdl-textfield__label input_label" for="username">Username</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input name="pwd-input" class="mdl-textfield__input" type="text" id="password">
+              <label class="mdl-textfield__label input_label" for="password">Password</label>
+          </div>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
