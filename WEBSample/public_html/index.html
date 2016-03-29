@@ -60,7 +60,7 @@
               <label class="mdl-textfield__label input_label" for="username">Username</label>
           </div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input name="pwd-input" class="mdl-textfield__input" type="text" id="password">
+              <input name="pwd-input" type="password" class="mdl-textfield__input" type="text" id="password">
               <label class="mdl-textfield__label input_label" for="password">Password</label>
           </div>
         <div class="checkbox">
