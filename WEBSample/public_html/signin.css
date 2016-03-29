@@ -54,6 +54,11 @@ body {
     border-color:#B71c1c;
 }
 
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 6px 0 rgba(0,0,0,0.2);
+}
+
 .mdl-textfield__label:{
     color:#ffffff !important;
 }

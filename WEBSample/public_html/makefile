@@ -4,6 +4,7 @@ ojsp:
 htoj:
 	cp orders.html orders.jsp
 
+
 reg: htor rjsp
 
 rjsp:
@@ -11,11 +12,19 @@ rjsp:
 htor:
 	cp register.html register.jsp
 
+
 ind: itoh ijsp
 
 itoh:
 	cp index.html index.jsp
 ijsp:
 	scp index.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
+
+indcss:
+	scp signin.css cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
+
+
 clean:
 	rm *~
