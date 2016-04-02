@@ -3,14 +3,25 @@
 <head>
     <title>Utrack</title>
     <meta charset="utf-8">
+
+    <!-- Bootstrap -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+    <!-- MDL -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+
     <!-- Custom styles for this template -->
     <link href="orders.css" rel="stylesheet">
+
     <script LANGUAGE="javascript">
+
 function check_all_fields(form_obj){
 	alert(form_obj.searchAttribute.value+"='"+form_obj.attributeValue.value+"'");
 	if( form_obj.attributeValue.value == ""){
@@ -33,12 +44,13 @@ function check_all_fields(form_obj){
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+
             <a class="navbar-brand" href="#">Utrack</a>
         </div>
         <div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            
+
         </div><!--/.navbar-collapse -->
     </div>
 </nav>
@@ -68,6 +80,11 @@ function check_all_fields(form_obj){
         <input type=text name="attributeValue" length=10>
         <input type=submit>
     </form>
+    <div class="txt_format"> Form2: Search orders on director name: </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input name="pwd-input" class="mdl-textfield__input" type="text" id="password">
+        <label class="mdl-textfield__label input_label" for="password"></label>
+    </div>
 
     <%
     } else {
