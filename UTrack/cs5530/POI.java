@@ -545,7 +545,7 @@ public class POI {
 	String output = "";
 	for(String s : cats)
 	    
-	    output += s + ":\n" + getPopularPOIbyCategory(s, limit, stmt, con) + "\n";
+	    output += s + "  " + getPopularPOIbyCategory(s, limit, stmt, con) + "\n";
 	
 	return output;
     }
