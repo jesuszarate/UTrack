@@ -21,8 +21,8 @@ ijsp:
 	scp index.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
 
-indcss:
-	scp signin.css cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+styles:
+	scp styles.css cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
 ordcss:
 	scp orders.css cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html

@@ -24,6 +24,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Utrack</title>
 
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="images/android-desktop.png">
@@ -47,7 +53,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.deep_purple-pink.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
         #view-source {
@@ -60,6 +66,13 @@
         z-index: 900;
         }
     </style>
+
+    <script language="JavaScript">
+    function move() {
+        window.location.href='';
+    }
+    </script>
+
 </head>
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -84,7 +97,9 @@
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="add">
                 <li class="mdl-menu__item" disabled>Add New POI</li>
-                <li class="mdl-menu__item">Add visit to POI</li>
+                <li class="mdl-menu__item" >
+                    <a href="#addVisit" class="mdl-layout__tab mdl-color-text--grey-700">Favorites</a>
+                </li>
             </ul>
         </div>
     </header>
@@ -121,6 +136,8 @@
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
             </section>
+
+
 
             <!-- Naked Fish Card -->
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
@@ -257,6 +274,7 @@
     -->
 
 
+
         <!--For the features tab-->
         <div class="mdl-layout__tab-panel" id="features">
             <section class="section--center mdl-grid mdl-grid--no-spacing">
@@ -270,6 +288,62 @@
                         <a>Eve's Bakery</a>
                         <a>Starbucks</a>
                     </ul>
+                </div>
+            </section>
+        </div>
+
+        <!--For the features tab-->
+        <div class="mdl-layout__tab-panel" id="addVisit">
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+
+
+                <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                    <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div>
+                            <h4>New Visit</h4>
+                        </div>
+                    <div class="mdl-card__supporting-text">
+
+
+                        <div class="dropdown">
+                            <button class="mdl-button mdl-js-button dropdown-toggle mdl-color-text--red-900" type="button" data-toggle="dropdown">
+                                Choose POI
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu mdl-color-text--red-900">
+                                <li><a href="#">HTML</a></li>
+                                <li><a href="#">CSS</a></li>
+                                <li><a href="#">JavaScript</a></li>
+                            </ul>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label ">
+                            <input name="email-input" class="mdl-textfield__input" type="text" id="input">
+                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="input">Select POI (This should be a pull down option)</label>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input name="email-input" class="mdl-textfield__input" type="text" id="cost">
+                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Cost</label>
+                        </div>
+
+                        <div class="mdl-textfield mdl-textfield--bar--red mdl-js-textfield mdl-textfield--floating-label">
+                            <input name="email-input" class="mdl-textfield__input" type="text" id="partyCount">
+                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Number of people</label>
+                        </div>
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input name="email-input" class="mdl-textfield__input" type="text" id="date">
+                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="date">Date (DD/MM/YYYY)</label>
+                        </div>
+                        <div>
+                        <a target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">
+                            Submit
+                        </a>
+                            <!--<a target="_blank" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-color-text&#45;&#45;accent-contrast">-->
+                                <!--Submit-->
+                            <!--</a>-->
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </section>
         </div>
