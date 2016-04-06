@@ -82,6 +82,11 @@
                 <i class="material-icons" role="presentation">add</i>
                 <span class="visuallyhidden">Add</span>
             </button>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="add">
+                <li class="mdl-menu__item" disabled>Add New POI</li>
+                <li class="mdl-menu__item">Add visit to POI</li>
+                <li class="mdl-menu__item">Dolor</li>
+            </ul>
         </div>
     </header>
     <main class="mdl-layout__content">
@@ -285,13 +290,14 @@
         "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
             "<div class=\"mdl-card__supporting-text\">" +
                 "<h4>" + ps[i] + "</h4>" +
-                "<b>" + ps[i] + "</b>" +
+                "<b>" + ps[i+1] + "</b>" +
             "</div>" +
             "<div class=\"mdl-card__actions\">" +
                 "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
             "</div>" +
         "</div>" +
             "</section>";
+            i++;
         }
         %>
         <!--For the popular tab-->
