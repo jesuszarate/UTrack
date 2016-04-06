@@ -2,6 +2,8 @@ package cs5530;
 
 import java.sql.*;
 import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class POI {
@@ -208,7 +210,10 @@ public class POI {
 	    PreparedStatement preparedStatement = con.prepareStatement(sql);
 	    preparedStatement.setInt(1, pid);
 	    preparedStatement.setString(2, login);
-	    preparedStatement.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+	    //preparedStatement.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+	    preparedStatement.setDate(3, java.sql.Date.valueOf(new SimpleDateFormat("yyyy/dd/MM").format(Calendar.getInstance().getTime())));
+	    //System.out.println(new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime()));
+
 
 	    preparedStatement.executeUpdate();
 	}
@@ -273,7 +278,8 @@ public class POI {
 	    preparedStatement.setInt(1, pid);
 	    preparedStatement.setString(2, login);
 	    preparedStatement.setString(3, text);
-	    preparedStatement.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
+	    //preparedStatement.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
+	    preparedStatement.setDate(4, java.sql.Date.valueOf(new SimpleDateFormat("yyyy/dd/MM").format(Calendar.getInstance().getTime())));
 	    preparedStatement.setInt(5, score);
 
 	    preparedStatement.executeUpdate();
@@ -543,8 +549,7 @@ public class POI {
 	ArrayList<String> cats = getCategories(stmt);
 	
 	String output = "";
-	for(String s : cats)
-	    
+	for(String s : cats)	    
 	    output += s + "  " + getPopularPOIbyCategory(s, limit, stmt, con) + "\n";
 	
 	return output;
