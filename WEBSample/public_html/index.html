@@ -292,61 +292,88 @@
             </section>
         </div>
 
-        <!--For the features tab-->
-        <div class="mdl-layout__tab-panel" id="addVisit">
-            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+        <!--For New Visit tab-->
+
+        <form method="get" action="index.jsp#addVisit">
+            <div class="mdl-layout__tab-panel" id="addVisit">
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+
+                    <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                            <div>
+                                <h4>New Visit</h4>
+                            </div>
+                            <div class="mdl-card__supporting-text">
 
 
-                <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                    <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                        <div>
-                            <h4>New Visit</h4>
-                        </div>
-                    <div class="mdl-card__supporting-text">
+                                <div class="dropdown">
+                                    <button class="mdl-button mdl-js-button dropdown-toggle mdl-color-text--red-900" type="button" data-toggle="dropdown">
+                                        <div class="marg">
+                                            <strong>
+                                                <h7>
+                                                    Choose POI
+                                                    <span class="caret"></span>
+                                                </h7>
+                                            </strong>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu mdl-color-text--red-900">
+                                        <!--Add items programmatically-->
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>JavaScript</li>
+                                    </ul>
+                                </div>
 
+                                <!--Cost-->
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input name="cost-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="cost">
+                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Cost</label>
+                                    <span class="mdl-textfield__error">Input must be a number</span>
+                                </div>
 
-                        <div class="dropdown">
-                            <button class="mdl-button mdl-js-button dropdown-toggle mdl-color-text--red-900" type="button" data-toggle="dropdown">
-                                Choose POI
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu mdl-color-text--red-900">
-                                <li><a href="#">HTML</a></li>
-                                <li><a href="#">CSS</a></li>
-                                <li><a href="#">JavaScript</a></li>
-                            </ul>
-                        </div>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label ">
-                            <input name="email-input" class="mdl-textfield__input" type="text" id="input">
-                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="input">Select POI (This should be a pull down option)</label>
-                        </div>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input name="email-input" class="mdl-textfield__input" type="text" id="cost">
-                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Cost</label>
-                        </div>
+                                <!--Party Count-->
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input name="partyCount-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="partyCount">
+                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Number of people</label>
+                                    <span class="mdl-textfield__error">Input must be a number</span>
+                                </div>
 
-                        <div class="mdl-textfield mdl-textfield--bar--red mdl-js-textfield mdl-textfield--floating-label">
-                            <input name="email-input" class="mdl-textfield__input" type="text" id="partyCount">
-                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Number of people</label>
-                        </div>
+                                <!--Date-->
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input name="date-in" class="mdl-textfield__input" type="text"
+                                           pattern="\d{1,2}/\d{1,2}/\d{4}"
+                                           id="date">
+                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="date">Date (DD/MM/YYYY)</label>
+                                    <span class="mdl-textfield__error">Incorrect date format!</span>
+                                </div>
+                                <div>
+                                    <div>
+                                        <button class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                        mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900">
+                                            Sign in
+                                        </button>
+                                    </div>
+                                    <!--<a target="_blank" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-color&#45;&#45;red-900 mdl-color-text&#45;&#45;accent-contrast">-->
+                                    <!--Submit-->
+                                    <!--</a>-->
+                                    <%
+                                    String cost = request.getParameter("cost-in");
+                                    String partyCount = request.getParameter("partyCount-in");
+                                    String date = request.getParameter("date-in");
 
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input name="email-input" class="mdl-textfield__input" type="text" id="date">
-                            <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="date">Date (DD/MM/YYYY)</label>
-                        </div>
-                        <div>
-                        <a target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">
-                            Submit
-                        </a>
-                            <!--<a target="_blank" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-color-text&#45;&#45;accent-contrast">-->
-                                <!--Submit-->
-                            <!--</a>-->
+                                    if(cost != null && partyCount != null && date != null)
+                                    {
+                                    out.println("It worked!!!!");
+                                    }
+                                    %>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+        </form>
 
 
         <%
@@ -358,101 +385,101 @@
         String[] ps = popPOI.split("\n");
         String[] pois = new String[ps.length];
         for(int i = 0; i < ps.length; i++){
-            pois[i] =
+        pois[i] =
         "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
         "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
-            "<div class=\"mdl-card__supporting-text\">" +
-                "<h4>" + ps[i] + "</h4>" +
-                "<b>" + ps[i+1] + "</b>" +
-            "</div>" +
-            "<div class=\"mdl-card__actions\">" +
-                "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
-            "</div>" +
+        "<div class=\"mdl-card__supporting-text\">" +
+        "<h4>" + ps[i] + "</h4>" +
+        "<b>" + ps[i+1] + "</b>" +
         "</div>" +
-            "</section>";
-            i++;
-        }
-        %>
-        <!--For the popular tab-->
-        <div class="mdl-layout__tab-panel" id="popular">
-            <section class="section--center mdl-grid mdl-grid--no-spacing">
-                <div class="mdl-cell mdl-cell--12-col">
-                    <h4>Favorites</h4>
+        "<div class=\"mdl-card__actions\">" +
+        "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
+        "</div>" +
+        "</div>" +
+"</section>";
+i++;
+}
+%>
+<!--For the popular tab-->
+<div class="mdl-layout__tab-panel" id="popular">
+    <section class="section--center mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-cell mdl-cell--12-col">
+            <h4>Favorites</h4>
 
-                    <ul class="toc">
-                        <a>Jack Mormon</a>
-                        <a>Naked Fish</a>
-                        <a>Tosh's Ramen</a>
-                        <a>Eve's Bakery</a>
-                        <a>Starbucks</a>
-                    </ul>
-                    <%
-                    for(int i = 0; i < ps.length; i++){
-                        out.println(pois[i]);
-                    }
-                    %>
-                </div>
-            </section>
+            <ul class="toc">
+                <a>Jack Mormon</a>
+                <a>Naked Fish</a>
+                <a>Tosh's Ramen</a>
+                <a>Eve's Bakery</a>
+                <a>Starbucks</a>
+            </ul>
+            <%
+            for(int i = 0; i < ps.length; i++){
+            out.println(pois[i]);
+            }
+            %>
         </div>
+    </section>
+</div>
 
 
-        <!-- Footer Information-->
-        <footer class="mdl-mega-footer">
-            <div class="mdl-mega-footer--middle-section">
-                <div class="mdl-mega-footer--drop-down-section">
-                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-                    <h1 class="mdl-mega-footer--heading">Features</h1>
-                    <ul class="mdl-mega-footer--link-list">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Terms</a></li>
-                        <li><a href="#">Partners</a></li>
-                        <li><a href="#">Updates</a></li>
-                    </ul>
-                </div>
-                <div class="mdl-mega-footer--drop-down-section">
-                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-                    <h1 class="mdl-mega-footer--heading">Details</h1>
-                    <ul class="mdl-mega-footer--link-list">
-                        <li><a href="#">Spec</a></li>
-                        <li><a href="#">Tools</a></li>
-                        <li><a href="#">Resources</a></li>
-                    </ul>
-                </div>
-                <div class="mdl-mega-footer--drop-down-section">
-                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-                    <h1 class="mdl-mega-footer--heading">Technology</h1>
-                    <ul class="mdl-mega-footer--link-list">
-                        <li><a href="#">How it works</a></li>
-                        <li><a href="#">Patterns</a></li>
-                        <li><a href="#">Usage</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Contracts</a></li>
-                    </ul>
-                </div>
-                <div class="mdl-mega-footer--drop-down-section">
-                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-                    <h1 class="mdl-mega-footer--heading">FAQ</h1>
-                    <ul class="mdl-mega-footer--link-list">
-                        <li><a href="#">Questions</a></li>
-                        <li><a href="#">Answers</a></li>
-                        <li><a href="#">Contact us</a></li>
-                    </ul>
-                </div>
-            </div>
-            <!--
-            <div class="mdl-mega-footer--bottom-section">
-                <div class="mdl-logo">
-                    More Information
-                </div>
-                <ul class="mdl-mega-footer--link-list">
-                    <li><a href="https://developers.google.com/web/starter-kit/">Web Starter Kit</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Privacy and Terms</a></li>
-                </ul>
-            </div>
-            -->
-        </footer>
-    </main>
+<!-- Footer Information-->
+<footer class="mdl-mega-footer">
+    <div class="mdl-mega-footer--middle-section">
+        <div class="mdl-mega-footer--drop-down-section">
+            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+            <h1 class="mdl-mega-footer--heading">Features</h1>
+            <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">About</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Partners</a></li>
+                <li><a href="#">Updates</a></li>
+            </ul>
+        </div>
+        <div class="mdl-mega-footer--drop-down-section">
+            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+            <h1 class="mdl-mega-footer--heading">Details</h1>
+            <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">Spec</a></li>
+                <li><a href="#">Tools</a></li>
+                <li><a href="#">Resources</a></li>
+            </ul>
+        </div>
+        <div class="mdl-mega-footer--drop-down-section">
+            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+            <h1 class="mdl-mega-footer--heading">Technology</h1>
+            <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">How it works</a></li>
+                <li><a href="#">Patterns</a></li>
+                <li><a href="#">Usage</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Contracts</a></li>
+            </ul>
+        </div>
+        <div class="mdl-mega-footer--drop-down-section">
+            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+            <h1 class="mdl-mega-footer--heading">FAQ</h1>
+            <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">Questions</a></li>
+                <li><a href="#">Answers</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--
+    <div class="mdl-mega-footer--bottom-section">
+        <div class="mdl-logo">
+            More Information
+        </div>
+        <ul class="mdl-mega-footer--link-list">
+            <li><a href="https://developers.google.com/web/starter-kit/">Web Starter Kit</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Privacy and Terms</a></li>
+        </ul>
+    </div>
+    -->
+</footer>
+</main>
 </div>
 <a href="https://github.com/google/material-design-lite/blob/master/templates/text-only/" target="_blank" id="view-source"
    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">View Source</a>
