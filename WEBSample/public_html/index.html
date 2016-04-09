@@ -30,6 +30,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+    <!--End Bootstrap -->
+
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="images/android-desktop.png">
@@ -66,37 +77,94 @@
         z-index: 900;
         }
     </style>
+    <!--window.location.href='#signOut';-->
 
+    <%
+    //session.setAttribute("username", null);
+    //session.setAttribute("signedIn", "false");
+    %>
     <script language="JavaScript">
-    function move() {
-        window.location.href='';
+    function signOut() {
+        var name = '<%= session.getAttribute("username") %>';
+        <%
+        out.println(session.getAttribute("signedIn"));
+        if(session.getAttribute("signedIn") != null &&
+         session.getAttribute("signedIn").toString().equals("true")){
+            session.setAttribute("username", null);
+            session.setAttribute("signedIn", "false");
+        %>
+
+        alert("Successfully signed out " + name);
+        <%}else{%>
+        alert("here");
+        <%}%>
     }
+
+
+    $(function() {
+    $('input[name="birthdate"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true
+    },
+    function(start, end, label) {
+        var years = moment().diff(start, 'years');
+        alert("You are " + years + " years old.");
+    });
+});
+
     </script>
 
 </head>
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<%
+    Connector connector = new Connector();
+    User user = new User();
+    POI poi = new POI();
+    session.setAttribute("connector", connector);
+    session.setAttribute("user", user);
+    session.setAttribute("poi", poi);
+%>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--red-600">
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
         </div>
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
             <b><h1>UTrack</h1></b>
+
         </div>
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+            <%
+            Object username = session.getAttribute("username");
+            out.println(username);
+            if(username != null){
+            %>
+            <b>Welcome, <%=session.getAttribute("username")%></b>
+            <%}%>
         </div>
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--red-900">
             <a href="#overview" class="mdl-layout__tab is-active">Home</a>
             <a href="#features" class="mdl-layout__tab">Favorites</a>
             <a href="#popular" class="mdl-layout__tab">Popular</a>
             <a href="#features" class="mdl-layout__tab">FAQ</a>
+            <%if(username == null){%>
             <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
-            <a href="#features" class="mdl-layout__tab">Account</a>
+            <%}%>
+            <a class="mdl-layout__tab" id="account">Account</a>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="account">
+                <form method=post action="index.jsp" onsubmit="signOut()">
+                    <li class="mdl-menu__item">
+                        <input type=submit class="mdl-menu__item"/>
+                    </li>
+                </form>
+            </ul>
+
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--grey-900" id="add">
                 <i class="material-icons" role="presentation">add</i>
                 <span class="visuallyhidden">Add</span>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="add">
                 <li class="mdl-menu__item" disabled>Add New POI</li>
+
                 <li class="mdl-menu__item" >
                     <a href="#addVisit" class="mdl-layout__tab mdl-color-text--grey-700">Favorites</a>
                 </li>
@@ -273,8 +341,6 @@
     </div>
     -->
 
-
-
         <!--For the features tab-->
         <div class="mdl-layout__tab-panel" id="features">
             <section class="section--center mdl-grid mdl-grid--no-spacing">
@@ -341,22 +407,16 @@
 
                                 <!--Date-->
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input name="date-in" class="mdl-textfield__input" type="text"
-                                           pattern="\d{1,2}/\d{1,2}/\d{4}"
-                                           id="date">
-                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="date">Date (DD/MM/YYYY)</label>
-                                    <span class="mdl-textfield__error">Incorrect date format!</span>
+                                    <input class="mdl-textfield__input" type="text" name="birthdate" value="10/24/2016" />
                                 </div>
+
                                 <div>
                                     <div>
                                         <button class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
                                         mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900">
-                                            Sign in
+                                            Add Visit
                                         </button>
                                     </div>
-                                    <!--<a target="_blank" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-color&#45;&#45;red-900 mdl-color-text&#45;&#45;accent-contrast">-->
-                                    <!--Submit-->
-                                    <!--</a>-->
                                     <%
                                     String cost = request.getParameter("cost-in");
                                     String partyCount = request.getParameter("partyCount-in");
@@ -377,9 +437,6 @@
 
 
         <%
-        Connector connector = new Connector();
-        User user = new User();
-        POI poi = new POI();
         int limit = 10;
         String popPOI = poi.getCostliestForEachCategory(limit, connector.stmt, connector._con);
         String[] ps = popPOI.split("\n");
