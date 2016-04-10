@@ -133,6 +133,7 @@
             <a href="#features" class="mdl-layout__tab">FAQ</a>
             <%if(username == null){%>
             <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
+            <a href="register.jsp" class="mdl-layout__tab">Register</a>
             <%}else{%>
             <a class="mdl-layout__tab" id="account">Account</a>
             <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="account">
