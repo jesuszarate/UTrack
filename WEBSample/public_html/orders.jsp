@@ -81,10 +81,12 @@ function check_all_fields(form_obj){
         <input type=submit>
     </form>
     <div class="txt_format"> Form2: Search orders on director name: </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input name="pwd-input" class="mdl-textfield__input" type="text" id="password">
-        <label class="mdl-textfield__label input_label" for="password"></label>
-    </div>
+    <form name="director_search" method=get onsubmit="return check_all_fields(this)" action="orders.jsp">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input name="pwd-input" class="mdl-textfield__input" type="text" id="password">
+            <label class="mdl-textfield__label input_label" for="password"></label>
+        </div>
+    </form>
 
     <%
     } else {
@@ -96,7 +98,7 @@ function check_all_fields(form_obj){
 
     <p><b>Listing orders in JSP: </b><BR><BR>
 
-        The orders for query: <b><%=searchAttribute%>='<%=attributeValue%>'</b> are  as follows:<BR><BR>
+        The orders for query: are  as follows:<BR><BR>
         <%=order.getOrders(searchAttribute, attributeValue, connector.stmt)%> <BR><BR>
 
         <b>Alternate way (servlet method):</b> <BR><BR>
@@ -117,7 +119,7 @@ function check_all_fields(form_obj){
     <p>Schema for Order table: <font face="Geneva, Arial, Helvetica, sans-serif">(
         title varchar(100), quantity integer, login varchar(8), director varchar(10)
         )</font></p>
-    </div>
+</div>
 
 </body>
 </html>
