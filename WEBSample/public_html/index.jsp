@@ -80,25 +80,11 @@
     <!--window.location.href='#signOut';-->
 
     <%
-    //session.setAttribute("username", null);
-    //session.setAttribute("signedIn", "false");
+    //session.invalidate();
     %>
-    <script language="JavaScript">
-    function signOut() {
-        var name = '<%= session.getAttribute("username") %>';
-        <%
-        out.println(session.getAttribute("signedIn"));
-        if(session.getAttribute("signedIn") != null &&
-         session.getAttribute("signedIn").toString().equals("true")){
-            session.setAttribute("username", null);
-            session.setAttribute("signedIn", "false");
-        %>
 
-        alert("Successfully signed out " + name);
-        <%}else{%>
-        alert("here");
-        <%}%>
-    }
+    <script language="JavaScript">
+
 
 
     $(function() {
@@ -135,7 +121,6 @@
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
             <%
             Object username = session.getAttribute("username");
-            out.println(username);
             if(username != null){
             %>
             <b>Welcome, <%=session.getAttribute("username")%></b>
@@ -148,12 +133,12 @@
             <a href="#features" class="mdl-layout__tab">FAQ</a>
             <%if(username == null){%>
             <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
-            <%}%>
+            <%}else{%>
             <a class="mdl-layout__tab" id="account">Account</a>
             <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="account">
-                <form method=post action="index.jsp" onsubmit="signOut()">
+                <form method=post action="signout.jsp" onsubmit="signOut()">
                     <li class="mdl-menu__item">
-                        <input type=submit class="mdl-menu__item"/>
+                        <input type=submit class="mdl-menu__item" value="Log out"/>
                     </li>
                 </form>
             </ul>
@@ -169,6 +154,7 @@
                     <a href="#addVisit" class="mdl-layout__tab mdl-color-text--grey-700">Favorites</a>
                 </li>
             </ul>
+            <%}%>
         </div>
     </header>
     <main class="mdl-layout__content">
@@ -204,8 +190,6 @@
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
             </section>
-
-
 
             <!-- Naked Fish Card -->
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">

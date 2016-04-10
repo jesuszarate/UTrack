@@ -34,6 +34,17 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <%
+    Connector connector = (Connector)session.getAttribute("connector");
+    User user = (User)session.getAttribute("user");
+
+    %>
+
+    <script language="JavaScript">
+
+    </script>
+
 </head>
 
 <body>
@@ -46,7 +57,7 @@
     <div class="container">
 
         <!--<form class="form-signin" method="post" action="index.jsp">-->
-        <form class="form-signin" method="post" action="signin.jsp">
+        <form class="form-signin" method=post action="signin.jsp">
             <h2 class="form-signin-heading">Please sign in</h2>
 
             <!-- Theme labels -->
@@ -63,49 +74,26 @@
                     <input type="checkbox" value="remember-me"> Remember me
                 </label>
             </div>
-            <button class="btn-lg mdl-button btn-theme btn-block btn-primary mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                Sign in
-            </button>
+            <input type="submit" value="Sign in" class="btn-lg mdl-button btn-theme btn-block btn-primary mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             <!--<button class="btn btn-theme btn-lg btn-primary btn-block" type="submit">Sign in</button> -->
-
-
-            <%
-            Connector connector = (Connector)session.getAttribute("connector");
-            User user = (User)session.getAttribute("user");
-
-            String username = request.getParameter("username-input");
-            String password = request.getParameter("pwd-input");
-
-
-            if( username != null && password != null){
-
-
-                if (user.loginUser(username, password, connector.stmt)){
-                    session.setAttribute("username", username);
-
-                    session.setAttribute("signedIn", "true");
-
-            %>
-            <script>
-            alert(<%=session.getAttribute("username")%>);
-            </script>
-            <%
-            %>
-                    <!--<jsp:forward page="index.jsp"/>-->
-
-                    User: <b><%=username%></b>, is successfully logged in!
-            <%
-                } else {%>
-                <div class="form-signin">
-                    Incorrect username or password, please try again!
-                </div>
-            <%
-            }
-            %>
-            <%
-            }
-            %>
         </form>
+
+        <%
+        String username = request.getParameter("username-input");
+        String password = request.getParameter("pwd-input");
+
+        if(username != null && password != null){
+        if (user.loginUser(username, password, connector.stmt)){
+            session.setAttribute("username", username);
+            session.setAttribute("signedIn", "true");
+        %>
+            <script>window.location.href='index.jsp';</script>
+        <%
+        } else {%>
+        <div class="form-signin">
+            Incorrect username or password, please try again!
+        </div>
+        <%}}%>
 
     </div> <!-- /container -->
 </div>

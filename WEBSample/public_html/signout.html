@@ -41,10 +41,6 @@
 
     %>
 
-    <script language="JavaScript">
-
-    </script>
-
 </head>
 
 <body>
@@ -58,42 +54,19 @@
 
         <!--<form class="form-signin" method="post" action="index.jsp">-->
         <form class="form-signin" method=post action="signin.jsp">
-            <h2 class="form-signin-heading">Please sign in</h2>
+            <h2 class="form-signin-heading">Successfully signed out!</h2>
 
-            <!-- Theme labels -->
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input name="username-input" class="mdl-textfield__input" type="text" id="username">
-                <label class="mdl-textfield__label input_label" for="username">Username</label>
-            </div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input name="pwd-input" type="password" class="mdl-textfield__input" type="text" id="password">
-                <label class="mdl-textfield__label input_label" for="password">Password</label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-            <input type="submit" value="Sign in" class="btn-lg mdl-button btn-theme btn-block btn-primary mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-            <!--<button class="btn btn-theme btn-lg btn-primary btn-block" type="submit">Sign in</button> -->
         </form>
 
         <%
-        String username = request.getParameter("username-input");
-        String password = request.getParameter("pwd-input");
+        Object username = session.getAttribute("username");
+        Object signedIn = session.getAttribute("signedIn");
 
-        if(username != null && password != null){
-        if (user.loginUser(username, password, connector.stmt)){
-            session.setAttribute("username", username);
-            session.setAttribute("signedIn", "true");
-        %>
-            <script>window.location.href='index.jsp';</script>
-        <%
-        } else {%>
-        <div class="form-signin">
-            Incorrect username or password, please try again!
-        </div>
-        <%}}%>
+        if(username != null && signedIn != null){
+            session.setAttribute("username", null);
+            session.setAttribute("signedIn", null);
+                //session.invalidate();
+        }%>
 
     </div> <!-- /container -->
 </div>

@@ -27,6 +27,12 @@ stoh:
 sjsp:
 	scp signin.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
+sout: sotoh sojsp
+
+sotoh:
+	cp signout.html signout.jsp
+sojsp:
+	scp signout.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
 styles:
 	scp styles.css cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
