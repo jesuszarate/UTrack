@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License
 -->
-<%@ page language="java" import="cs5530.*" %>
+<%@ page language="java" import="cs5530.*"%>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -91,10 +91,6 @@
     $('input[name="birthdate"]').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true
-    },
-    function(start, end, label) {
-        var years = moment().diff(start, 'years');
-        alert("You are " + years + " years old.");
     });
 });
 
@@ -110,7 +106,10 @@
     session.setAttribute("user", user);
     session.setAttribute("poi", poi);
 %>
+
+
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
     <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--red-600">
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
         </div>
@@ -144,21 +143,35 @@
                 </form>
             </ul>
 
-            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--grey-900" id="add">
-                <i class="material-icons" role="presentation">add</i>
+            <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;fab mdl-js-ripple-effect mdl-button&#45;&#45;colored mdl-shadow&#45;&#45;4dp mdl-color&#45;&#45;grey-900" id="add">-->
+                <!--<i class="material-icons" role="presentation">add</i>-->
+                <!--<span class="visuallyhidden">Add</span>-->
+            <!--</button>-->
+            <!--<ul class="mdl-menu mdl-js-menu mdl-menu&#45;&#45;bottom-right" for="add">-->
+                <!--<li class="mdl-menu__item" disabled>Add New POI</li>-->
+
+                <!--<li class="mdl-menu__item" >-->
+                    <!--<a href="#addVisit" class="mdl-layout__tab mdl-color-text&#45;&#45;grey-700">Favorites</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+
+            <!--here-->
+            <button id="view-source"
+                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">
+                <i class="material-icons">add</i>
                 <span class="visuallyhidden">Add</span>
             </button>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="add">
-                <li class="mdl-menu__item" disabled>Add New POI</li>
 
+            <ul class="view-source1 mdl-menu mdl-js-menu mdl-menu--top-right" for="view-source">
                 <li class="mdl-menu__item" >
-                    <a href="#addVisit" class="mdl-layout__tab mdl-color-text--grey-700">Favorites</a>
+                    <a href="#addVisit" class="mdl-layout__tab mdl-color-text--grey-700">Add Visit</a>
                 </li>
             </ul>
             <%}%>
         </div>
     </header>
     <main class="mdl-layout__content">
+
         <div class="mdl-layout__tab-panel is-active" id="overview">
             <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
                 <b><h1>Check out these POIs</h1></b>
@@ -190,6 +203,7 @@
                     <li class="mdl-menu__item" disabled>Ipsum</li>
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
+
             </section>
 
             <!-- Naked Fish Card -->
@@ -345,7 +359,7 @@
 
         <!--For New Visit tab-->
 
-        <form method="get" action="index.jsp#addVisit">
+        <form method=post action="index.jsp#addVisit">
             <div class="mdl-layout__tab-panel" id="addVisit">
                 <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
 
@@ -356,24 +370,37 @@
                             </div>
                             <div class="mdl-card__supporting-text">
 
+                                <!--POI Selection-->
+                                <div class="mdl-textfield">
+                                    <label class="input_label mdl-color-text--red-900">Select POI</label>
+                                    <input list="pois" name="poi">
+                                    <datalist id="pois">
+                                        <%
+                                        for(String s : poi.getPOIList(connector.stmt)){
+                                        out.println("<option value=\"" + s + "\">");
+                                        }
+                                        %>
+                                    </datalist>
+                                </div>
 
                                 <div class="dropdown">
-                                    <button class="mdl-button mdl-js-button dropdown-toggle mdl-color-text--red-900" type="button" data-toggle="dropdown">
-                                        <div class="marg">
-                                            <strong>
-                                                <h7>
-                                                    Choose POI
-                                                    <span class="caret"></span>
-                                                </h7>
-                                            </strong>
-                                        </div>
-                                    </button>
-                                    <ul class="dropdown-menu mdl-color-text--red-900">
-                                        <!--Add items programmatically-->
-                                        <li>HTML</li>
-                                        <li>CSS</li>
-                                        <li>JavaScript</li>
-                                    </ul>
+                                    <!--<button list="browsers1"class="mdl-button mdl-js-button dropdown-toggle mdl-color-text&#45;&#45;red-900" type="button" data-toggle="dropdown">-->
+                                        <!--<div class="marg">-->
+                                            <!--<strong>-->
+                                                <!--<h7>-->
+                                                    <!--Choose POI-->
+                                                    <!--<span class="caret"></span>-->
+                                                <!--</h7>-->
+                                            <!--</strong>-->
+                                        <!--</div>-->
+                                    <!--</button>-->
+                                    <!--<ul class="dropdown-menu mdl-color-text&#45;&#45;red-900">-->
+                                        <!--<%-->
+                                        <!--for(String s : poi.getPOIList(connector.stmt)){-->
+                                            <!--out.println("<li><a>" + s + "</a></li>");-->
+                                        <!--}-->
+                                        <!--%>-->
+                                    <!--</ul>-->
                                 </div>
 
                                 <!--Cost-->
@@ -392,7 +419,7 @@
 
                                 <!--Date-->
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" name="birthdate" value="10/24/2016" />
+                                    <input class="mdl-textfield__input" type="text" name="birthdate"/>
                                 </div>
 
                                 <div>
@@ -403,13 +430,16 @@
                                         </button>
                                     </div>
                                     <%
+                                    String p = request.getParameter("poi");
                                     String cost = request.getParameter("cost-in");
                                     String partyCount = request.getParameter("partyCount-in");
                                     String date = request.getParameter("date-in");
 
-                                    if(cost != null && partyCount != null && date != null)
+                                    if(poi != null && cost != null && partyCount != null && date != null)
                                     {
-                                    out.println("It worked!!!!");
+                                        //int pid = user.addVisit(p, cost, partyCount, date, connector.stmt, connector._con);
+                                        out.println("It worked!!!!");
+                                        out.println(date);
                                     }
                                     %>
                                 </div>
@@ -521,10 +551,11 @@ i++;
     </div>
     -->
 </footer>
+
+
 </main>
 </div>
-<a href="https://github.com/google/material-design-lite/blob/master/templates/text-only/" target="_blank" id="view-source"
-   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">View Source</a>
+
 <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 </body>
 </html>
