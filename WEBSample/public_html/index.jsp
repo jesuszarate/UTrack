@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License
 -->
-<%@ page language="java" import="cs5530.*"%>
+<%@ page language="java" import="cs5530.*, java.util.*"%>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -38,6 +38,14 @@
     <!-- Include Date Range Picker -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 
     <!--End Bootstrap -->
 
@@ -85,8 +93,6 @@
 
     <script language="JavaScript">
 
-
-
     $(function() {
     $('input[name="birthdate"]').daterangepicker({
         singleDatePicker: true,
@@ -105,6 +111,12 @@
     session.setAttribute("connector", connector);
     session.setAttribute("user", user);
     session.setAttribute("poi", poi);
+
+
+    boolean isAdmin = false;
+
+    if(session.getAttribute("isAdmin") != null)
+        isAdmin = session.getAttribute("isAdmin").equals("true") ? true : false;
 %>
 
 
@@ -129,7 +141,7 @@
             <a href="#overview" class="mdl-layout__tab is-active">Home</a>
             <a href="#features" class="mdl-layout__tab">Favorites</a>
             <a href="#popular" class="mdl-layout__tab">Popular</a>
-            <a href="#features" class="mdl-layout__tab">FAQ</a>
+            <a href="#addVisit" class="mdl-layout__tab">FAQ</a>
             <%if(username == null){%>
             <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
             <a href="register.jsp" class="mdl-layout__tab">Register</a>
@@ -143,19 +155,7 @@
                 </form>
             </ul>
 
-            <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;fab mdl-js-ripple-effect mdl-button&#45;&#45;colored mdl-shadow&#45;&#45;4dp mdl-color&#45;&#45;grey-900" id="add">-->
-                <!--<i class="material-icons" role="presentation">add</i>-->
-                <!--<span class="visuallyhidden">Add</span>-->
-            <!--</button>-->
-            <!--<ul class="mdl-menu mdl-js-menu mdl-menu&#45;&#45;bottom-right" for="add">-->
-                <!--<li class="mdl-menu__item" disabled>Add New POI</li>-->
-
-                <!--<li class="mdl-menu__item" >-->
-                    <!--<a href="#addVisit" class="mdl-layout__tab mdl-color-text&#45;&#45;grey-700">Favorites</a>-->
-                <!--</li>-->
-            <!--</ul>-->
-
-            <!--here-->
+            <!--Add Button-->
             <button id="view-source"
                     class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">
                 <i class="material-icons">add</i>
@@ -164,8 +164,14 @@
 
             <ul class="view-source1 mdl-menu mdl-js-menu mdl-menu--top-right" for="view-source">
                 <li class="mdl-menu__item" >
-                    <a href="#addVisit" class="mdl-layout__tab mdl-color-text--grey-700">Add Visit</a>
+                    <a href="addVisit.jsp" class="mdl-layout__tab mdl-color-text--grey-700">Add Visit</a>
                 </li>
+
+                <%if(isAdmin){%>
+                <li class="mdl-menu__item" >
+                <a href="addNewPOI.jsp" class="mdl-layout__tab mdl-color-text--grey-700">Add New POI</a>
+                </li>
+                <%}%>
             </ul>
             <%}%>
         </div>
@@ -424,11 +430,35 @@
 
                                 <div>
                                     <div>
-                                        <button class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
-                                        mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900">
+                                        <button type="button" data-toggle="modal" data-target="#myModal"
+                                                class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900">
                                             Add Visit
                                         </button>
+                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">Modal Header</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Some text in the modal.</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
+
+
                                     <%
                                     String p = request.getParameter("poi");
                                     String cost = request.getParameter("cost-in");
@@ -453,40 +483,35 @@
 
         <%
         int limit = 10;
-        String popPOI = poi.getCostliestForEachCategory(limit, connector.stmt, connector._con);
-        String[] ps = popPOI.split("\n");
-        String[] pois = new String[ps.length];
-        for(int i = 0; i < ps.length; i++){
+        //String popPOI = poi.getCostliestForEachCategory(limit, connector.stmt, connector._con);
+        ArrayList<String> popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
+        int size = popPOI.size();
+
+        //String[] ps = popPOI.split("\n");
+        String[] pois = new String[size];
+        for(int i = 0; i < size; i++){
+
         pois[i] =
         "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
         "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
         "<div class=\"mdl-card__supporting-text\">" +
-        "<h4>" + ps[i] + "</h4>" +
-        "<b>" + ps[i+1] + "</b>" +
+        "<b>" + popPOI.get(i) + "</b>" +
         "</div>" +
         "<div class=\"mdl-card__actions\">" +
         "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
         "</div>" +
         "</div>" +
 "</section>";
-i++;
+
 }
 %>
 <!--For the popular tab-->
 <div class="mdl-layout__tab-panel" id="popular">
     <section class="section--center mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
-            <h4>Favorites</h4>
-
-            <ul class="toc">
-                <a>Jack Mormon</a>
-                <a>Naked Fish</a>
-                <a>Tosh's Ramen</a>
-                <a>Eve's Bakery</a>
-                <a>Starbucks</a>
-            </ul>
+            <h4>Popular</h4>
             <%
-            for(int i = 0; i < ps.length; i++){
+            for(int i = 0; i < size; i++){
             out.println(pois[i]);
             }
             %>
