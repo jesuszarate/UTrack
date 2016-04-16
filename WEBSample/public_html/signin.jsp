@@ -83,16 +83,20 @@
         String password = request.getParameter("pwd-input");
 
         if(username != null && password != null){
-        if (user.loginUser(username, password, connector.stmt)){
-            session.setAttribute("username", username);
-            session.setAttribute("signedIn", "true");
+            if (user.loginUser(username, password, connector.stmt)){
+                session.setAttribute("username", username);
+                session.setAttribute("signedIn", "true");
+
+                if(user.isAdmin()){
+                    session.setAttribute("isAdmin", "true");
+                }
         %>
-            <script>window.location.href='index.jsp';</script>
+                <script>window.location.href='index.jsp';</script>
         <%
-        } else {%>
-        <div class="form-signin">
-            Incorrect username or password, please try again!
-        </div>
+            } else {%>
+            <div class="form-signin">
+                Incorrect username or password, please try again!
+            </div>
         <%}}%>
 
     </div> <!-- /container -->
