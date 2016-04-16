@@ -86,6 +86,10 @@
             if (user.loginUser(username, password, connector.stmt)){
                 session.setAttribute("username", username);
                 session.setAttribute("signedIn", "true");
+
+                if(user.isAdmin()){
+                    session.setAttribute("isAdmin", "true");
+                }
         %>
                 <script>window.location.href='index.jsp';</script>
         <%
