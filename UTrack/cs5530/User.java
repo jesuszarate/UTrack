@@ -143,6 +143,46 @@ public class User {
 	password = null;
 	return false;
     }
+
+    public boolean isAdmin(Statement stmt){
+
+        String sql = "SELECT * " +
+            "FROM Users " +
+            "WHERE login = '" + login + "'";
+
+        String output = "";
+        ResultSet rs = null;
+        System.out.println("Executing: " + sql);
+        try{
+            // Execute sql query                                                                                                                                                                            
+            rs = stmt.executeQuery(sql);
+
+            String p;
+            while (rs.next()){
+		isAdmin = rs.getBoolean("isAdmin");
+
+		if(isAdmin)
+		    return true;
+
+            }
+            rs.close();
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+            System.out.println("Cannot execute the query");
+        }
+        finally{
+            try{
+                if (rs!=null && !rs.isClosed())
+                    rs.close();
+            }
+            catch(Exception e){
+                System.out.println("Cannot close resultset");
+            }
+        }
+        return false;
+    }
+
     
     public int addVisit(String _pname, int _cost, int _numberOfPeople, String _date,
 			   Statement stmt, Connection con){
