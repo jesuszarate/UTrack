@@ -594,6 +594,16 @@ public class POI {
 	return output;
     }
    
+    public ArrayList<String> getPopularForEachCategoryArray(int limit, Statement stmt, Connection con){
+
+        ArrayList<String> cats = getCategories(stmt);
+
+        ArrayList<String> output = new ArrayList<String>();
+        for(String s : cats)
+            output.add(getPopularPOIbyCategory(s, limit, stmt, con));
+
+	return output;
+    }
 
     public String getPopularPOIbyCategory(String category, int limit, 
 					  Statement stmt, Connection con){
@@ -619,13 +629,13 @@ public class POI {
 	    while (rs.next()){
 		
 		output += 
-		    "Name: " + rs.getString("name") +
-		    " Category: " + rs.getString("category") + 
-		    " Address: " + rs.getString("address") + 
-		    " URL: " + rs.getString("URL") + 
-		    " Phone Number: " + rs.getString("tel_num") + 
-		    " Hours: " + rs.getString("hours") +
-		    " Price: " + rs.getInt("price") + 
+		    "Name: " + rs.getString("name") + "\n" +
+		    " Category: " + rs.getString("category") + "\n" +
+		    " Address: " + rs.getString("address") + "\n" +
+		    " URL: " + rs.getString("URL") + "\n" +
+		    " Phone Number: " + rs.getString("tel_num") + "\n" +
+		    " Hours: " + rs.getString("hours") + "\n" +
+		    " Price: " + rs.getInt("price") + "\n" +
 		    " Visits: " + rs.getInt("num_visits") + "\n";
 	    }
 	    rs.close();
@@ -647,6 +657,60 @@ public class POI {
 
 	return output;
     }
+
+    public ArrayList<String> getPopularPOIbyCategoryArray(String category, int limit,
+                                          Statement stmt, Connection con){
+        String sql = "select * " +
+            "from POI P, " +
+            "(select pid, count(*) num_visits from Visit group by pid) V " +
+            "where V.pid = P.pid " +
+            "and P.category = ? " +
+            "order by V.num_visits DESC " +
+            "limit ?";
+
+        ArrayList<String> output = new ArrayList<String>();
+        ResultSet rs = null;
+        try{
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, category);
+            preparedStatement.setInt(2, limit);
+
+            rs = preparedStatement.executeQuery();
+
+            String p;
+            while (rs.next()){
+
+                output.add(
+                    "Name: " + rs.getString("name") +
+                    " Category: " + rs.getString("category") +
+                    " Address: " + rs.getString("address") +
+                    " URL: " + rs.getString("URL") +
+                    " Phone Number: " + rs.getString("tel_num") +
+                    " Hours: " + rs.getString("hours") +
+                    " Price: " + rs.getInt("price") +
+                    " Visits: " + rs.getInt("num_visits") + "\n");
+            }
+            rs.close();
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+            System.out.println("Cannot execute the query");
+        }
+        finally{
+            try{
+                if (rs!=null && !rs.isClosed())
+                    rs.close();
+            }
+            catch(Exception e){
+                System.out.println("Cannot close resultset");
+            }
+        }
+
+
+        return output;
+    }
+
     
     public ArrayList<String> getCategories(Statement stmt){
 	String sql = "select category from POI group by category";
@@ -689,6 +753,19 @@ public class POI {
 	
 	return output;
     }
+    /*
+    public HashMap<String, String> getCostliestForEachCategoryHM(int limit, Statement stmt, Connection con){
+
+	ArrayList<String> cats = getCategories(stmt);
+	
+	String output = "";
+	for(String s : cats)
+	    
+	    output += s + ":\n" + getMostExpensiveByCategory(s, limit, stmt, con) + "\n";
+	
+	return output;
+	}
+    */
 
     public String getMostExpensiveByCategory(String category, int limit, 
 					     Statement stmt, Connection con){
