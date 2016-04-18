@@ -60,6 +60,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="jquery-1.12.0.min.js"></script>
+
     <%
     Connector connector = (Connector)session.getAttribute("connector");
     User user = (User)session.getAttribute("user");
@@ -77,6 +79,13 @@
     $(function () {
         $('#datetimepicker1').datetimepicker();
     });
+
+    };
+
+    function back(){
+        window.location("index.jsp");
+        alert("here");
+    }
     </script>
 
 </head>
@@ -86,6 +95,16 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Utrack</h1>
+
+        <%
+        Object isSuccessful = session.getAttribute("isAddPOI");
+
+
+        if(isSuccessful != null && isSuccessful.toString().equals("true")){
+            session.setAttribute("isAddPOI", "false");
+        %>
+        <h4>POI Successfully added</h4>
+        <%}%>
     </div>
 
     <div class="container">
@@ -94,7 +113,7 @@
 
         </div>
         <!--<form class="form-signin" method="post" action="index.jsp">-->
-            <!--<form method=post action="index.jsp#addVisit">-->
+            <form method=post action="addNewPOI.jsp">
                 <h2 class="form-signin-heading">New POI</h2>
 
                 <div class="mdl-layout__tab-panel" id="addVisit">
@@ -107,88 +126,100 @@
                                 <div class="mdl-card__supporting-text">
 
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="Name">
+                                        <input name="Name" class="mdl-textfield__input" type="text" id="Name">
                                         <label class="mdl-textfield__label input_label" for="Name">Name</label>
                                     </div>
 
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="Category">
+                                        <input name="Category" class="mdl-textfield__input" type="text" id="Category">
                                         <label class="mdl-textfield__label input_label" for="Category">Category</label>
                                     </div>
 
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="Address">
+                                        <input name="Address" class="mdl-textfield__input" type="text" id="Address">
                                         <label class="mdl-textfield__label input_label" for="Address">Address</label>
                                     </div>
 
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="URL">
+                                        <input name="URL" class="mdl-textfield__input" type="text" id="URL">
                                         <label class="mdl-textfield__label input_label" for="URL">URL</label>
                                     </div>
 
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="phoneNumber">
+                                        <input name="phoneNumber" class="mdl-textfield__input" type="text" id="phoneNumber">
                                         <label class="mdl-textfield__label input_label" for="phoneNumber">Phone Number</label>
                                     </div>
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="year">
-                                        <label class="mdl-textfield__label input_label" for="year">Year of Establishment</label>
+                                        <input name="year" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="year">
+                                        <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="year">Year</label>
+                                        <span class="mdl-textfield__error">Input must be a number</span>
                                     </div>
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="hours">
+                                        <input name="hours" class="mdl-textfield__input" type="text" id="hours">
                                         <label class="mdl-textfield__label input_label" for="hours">hours</label>
                                     </div>
+
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="username-input" class="mdl-textfield__input" type="text" id="price">
-                                        <label class="mdl-textfield__label input_label" for="price">Price Per Person</label>
-                                    </div>
-                                    <!--Party Count-->
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="partyCount-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="partyCount">
-                                        <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Hours</label>
+                                        <input name="price" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="price">
+                                        <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="price">Price Per Person</label>
                                         <span class="mdl-textfield__error">Input must be a number</span>
                                     </div>
 
-                                    <!--Cost-->
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="cost-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="cost">
-                                        <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Price Per Person</label>
-                                        <span class="mdl-textfield__error">Input must be a number</span>
-                                    </div>
+                                <%
+                                    String Name = request.getParameter("Name");
+                                    String Category = request.getParameter("Category");
+                                    String Address = request.getParameter("Address");
+                                    String URL = request.getParameter("URL");
+                                    String phoneNumber = request.getParameter("phoneNumber");
+                                    String year = request.getParameter("year");
+                                    String hours = request.getParameter("hours");
+                                    String price = request.getParameter("price");
 
+                                    int cost = -1;
+                                    int yr = -1;
+                                    try {
+                                    out.println(price + " " + year);
+                                        cost = Integer.parseInt(price);
+                                        yr = Integer.parseInt(year);
 
+                                    } catch(Exception e) {
+                                        out.println("Not Worked" + e);
 
-                                        <%
-                                        String p = request.getParameter("poi");
-                                        String cost = request.getParameter("cost-in");
-                                        String partyCount = request.getParameter("partyCount-in");
-                                        String date = request.getParameter("date-in");
+                                    } finally {
 
-                                        try {
-                                            int c = Integer.parseInt(cost);
-                                            int pc = Integer.parseInt(partyCount);
+                                    }
 
-                                            if(p != null && cost != null && partyCount != null && date != null)
-                                            {
-                                                int pid = user.addVisit(p, c, pc, date, connector.stmt, connector._con);
-                                            }
-                                        } catch(Exception e) {
+                                    if(Name != null && Category!= null && Address != null && URL != null &&
+                                    phoneNumber != null && year != null && hours != null && price != null &&
+                                    Name != "" && Category!= "" && Address != "" && URL != "" &&
+                                    phoneNumber != "" && year != "" && hours != "" && price != "")
+                                    {
+                                        boolean t = poi.addPOI(Name, Category, Address, URL, phoneNumber, yr, hours, cost,
+                                        connector._con, connector.stmt);
 
-                                        } finally {
-
-                                        }
+                                        if(t){
                                     %>
+                                            <script>alert("POI Successfully added");</script>
+                                    <%
+                                        }
+                                        session.setAttribute("isAddPOI", "true");
+                                    }
+                                %>
 
                                 </div>
                             <div>
-                                <button type="button" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                <!--<button type="button" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button-->
+                                                <!--mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-button&#45;&#45;accent mdl-color&#45;&#45;red-900"-->
+                                        <!--data-toggle="modal" data-target="#myModal">Add POI</button>-->
+                                <button type="submit" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
                                                 mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
-                                        data-toggle="modal" data-target="#myModal">Add POI</button>
+                                        >Add POI</button>
+                                <!--<input type="submit" value="Add POI" class="btn-lg mdl-button btn-theme btn-block btn-primary mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-button&#45;&#45;accent">-->
+
                             </div>
                             </div>
 
                         </div>
-
 
 
                         <!-- Modal -->
@@ -202,10 +233,11 @@
                                         <h4 class="modal-title">Added Visits</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Some text in the modal.</p>
+                                        <p>POI Successfully Added</p>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <!--<button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                                        <input type="submit" class="btn btn-default" data-dismiss="modal">Close</input>
                                     </div>
                                 </div>
 
@@ -214,8 +246,9 @@
                     </section>
 
                 </div>
-            <!--</form>-->
-
+            </form>
+        <input value="Done" onclick="window.location = 'index.jsp';" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"/>
     </div> <!-- /container -->
 </div>
 

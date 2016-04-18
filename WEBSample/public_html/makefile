@@ -51,6 +51,13 @@ aptoh:
 apjsp:
 	scp addNewPOI.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
+#Browse
+b: btoh bjsp
+btoh:
+	cp browse.html browse.jsp
+bjsp:
+	scp browse.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
 
 #Styles
 styles:

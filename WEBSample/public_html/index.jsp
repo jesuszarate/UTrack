@@ -140,6 +140,7 @@
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--red-900">
             <a href="#overview" class="mdl-layout__tab is-active">Home</a>
             <a href="#features" class="mdl-layout__tab">Favorites</a>
+            <a href="browse.jsp" class="mdl-layout__tab">Browse</a>
             <a href="#popular" class="mdl-layout__tab">Popular</a>
             <a href="#addVisit" class="mdl-layout__tab">FAQ</a>
             <%if(username == null){%>
