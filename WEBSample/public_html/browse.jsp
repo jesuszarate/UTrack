@@ -65,6 +65,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+
 
     <!-- Custom styles for this template -->
     <link href="signin.css" rel="stylesheet">
@@ -164,6 +166,25 @@
                             <label class="mdl-textfield__label input_label" for="keywords">Keywords</label>
                         </div>
 
+                        <div>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+                                <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="2"checked>
+                                <span class="mdl-radio__label">Any</span>
+                            </label>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+                                <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="1">
+                                <span class="mdl-radio__label">Price</span>
+                            </label>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
+                                <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="2">
+                                <span class="mdl-radio__label">Feedback</span>
+                            </label>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-4">
+                                <input type="radio" id="option-4" class="mdl-radio__button" name="options" value="2">
+                                <span class="mdl-radio__label">Trusted Users</span>
+                            </label>
+
+                        </div>
                         <%
 
                         %>
