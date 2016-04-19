@@ -58,6 +58,20 @@ btoh:
 bjsp:
 	scp browse.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
+#BrowseJSP
+bj: bjtoh bjjsp
+bjtoh:
+	cp browseJSP.html browseJSP.jsp
+bjjsp:
+	scp browseJSP.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
+#BrowseJSP
+d: dtoh djsp
+dtoh:
+	cp d.html d.jsp
+djsp:
+	scp d.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
 
 #Styles
 styles:
