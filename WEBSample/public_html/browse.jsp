@@ -82,12 +82,17 @@
     <script type="text/javascript">
         function get(){
 
-            <!--var min = $("#min").val();-->
-            <!--var max = $("#max").val();-->
-            <!--var address = $("#Address").val();-->
-            <!--var category = $("#Category").val();-->
-            <!--var name = $("#Name").val();-->
-            <!--var keywords = $("#keywords").val();-->
+            var sortBy = "";
+            if(document.getElementById('price').checked){
+                sortBy = "a";
+            }
+            else if(document.getElementById('feedback').checked){
+                sortBy = "b";
+            }
+            else if(document.getElementById('trusted').checked){
+                sortBy = "c";
+            }
+
 
             var query = "";
 
@@ -97,7 +102,8 @@
                                     max : form.max.value,
                                     Category : form.Category.value,
                                     Address : form.Address.value,
-                                    keywords : form.keywords.value},
+                                    keywords : form.keywords.value,
+                                    sortby : sortBy },
 
                        function (output)
                        {
@@ -167,20 +173,20 @@
                         </div>
 
                         <div>
-                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
-                                <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="2"checked>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="any">
+                                <input type="radio" id="any" class="mdl-radio__button" name="options" value="2"checked>
                                 <span class="mdl-radio__label">Any</span>
                             </label>
-                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
-                                <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="1">
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="price">
+                                <input type="radio" id="price" class="mdl-radio__button" name="options" value="1">
                                 <span class="mdl-radio__label">Price</span>
                             </label>
-                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
-                                <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="2">
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="feedback">
+                                <input type="radio" id="feedback" class="mdl-radio__button" name="options" value="2">
                                 <span class="mdl-radio__label">Feedback</span>
                             </label>
-                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-4">
-                                <input type="radio" id="option-4" class="mdl-radio__button" name="options" value="2">
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="trusted">
+                                <input type="radio" id="trusted" class="mdl-radio__button" name="options" value="2">
                                 <span class="mdl-radio__label">Trusted Users</span>
                             </label>
 

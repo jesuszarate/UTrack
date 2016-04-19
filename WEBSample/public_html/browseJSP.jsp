@@ -8,7 +8,7 @@ String max = request.getParameter("max");
 String cat = request.getParameter("Category");
 String add = request.getParameter("Address");
 String keys = request.getParameter("keywords");
-String sortby = "";
+String sortby = request.getParameter("sortby");
 
 Connector connector = (Connector)session.getAttribute("connector");
 User user = (User)session.getAttribute("user");
@@ -37,8 +37,6 @@ if(min != null && max != null &&
 }
 
 
-
-out.println(add);
 if(add != null && add != ""){
     query += poi.createQuery(query, "address", add);
 }
@@ -51,14 +49,6 @@ if(name != null && name != ""){
 if(keys != null){
 
 }
-
-out.println(query + " " + sortby + " yup ");
-
-//Results
-//out.println("Results " + poi.poiBrowsing(query, "", sortby, connector.stmt, connector._con));
-
-
-out.println("aloha4");
 
 int limit = 10;
 
@@ -76,12 +66,11 @@ int limit = 10;
         "<b>" + popPOI.get(i) + "</b>" +
         "</div>" +
     "<div class=\"mdl-card__actions\">" +
-        "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
+        "<a href=\"#\" class=\"mdl-button\">Set as favorite</a>" +
         "</div>" +
     "</div>" +
     "</section>");
 
 
     }
-/**/
 %>
