@@ -14,7 +14,7 @@ public class POI {
     public POI()
     {}
 
-    public String addPOI(String _name, String _category, String _address, String _URL, 
+    public boolean addPOI(String _name, String _category, String _address, String _URL, 
 			 String _tel_num, int _yr_est, String _hours, int _price, 
 			 Connection con, Statement stmt){
 
@@ -38,14 +38,16 @@ public class POI {
 	    preparedStatement.setInt(8, _price);
 
 	    preparedStatement.executeUpdate();
+
+	    System.out.println("Successfully added " + _name  + "as a new POI");
+	    return true;
 	}
 	catch(Exception e){	    
 	    System.out.println(e.toString());
 	    System.out.println("Cannot execute the query");
 	}
 	
-	System.out.println("Successfully added " + _name  + "as a new POI");
-	return output;
+	return false;
     }
 
     public String updatePOI(String poiName,
