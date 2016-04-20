@@ -36,9 +36,14 @@ sotoh:
 sojsp:
 	scp signout.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
+#Add data
+ad: adjsp
+
+adjsp:
+	scp visitData.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
 #Add visit
 av: avtoh avjsp
-
 avtoh:
 	cp addVisit.html addVisit.jsp
 avjsp:

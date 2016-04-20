@@ -66,6 +66,7 @@
     Connector connector = (Connector)session.getAttribute("connector");
     User user = (User)session.getAttribute("user");
     POI poi = (POI)session.getAttribute("poi");
+
     %>
 
     <script language="JavaScript">
@@ -199,7 +200,7 @@
 
                                         if(t){
                                     %>
-                                            <script>alert("hi");</script>
+                                            <script>alert("POI Successfully added");</script>
                                     <%
                                         }
                                         session.setAttribute("isAddPOI", "true");

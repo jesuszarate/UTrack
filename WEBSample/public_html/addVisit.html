@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ page language="java" import="cs5530.*" %>
+<%@ page language="java" import="cs5530.*, java.util.*" %>
 <html lang="en">
 <head>
 
@@ -63,25 +63,96 @@
     <script src="jquery-1.12.0.min.js"></script>
 
     <%
-    Connector connector = (Connector)session.getAttribute("connector");
-    User user = (User)session.getAttribute("user");
-    POI poi = (POI)session.getAttribute("poi");
+        Connector connector = (Connector)session.getAttribute("connector");
+        User user = (User)session.getAttribute("user");
+        POI poi = (POI)session.getAttribute("poi");
+
+
+        ArrayList<visit> visits = (ArrayList<visit>)session.getAttribute("visits");
+        if(visits == null){
+            visits = new ArrayList<visit>();
+            session.setAttribute("visits", visits);
+        }
+
     %>
 
-    <script language="JavaScript">
-    $(function() {
-    $('input[name="birthdate"]').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true
-    });
-    });
+        <!--poi : form.poi.value,-->
+        <!--cost : form.cost.value,-->
+        <!--partyCount : form.partyCount.value,-->
+        <!--date : form.date.value-->
 
-    $(function () {
-        $('#datetimepicker1').datetimepicker();
-    });
+        <script type="text/javascript">
+        function submitVisit(){
+            alert("submitting");
+            $.get('visitData.jsp', {submit : "true"
+                                    },
+                           function (output)
+                           {
+                                $('#addResults').html(output).show();
+                           });
+        }
+
+        function addVisit(){
+
+            var p = document.getElementById('poi-id').value;
+            var c = document.getElementById('cost').value;
+            var pc = document.getElementById('partyCount').value;
+            var d = document.getElementById('date').value;
+
+            if(p != "" && c != "" && pc != "" && d != ""){
+                var query = "";
+                $.get('visitData.jsp', {add : "true",
+                                        pname : form.poi.value,
+                                        cost : form.cost.value,
+                                        partyCount : form.partyCount.value,
+                                        date : form.date.value},
+                           function (output)
+                           {
+                                $('#addResults').html(output).show();
+                           });
+                document.getElementById("error").innerHTML = "";
+                document.getElementById('poi-id').innerHTML = "";
+                document.getElementById('cost').innerHTML = "";
+                document.getElementById('partyCount').innerHTML = "";
+                document.getElementById('date').innerHTML = "";
+            }
+            else{
+                 document.getElementById("error").innerHTML = "* Must fill in all fields";
+            }
+        }
+
+        function add(){
+        alert("here");
+              <!--var query = "";-->
+            $.get('visitData.jsp', {add : "true",
+                                    poi : form.poi.value,
+                                    cost : form.cost.value,
+                                    partyCount : form.partyCount.value,
+                                    date : form.date.value},
+                       function (output)
+                       {
+                            $('#addResults').html(output).show();
+                       });
+    }
+
     </script>
 
-</head>
+        <style>
+            .demo-card-wide.mdl-card {
+            width: 512px;
+            }
+            .demo-card-wide > .mdl-card__title {
+            color: #fff;
+            height: 176px;
+            background: url('../assets/demos/welcome_card.jpg') center / cover;
+            }
+            .demo-card-wide > .mdl-card__menu {
+            color: #fff;
+            }
+        </style>
+
+
+        </head>
 
 <body>
 
@@ -90,25 +161,8 @@
         <h1>Utrack</h1>
     </div>
 
-    <div class="container">
-
-        <div class="container">
-            <div class="row">
-                <div class='col-sm-6'>
-                    <div class="form-group">
-                        <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
         <!--<form class="form-signin" method="post" action="index.jsp">-->
-            <!--<form method=post action="index.jsp#addVisit">-->
+            <form name="form">
                 <h2 class="form-signin-heading">New visit</h2>
 
                 <div class="mdl-layout__tab-panel" id="addVisit">
@@ -123,9 +177,12 @@
                                     <!--POI Selection-->
                                     <div class="mdl-textfield">
                                         <div>
+                                            <div>
+                                                <label id="error" class="mdl-color-text--blue"></label>
+                                            </div>
                                             <label class="input_label mdl-color-text--red-900">Select POI</label>
                                         </div>
-                                        <input list="pois" name="poi">
+                                        <input list="pois" name="poi" id="poi-id">
                                         <datalist id="pois">
                                             <%
                                             for(String s : poi.getPOIList(connector.stmt)){
@@ -138,7 +195,7 @@
                                     <div>
                                     <!--Cost-->
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input name="cost-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="cost">
+                                            <input name="cost" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="cost">
                                             <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Cost</label>
                                             <span class="mdl-textfield__error">Input must be a number</span>
                                         </div>
@@ -147,7 +204,7 @@
                                     <div>
                                     <!--Party Count-->
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input name="partyCount-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="partyCount">
+                                        <input name="partyCount" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="partyCount">
                                         <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Number of people</label>
                                         <span class="mdl-textfield__error">Input must be a number</span>
                                     </div>
@@ -155,7 +212,7 @@
                                     <div>
                                     <!--Date-->
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" name="birthdate"/>
+                                        <input id="date" class="mdl-textfield__input" type="text" name="date"/>
                                     </div>
                                     </div>
                                         <%
@@ -178,42 +235,52 @@
 
                                         }
                                     %>
-
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <div>
-                            <button type="button" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                    <input type="button" onclick="addVisit()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
                                                 mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
-                                    data-toggle="modal" data-target="#myModal">Add Visit</button>
-                        </div>
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog">
-
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Added Visits</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Some text in the modal.</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+                                           value="Add"/>
+                                    <input type="button" onclick="submitVisit()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
+                                           value="Submit Visits"/>
                                 </div>
 
+
                             </div>
+
+
                         </div>
                     </section>
+                    <div id="addResults">
+                    <%
+                    visits = (ArrayList<visit>)session.getAttribute("visits");
+                    int size = visits.size();
+                    for(int i = 0; i < size; i++){
+                    visit v = visits.get(i);
+                    out.println(
 
+                    "<div class=\"mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                        "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                            "<div class=\"mdl-card__supporting-text\">" +
+
+                                "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
+                                "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                                "<div class=\"mdl-card__supporting-text\">" +
+                                    "<div><p><b>" + v.pname + "</b></p></div>" +
+                                    "<div><p><b>Cost</b>\t" + v.cost + "</p></div>" +
+                                    "<div><p><b>Number of People</b>\t" + v.numOfPeople + "</p></div>" +
+                                    "<div><p><b>Date</b>\t" + v.date + "</p></div>" +
+                                "</div>" +
+
+                                "</div>" +
+                                "</section>" +
+
+                            "</div>" +
+                        "</div>" +
+                    "</div>");
+                    }
+                    %>
+                    </div>
                 </div>
-            <!--</form>-->
+            </form>
 
     </div> <!-- /container -->
 </div>
