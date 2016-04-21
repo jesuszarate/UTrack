@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 
 public class User {
 
+
     private String login;
     private String name;
     private boolean isAdmin = false;
@@ -30,8 +31,8 @@ public class User {
     
     public boolean registerUser(String _login, String _name, String _password, 
 			       String _address, String _phone_num, Connection con, Statement stmt){
-	login = _login;
-	name = _name;	
+	this.login = _login;
+	this.name = _name;	
 
 	String sql = "INSERT INTO Users (login, name, password, address, phone_num, isAdmin)" +
 	    "VALUES (?, ?, ?, ?, ?, ?)";
@@ -182,7 +183,6 @@ public class User {
         }
         return false;
     }
-
     
     public int addVisit(String _pname, int _cost, int _numberOfPeople, String _date,
 			   Statement stmt, Connection con){

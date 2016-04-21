@@ -51,6 +51,7 @@ public class utrack {
 	
     public static void main(String[] args) {
 	user = new User();
+	visit v = new visit();
 
 	System.out.println("Example for cs5530");
 
@@ -547,7 +548,7 @@ public class utrack {
 
     public static void poiBrowsing(BufferedReader in) throws IOException{
 	// Get rid of me after testing
-	user.setLogin("jay8chuy");
+	//user.setLogin("jay8chuy");
 	
 	POI poi = new POI();
 	String query;
