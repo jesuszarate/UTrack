@@ -112,6 +112,9 @@
     session.setAttribute("user", user);
     session.setAttribute("poi", poi);
 
+    if(session.getAttribute("recommended") == null){
+        session.setAttribute("recommended", new ArrayList<String>());
+    }
 
     boolean isAdmin = false;
 
@@ -240,6 +243,35 @@
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
             </section>
+
+            <div id="Recommended">
+                <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
+                    <b><h1>Recommended POIs</h1></b>
+                </div>
+                <%
+
+                ArrayList<String> recommended = (ArrayList<String>)session.getAttribute("recommended");
+                for(String s : recommended)
+                out.println(
+                "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
+                "<div class=\"mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                "<div class=\"mdl-card__supporting-text\">" +
+                "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
+                "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                "<div class=\"mdl-card__supporting-text\">" +
+
+                    "<div><p><b>" + s + "</b></p></div>" +
+
+                "</div>" +
+                "</div>" +
+                "</String>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</section>");
+                %>
+            </div>
             <section class="section--footer mdl-color--white mdl-grid">
                 <!--
                 <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">

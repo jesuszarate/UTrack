@@ -90,6 +90,7 @@
                            {
                                 $('#addResults').html(output).show();
                            });
+            window.location="index.jsp";
         }
 
         function addVisit(){

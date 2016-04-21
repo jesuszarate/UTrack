@@ -15,8 +15,18 @@ User user = (User)session.getAttribute("user");
 POI poi = (POI)session.getAttribute("poi");
 
 
-String query = "";
+String setFav = request.getParameter("setFav");
+String pname = request.getParameter("pname");
 
+if(setFav != null && setFav.equals("true")){
+
+    String username = (String)session.getAttribute("username");
+out.println("_" +pname+"_");
+out.println(username);
+    out.println(poi.setFavoritePOI(pname, username, connector.stmt, connector._con));
+
+}else{
+String query = "";
 
 if(min != null && max != null &&
     min != "" && max != ""){
@@ -59,6 +69,11 @@ int limit = 10;
     String[] pois = new String[size];
     for(int i = 0; i < size; i++){
 
+    String[] str = popPOI.get(i).split("\\n");
+    String p = popPOI.get(i);
+
+    p ="word";
+
     out.println(
     "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
     "<div class=\"mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
@@ -66,12 +81,14 @@ int limit = 10;
         "<b>" + popPOI.get(i) + "</b>" +
         "</div>" +
     "<div class=\"mdl-card__actions\">" +
-        "<a class=\"mdl-button\">Set as favorite</a>" +
+        //"<a onclick=\"setFavorite(\'"+ str[0] +"\')\" class=\"mdl-button\">Set as favorite</a>" +
+        "<a onclick=\"setFavorite('hey:hello " + str[0] +"')\" class=\"mdl-button\">Set as favorite</a>" +
         "<a href=\"#\" class=\"mdl-button\">Edit POI</a>" +
         "</div>" +
     "</div>" +
     "</section>");
 
 
+    }
     }
 %>

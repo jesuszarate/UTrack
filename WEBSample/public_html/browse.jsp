@@ -80,6 +80,40 @@
     %>
 
     <script type="text/javascript">
+        function setFavorite(){
+
+            var n = arguments[0].match(/Name:(.*)Category/);
+
+            var pn = n[1];
+
+            var hello = "";
+            var i;
+            var start;
+            var end;
+            for(i = 0; i < pn.length; i++){
+                if(pn.charAt(i) != ' '){
+                    start = i;
+                    break;
+                }
+            }
+            for(i = pn.length - 1; i >= 0; i--){
+                if(pn.charAt(i) != ' '){
+                    end = i;
+                    break;
+                }
+            }
+            pn = pn.substring(start, end+1);
+
+            $.get('browseJSP.jsp', {setFav : "true",
+                                    pname : pn},
+                       function (output)
+                       {
+                            $('#SearchResults').html(output).show();
+                       });
+
+            alert ("Added " + n[1] + " _" + pn + "_ to your favorite POIs");
+        }
+
         function get(){
 
             var sortBy = "";
@@ -96,7 +130,6 @@
 
             var query = "";
 
-            <!--alert(query);-->
             $.get('browseJSP.jsp', {name : form.Name.value,
                                     min : form.min.value,
                                     max : form.max.value,

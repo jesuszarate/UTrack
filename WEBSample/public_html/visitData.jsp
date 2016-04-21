@@ -49,18 +49,48 @@ if(submit != null && submit.equals("true")){
                 int cst = Integer.parseInt(vst.cost);
                 int np = Integer.parseInt(vst.numOfPeople);
                 pid = user.addVisit(vst.pname, cst, np, vst.date, connector.stmt, connector._con);
+
             }catch(Exception e){
                   out.println(e.toString());
             }
 
+            if(pid != -1){
+                out.println("pid " + pid);
 
+                ArrayList<String> newRecommended = poi.getRecomendedPOIsArr(user.getLogin(), pid, connector.stmt);
 
+                ArrayList<String> recommended = (ArrayList<String>)session.getAttribute("recommended");
 
-            out.println("pid " + pid);
-            //out.println(poi.getRecomendedPOIs("user2", 320, connector.stmt));
+                for(String rec : newRecommended){
+                    recommended.add(rec);
+                }
 
+                session.setAttribute("recommended", recommended);
 
+                /*
+                out.println("<p><b>" + "RECOMMENDED POI'S FOR YOU" + "</b></p>");
 
+                for(String s : recommended)
+                    out.println(
+                                "<div class=\"mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                                    "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                                        "<div class=\"mdl-card__supporting-text\">" +
+                                            "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
+                                            "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                                            "<div class=\"mdl-card__supporting-text\">" +
+
+                                                "<div><p><b>" + s + "</b></p></div>" +
+
+                                            "</div>" +
+
+                                            "</div>" +
+                                            "</section>" +
+
+                                        "</div>" +
+                                    "</div>" +
+                                "</div>");
+                 */
+            }
         }
 
         session.setAttribute("visits", null);
