@@ -407,7 +407,7 @@ public class POI {
             String p;
             while (rs.next()){
                 output.add(
-                    "Username:  " + rs.getString("login") +  ",\t " +
+                    "Username:  " + rs.getString("login") +  "\t " +
                     "POI: " + rs.getString("name") + ",\t" +
                     "Text: " + rs.getString("text") + ",\t" +
                     "Score: " + rs.getString("score") + "\n");
