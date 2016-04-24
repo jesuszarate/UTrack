@@ -254,7 +254,9 @@ public class User {
 	return pid;
 
     }
+
     
+
     public String setTrustOrUntrust(String other_login, boolean isTrusted, 
 				    Statement stmt, Connection con){
 		
@@ -287,6 +289,40 @@ public class User {
 	    System.out.println(other_login + " not Trusted by you now");
 	return output;
     }
+
+    public String setTrust(String myLogin, String other_login, boolean isTrusted,
+                                    Statement stmt, Connection con){
+
+        if (hasTrust(other_login, stmt, con)){
+            return updateTrustOrUntrust(other_login, isTrusted, stmt, con);
+        }
+
+        String sql = "INSERT INTO Trust (login1, login2, isTrusted)" +
+            "VALUES (?, ?, ?)";
+
+        String output = "";
+        ResultSet rs = null;
+        System.out.println("executing " + sql);
+        try{
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, myLogin);
+            preparedStatement.setString(2, other_login);
+            preparedStatement.setBoolean(3, isTrusted);
+
+            preparedStatement.executeUpdate();
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+            System.out.println("Cannot execute the query");
+        }
+
+        if (isTrusted)
+            System.out.println(other_login + " is now Trusted by you now");
+        else
+            System.out.println(other_login + " not Trusted by you now");
+        return output;
+    }
+
 
     public String updateTrustOrUntrust(String other_login, boolean isTrusted, 
 				    Statement stmt, Connection con){		

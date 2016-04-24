@@ -241,7 +241,7 @@ public class POI {
     }
 
 
-    public String getTopFeedback(String pname, int n,
+    public ArrayList<String> getTopFeedbackArr(String pname, int n,
 				 Statement stmt, Connection con){
 	String sql  = 
 	    "SELECT P.pid, P.name pname, F.login, F.text, F.fbdate, F.score, av.avg_score " +
@@ -254,7 +254,7 @@ public class POI {
 	    "ORDER BY av.avg_score DESC " + 
 	    "LIMIT " + n;
 
-	String output = "";
+	ArrayList<String> output = new ArrayList<String>();
 	ResultSet rs = null;
 	try{
 	    // Execute sql query
@@ -263,12 +263,12 @@ public class POI {
 	    String p;
 	    while (rs.next()){
 
-		output += 
+		output.add( 
 		    "Login: " + rs.getString("login") + " " +
 		    "Text: " + rs.getString("text") + " " +
 		    "Date: " + rs.getString("fbdate") + " " +
 		    "Score: " + rs.getString("score") + " " +
-		    "Average Score: " + rs.getString("avg_score") + "\n";	
+		    "Average Score: " + rs.getString("avg_score") + "\n");	
 	    }			     
 	    rs.close();
 	}
@@ -287,6 +287,54 @@ public class POI {
 	}
 	return output;
     }
+
+    public String getTopFeedback(String pname, int n,
+					       Statement stmt, Connection con){
+        String sql  =
+            "SELECT P.pid, P.name pname, F.login, F.text, F.fbdate, F.score, av.avg_score " +
+            "FROM Feedback F, POI P, " +
+            "(SELECT fid, rating, AVG(rating) avg_score " +
+            "FROM Rates GROUP BY fid) av " +
+            "where F.fid = av.fid " +
+            "AND P.pid = F.pid " +
+            "AND P.name = '" + pname + "' " +
+            "ORDER BY av.avg_score DESC " +
+            "LIMIT " + n;
+
+        String output = "";
+        ResultSet rs = null;
+        try{
+            // Execute sql query                                                                                                                                                                                                              
+            rs = stmt.executeQuery(sql);
+
+            String p;
+            while (rs.next()){
+
+                output += 
+			   "Login: " + rs.getString("login") + " " +
+			   "Text: " + rs.getString("text") + " " +
+			   "Date: " + rs.getString("fbdate") + " " +
+			   "Score: " + rs.getString("score") + " " +
+			   "Average Score: " + rs.getString("avg_score") + "\n";
+            }
+            rs.close();
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+            System.out.println("Cannot execute the query");
+        }
+        finally{
+            try{
+                if (rs!=null && !rs.isClosed())
+                    rs.close();
+            }
+            catch(Exception e){
+                System.out.println("Cannot close resultset");
+            }
+        }
+        return output;
+    }
+
 
     public String setFavoritePOI(String pname, String login,
 				 Statement stmt, Connection con){		
@@ -407,7 +455,7 @@ public class POI {
             String p;
             while (rs.next()){
                 output.add(
-                    "Username:  " + rs.getString("login") +  ",\t " +
+                    "Username:  " + rs.getString("login") +  "\t " +
                     "POI: " + rs.getString("name") + ",\t" +
                     "Text: " + rs.getString("text") + ",\t" +
                     "Score: " + rs.getString("score") + "\n");
