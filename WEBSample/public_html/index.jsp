@@ -586,7 +586,7 @@
                     </select>
 
                     <div style="width:100px;"  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input name="amount" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="amount">
+                        <input name="amount" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="amount" value="10">
                         <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="amount">Amount</label>
                         <span class="mdl-textfield__error">Input must be a number</span>
                     </div>

@@ -53,14 +53,16 @@ if(view != null && view.equals("true")){
 
     ArrayList<String> popPOI = new ArrayList<String>();
     if(viewBy.equals("Most Popular")){
+        out.print("Most Popular");
         popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
     }
     else if(viewBy.equals("Most Expensive")){
-        out.print("I'm fancy again");
+        out.print("Most Expensive");
         popPOI = poi.getCostliestForEachCategoryArr(limit, connector.stmt, connector._con);
     }
     else{
-        out.print("I'm awesome!");
+        out.print("Highest Rated");
+        popPOI = poi.getBestRatedForEachCategoryArr(limit, connector.stmt, connector._con);
     }
 
     ArrayList<String> resultArr = view(popPOI);
