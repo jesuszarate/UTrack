@@ -77,6 +77,34 @@ dtoh:
 djsp:
 	scp d.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
 
+#Edit POI
+ed: edtoh edjsp
+edtoh:
+	cp editPOI.html editPOI.jsp
+edjsp:
+	scp editPOI.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
+#Feedback
+f: ftoh fjsp
+ftoh:
+	cp feedback.html feedback.jsp
+fjsp:
+	scp feedback.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
+#Rate Feedback
+rf: rftoh rfjsp
+rftoh:
+	cp rateFeedback.html rateFeedback.jsp
+rfjsp:
+	scp rateFeedback.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
+#View
+vd: vdtoh vdjsp
+vdtoh:
+	cp viewData.html viewData.jsp
+vdjsp:
+	scp viewData.jsp cs5530u25@georgia.eng.utah.edu:/home/cs5530u25/public_html
+
 
 #Styles
 styles:

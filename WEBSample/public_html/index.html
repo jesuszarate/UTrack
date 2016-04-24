@@ -93,6 +93,22 @@
 
     <script language="JavaScript">
 
+    function view(){
+
+        var v = $( "#viewBy option:selected" ).text();
+        var lim = document.getElementById("amount").value;
+
+        alert(viewBy + " " + lim );
+
+        $.get('viewData.jsp', {view : "true",
+                               viewBy : v,
+                               limit : lim},
+                   function (output)
+                   {
+                        $('#here').html(output).show();
+                   });
+    }
+
     $(function() {
     $('input[name="birthdate"]').daterangepicker({
         singleDatePicker: true,
@@ -539,19 +555,66 @@
 }
 %>
 <!--For the popular tab-->
+<form id="form">
 <div class="mdl-layout__tab-panel" id="popular">
-    <section class="section--center mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-cell mdl-cell--12-col">
-            <h4>Popular</h4>
-            <%
-            for(int i = 0; i < size; i++){
-            out.println(pois[i]);
-            }
-            %>
+    <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+        <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+            <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
+                    <b><h2 id="here1">View</h2></b>
+                </div>
+                <!--<div class="mdl-card__supporting-text">-->
+                    <% String poiname = (String)session.getAttribute("POIFeedback");%>
+
+                    <!--<h4><%out.println(poiname);%></h4>-->
+                    <!--<%-->
+                    <!--HashMap<String, String> mp = poi.getPOI(poiname, connector.stmt);-->
+                    <!--Iterator it = mp.entrySet().iterator();-->
+                    <!--while (it.hasNext()) {-->
+                    <!--Map.Entry pair = (Map.Entry)it.next();-->
+                    <!--out.println("<div><b>" + pair.getKey() + " : " + pair.getValue() + "</b></div>");-->
+                    <!--it.remove(); // avoids a ConcurrentModificationException-->
+                    <!--}-->
+                    <!--%>-->
+                <!--</div>-->
+
+                <div class="mdl-card__supporting-text">
+                    <select id="viewBy">
+                        <option value="Most Popular">Most Popular</option>
+                        <option value="Most Expensive">Most Expensive</option>
+                        <option value="Highest Rated">Highest Rated</option>
+                    </select>
+
+                    <div style="width:100px;"  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input name="amount" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="amount">
+                        <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="amount">Amount</label>
+                        <span class="mdl-textfield__error">Input must be a number</span>
+                    </div>
+                    <div>
+                    <input type="button" onclick="view()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
+                           value="Search"/>
+                    </div>
+
+                </div>
+                <div id="here"></div>
+            </div>
+
+
         </div>
     </section>
+    <!--<section class="section&#45;&#45;center mdl-grid mdl-grid&#45;&#45;no-spacing">-->
+        <!--<div class="mdl-cell mdl-cell&#45;&#45;12-col">-->
+            <!--<h4>Popular</h4>-->
+            <!--<%-->
+            <!--for(int i = 0; i < size; i++){-->
+            <!--out.println(pois[i]);-->
+            <!--}-->
+            <!--%>-->
+        <!--</div>-->
+    <!--</section>-->
 </div>
-
+</form>
 
 <!-- Footer Information-->
 <footer class="mdl-mega-footer">

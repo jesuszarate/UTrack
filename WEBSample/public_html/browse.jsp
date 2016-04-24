@@ -80,6 +80,122 @@
     %>
 
     <script type="text/javascript">
+        function goHome(){
+            window.location="index.jsp";
+
+        }
+
+        function rateFeedback(){
+            alert("rating feedback2");
+            var name = getName(arguments[0]);
+
+            GetRequest(name);
+
+            window.location="rateFeedback.jsp";
+        }
+
+        function GetRequest(){
+            $.get('browseJSP.jsp', {feedback : "true",
+                                     pname : arguments[0]},
+                       function (output)
+                       {
+                            $('#SearchResults').html(output).show();
+                       });
+        }
+
+        function getName(){
+            var n = arguments[0].match(/Name:(.*)Category/);
+
+            var pn = n[1];
+
+            var hello = "";
+            var i;
+            var start;
+            var end;
+            for(i = 0; i < pn.length; i++){
+                if(pn.charAt(i) != ' '){
+                    start = i;
+                    break;
+                }
+            }
+            for(i = pn.length - 1; i >= 0; i--){
+                if(pn.charAt(i) != ' '){
+                    end = i;
+                    break;
+                }
+            }
+            pn = pn.substring(start, end+1);
+
+            return pn;
+        }
+
+        function giveFeedback(){
+            var n = arguments[0].match(/Name:(.*)Category/);
+
+            var pn = n[1];
+
+            var hello = "";
+            var i;
+            var start;
+            var end;
+            for(i = 0; i < pn.length; i++){
+                if(pn.charAt(i) != ' '){
+                    start = i;
+                    break;
+                }
+            }
+            for(i = pn.length - 1; i >= 0; i--){
+                if(pn.charAt(i) != ' '){
+                    end = i;
+                    break;
+                }
+            }
+            pn = pn.substring(start, end+1);
+
+             $.get('browseJSP.jsp', {feedback : "true",
+                                     pname : pn},
+                       function (output)
+                       {
+                            $('#SearchResults').html(output).show();
+                       });
+             window.location="feedback.jsp";
+        }
+
+        function editPOI(){
+
+            var n = arguments[0].match(/Name:(.*)Category/);
+
+            var pn = n[1];
+
+            var hello = "";
+            var i;
+            var start;
+            var end;
+            for(i = 0; i < pn.length; i++){
+                if(pn.charAt(i) != ' '){
+                    start = i;
+                    break;
+                }
+            }
+            for(i = pn.length - 1; i >= 0; i--){
+                if(pn.charAt(i) != ' '){
+                    end = i;
+                    break;
+                }
+            }
+            pn = pn.substring(start, end+1);
+
+             $.get('browseJSP.jsp', {editPoi : "true",
+                                    pname : pn},
+                       function (output)
+                       {
+                            $('#SearchResults').html(output).show();
+                       });
+
+            //alert(pn);
+            window.location="editPOI.jsp";
+        }
+
         function setFavorite(){
 
             var n = arguments[0].match(/Name:(.*)Category/);
@@ -150,7 +266,7 @@
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 
 <div class="jumbotron">
-    <h1>Utrack</h1>
+    <h1 onclick="goHome()">Utrack</h1>
     <%
     String query = "";
     %>
@@ -225,7 +341,6 @@
 
                         </div>
                         <%
-
                         %>
 
                     </div>
@@ -233,28 +348,18 @@
                         <input type="button" onclick="get()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
                                                 mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
                                value="Search"/>
-
                     </div>
                 </div>
 
             </div>
         </section>
     </div>
+    <div class="mdl-layout mdl-js-layout">
+        <main class="mdl-layout__content">
+            <div id="SearchResults" class="mdl-cell mdl-cell--12-col"></div>
+        </main>
+    </div>
 
-    <!--<input value="Done" onclick="window.location = 'index.jsp';" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button-->
-    <!--mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-button&#45;&#45;accent mdl-color&#45;&#45;red-900"/>-->
-
-
-
-            <!--<div class="mdl-layout__tab-panel">-->
-                <!--<section class="section&#45;&#45;center mdl-grid mdl-grid&#45;&#45;no-spacing">-->
-                    <div class="mdl-layout mdl-js-layout">
-                    <main class="mdl-layout__content">
-                    <div id="SearchResults" class="mdl-cell mdl-cell--12-col"></div>
-                    </main>
-                    </div>
-                <!--</section>-->
-            <!--</div>-->
 
 </form>
 </body>
