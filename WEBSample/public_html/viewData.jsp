@@ -45,22 +45,29 @@ if(view != null && view.equals("true")){
     String viewBy = request.getParameter("viewBy");
     String lim = request.getParameter("limit");
 
-
+    out.println(viewBy);
     int limit = 10;
     try{
         limit = Integer.parseInt(lim);
     }catch(Exception e){}
 
-
-            out.println(limit);
-    ArrayList<String> a = new ArrayList<String>();
-    a.add("h oohoo");
-    ArrayList<String> popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
+    ArrayList<String> popPOI = new ArrayList<String>();
+    if(viewBy.equals("Most Popular")){
+        popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
+    }
+    else if(viewBy.equals("Most Expensive")){
+        out.print("I'm fancy again");
+        popPOI = poi.getCostliestForEachCategoryArr(limit, connector.stmt, connector._con);
+    }
+    else{
+        out.print("I'm awesome!");
+    }
 
     ArrayList<String> resultArr = view(popPOI);
     for(String s : resultArr){
         out.println(s);
     }
+
 
 }
 
