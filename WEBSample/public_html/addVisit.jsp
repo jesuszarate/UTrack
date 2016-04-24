@@ -212,9 +212,13 @@
                                     </div>
                                     <div>
                                     <!--Date-->
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input id="date" class="mdl-textfield__input" type="text" name="date"/>
-                                    </div>
+                                    <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label">-->
+                                        <!--<input id="date" class="mdl-textfield__input" type="text" name="date"/>-->
+                                    <!--</div>-->
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input name="date" class="mdl-textfield__input" type="text" id="date">
+                                            <label class="mdl-textfield__label input_label" for="date">Date (mm-dd-yyyy)</label>
+                                        </div>
                                     </div>
                                         <%
                                         String p = request.getParameter("poi");
@@ -228,7 +232,9 @@
 
                                             if(p != null && cost != null && partyCount != null && date != null)
                                             {
-                                                int pid = user.addVisit(p, c, pc, date, connector.stmt, connector._con);
+                                                String username = (String)session.getAttribute("username");
+
+                                                int pid = user.addVisit(username, p, c, pc, date, connector.stmt, connector._con);
                                             }
                                         } catch(Exception e) {
 

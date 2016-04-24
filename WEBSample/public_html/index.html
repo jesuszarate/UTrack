@@ -74,6 +74,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link href="signin.css" rel="stylesheet">
+
     <style>
         #view-source {
         position: fixed;
@@ -92,6 +94,19 @@
     %>
 
     <script language="JavaScript">
+
+    function DOS(){
+        var oUsername = document.getElementById('o_username').value;
+        alert("uname " + oUsername);
+
+        $.get('viewData.jsp', {dos : "true",
+                               ouname : oUsername
+                               },
+                   function (output)
+                   {
+                        $('#DOShere').html(output).show();
+                   });
+    }
 
     function view(){
 
@@ -119,419 +134,419 @@
 </head>
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <%
-    Connector connector = new Connector();
-    User user = new User();
-    POI poi = new POI();
-    session.setAttribute("connector", connector);
-    session.setAttribute("user", user);
-    session.setAttribute("poi", poi);
+Connector connector = new Connector();
+User user = new User();
+POI poi = new POI();
+session.setAttribute("connector", connector);
+session.setAttribute("user", user);
+session.setAttribute("poi", poi);
 
-    if(session.getAttribute("recommended") == null){
-        session.setAttribute("recommended", new ArrayList<String>());
+if(session.getAttribute("recommended") == null){
+session.setAttribute("recommended", new ArrayList<String>());
     }
 
-    boolean isAdmin = false;
+    boolean isAdmin = user.isAdmin((String)session.getAttribute("username"),connector.stmt);
+    out.print(isAdmin);
 
-    if(session.getAttribute("isAdmin") != null)
-        isAdmin = session.getAttribute("isAdmin").equals("true") ? true : false;
-%>
+    %>
 
 
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--red-600">
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-            <b><h1>UTrack</h1></b>
-
-        </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-            <%
-            Object username = session.getAttribute("username");
-            if(username != null){
-            %>
-            <b>Welcome, <%=session.getAttribute("username")%></b>
-            <%}%>
-        </div>
-        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--red-900">
-            <a href="#overview" class="mdl-layout__tab is-active">Home</a>
-            <a href="#features" class="mdl-layout__tab">Favorites</a>
-            <a href="browse.jsp" class="mdl-layout__tab">Browse</a>
-            <a href="#view" class="mdl-layout__tab">View Top</a>
-            <a href="#addVisit" class="mdl-layout__tab">FAQ</a>
-            <%if(username == null){%>
-            <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
-            <a href="register.jsp" class="mdl-layout__tab">Register</a>
-            <%}else{%>
-            <a class="mdl-layout__tab" id="account">Account</a>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="account">
-                <form method=post action="signout.jsp" onsubmit="signOut()">
-                    <li class="mdl-menu__item">
-                        <input type=submit class="mdl-menu__item" value="Log out"/>
-                    </li>
-                </form>
-            </ul>
-
-            <!--Add Button-->
-            <button id="view-source"
-                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">
-                <i class="material-icons">add</i>
-                <span class="visuallyhidden">Add</span>
-            </button>
-
-            <ul class="view-source1 mdl-menu mdl-js-menu mdl-menu--top-right" for="view-source">
-                <li class="mdl-menu__item" >
-                    <a href="addVisit.jsp" class="mdl-layout__tab mdl-color-text--grey-700">Add Visit</a>
-                </li>
-
-                <%if(isAdmin){%>
-                <li class="mdl-menu__item" >
-                <a href="addNewPOI.jsp" class="mdl-layout__tab mdl-color-text--grey-700">Add New POI</a>
-                </li>
-                <%}%>
-            </ul>
-            <%}%>
-        </div>
-    </header>
-    <main class="mdl-layout__content">
-
-        <div class="mdl-layout__tab-panel is-active" id="overview">
-            <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
-                <b><h1>Check out these POIs</h1></b>
+        <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--red-600">
+            <div class="mdl-layout--large-screen-only mdl-layout__header-row">
             </div>
-            <!--Use this for each POI-->
-            <!-- Jack Mormon Card -->
-            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-                <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
-                    <!-- Insert Image here for POI-->
-                    <!--<i class="material-icons">play_circle_filled</i>-->
-                    <img src="images/jack-morman.jpg" alt="Jack Mormon image" style="width:220px;height:228px;">
-                </header>
+            <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+                <b><h1>UTrack</h1></b>
 
-                <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                    <div class="mdl-card__supporting-text">
-                        <h4>Jack Mormon Coffee</h4>
-                    </div>
-                    <div class="mdl-card__actions">
-                        <a href="#" class="mdl-button">Read more</a>
-                    </div>
-                </div>
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn-n">
-                    <i class="material-icons">more_vert</i>
-                </button>
-
-                <!-- Menu -->
-                <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn-n">
-                    <li class="mdl-menu__item">Lorem</li>
-                    <li class="mdl-menu__item" disabled>Ipsum</li>
-                    <li class="mdl-menu__item">Dolor</li>
-                </ul>
-
-            </section>
-
-            <!-- Naked Fish Card -->
-            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-                <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
-                    <!-- Insert Image here for POI-->
-                    <!--<i class="material-icons">play_circle_filled</i>-->
-                    <img src="images/naked-fish.jpg" alt="Naked Fish" style="width:220px;height:228px;">
-                </header>
-
-                <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                    <div class="mdl-card__supporting-text">
-                        <h4>Naked Fish</h4>
-                    </div>
-                    <div class="mdl-card__actions">
-                        <a href="#" class="mdl-button">Read more</a>
-                    </div>
-                </div>
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn-nf">
-                    <i class="material-icons">more_vert</i>
-                </button>
-
-                <!-- Menu -->
-                <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn-nf">
-                    <li class="mdl-menu__item">Lorem</li>
-                    <li class="mdl-menu__item" disabled>Ipsum</li>
-                    <li class="mdl-menu__item">Dolor</li>
-                </ul>
-            </section>
-
-            <div id="Recommended">
-                <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
-                    <b><h1>Recommended POIs</h1></b>
-                </div>
+            </div>
+            <div class="mdl-layout--large-screen-only mdl-layout__header-row">
                 <%
-
-                ArrayList<String> recommended = (ArrayList<String>)session.getAttribute("recommended");
-                for(String s : recommended)
-                out.println(
-                "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
-                "<div class=\"mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
-                "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
-                "<div class=\"mdl-card__supporting-text\">" +
-                "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
-                "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
-                "<div class=\"mdl-card__supporting-text\">" +
-
-                    "<div><p><b>" + s + "</b></p></div>" +
-
-                "</div>" +
-                "</div>" +
-                "</String>" +
-                "</div>" +
-                "</div>" +
-                "</div>" +
-                "</section>");
+                Object username = session.getAttribute("username");
+                if(username != null){
                 %>
+                <b>Welcome, <%=session.getAttribute("username")%></b>
+                <%}%>
             </div>
-            <section class="section--footer mdl-color--white mdl-grid">
-                <!--
-                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                    <div class="section__circle-container__circle mdl-color--accent section__circle--big">
+            <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--red-900">
+                <a href="#overview" class="mdl-layout__tab is-active">Home</a>
+                <a href="#features" class="mdl-layout__tab">Favorites</a>
+                <a href="browse.jsp" class="mdl-layout__tab">Browse</a>
+                <a href="#view" class="mdl-layout__tab">View Top</a>
+                <a href="#degrees" class="mdl-layout__tab">Degrees of Separation</a>
+                <a href="#addVisit" class="mdl-layout__tab">FAQ</a>
+                <%if(username == null){%>
+                <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
+                <a href="register.jsp" class="mdl-layout__tab">Register</a>
+                <%}else{%>
+                <a class="mdl-layout__tab" id="account">Account</a>
+                <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="account">
+                    <form method=post action="signout.jsp" onsubmit="signOut()">
+                        <li class="mdl-menu__item">
+                            <input type=submit class="mdl-menu__item" value="Log out"/>
+                        </li>
+                    </form>
+                </ul>
+
+                <!--Add Button-->
+                <button id="view-source"
+                        class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--red-900 mdl-color-text--accent-contrast">
+                    <i class="material-icons">add</i>
+                    <span class="visuallyhidden">Add</span>
+                </button>
+
+                <ul class="view-source1 mdl-menu mdl-js-menu mdl-menu--top-right" for="view-source">
+                    <li class="mdl-menu__item" >
+                        <a href="addVisit.jsp" class="mdl-layout__tab mdl-color-text--grey-700">Add Visit</a>
+                    </li>
+
+                    <%if(isAdmin){%>
+                    <li class="mdl-menu__item" >
+                        <a href="addNewPOI.jsp" class="mdl-layout__tab mdl-color-text--grey-700">Add New POI</a>
+                    </li>
+                    <%}%>
+                </ul>
+                <%}%>
+            </div>
+        </header>
+        <main class="mdl-layout__content">
+
+            <div class="mdl-layout__tab-panel is-active" id="overview">
+                <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
+                    <b><h1>Check out these POIs</h1></b>
+                </div>
+                <!--Use this for each POI-->
+                <!-- Jack Mormon Card -->
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                    <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
+                        <!-- Insert Image here for POI-->
+                        <!--<i class="material-icons">play_circle_filled</i>-->
+                        <img src="images/jack-morman.jpg" alt="Jack Mormon image" style="width:220px;height:228px;">
+                    </header>
+
+                    <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div class="mdl-card__supporting-text">
+                            <h4>Jack Mormon Coffee</h4>
+                        </div>
+                        <div class="mdl-card__actions">
+                            <a href="#" class="mdl-button">Read more</a>
+                        </div>
                     </div>
-                </div>
-                <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                    <h5>Lorem ipsum dolor sit amet</h5>
-                    Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
-                </div>
-                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                    <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
-                </div>
-                <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                    <h5>Lorem ipsum dolor sit amet</h5>
-                    Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
-                </div>
-                -->
-            </section>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn-n">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+
+                    <!-- Menu -->
+                    <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn-n">
+                        <li class="mdl-menu__item">Lorem</li>
+                        <li class="mdl-menu__item" disabled>Ipsum</li>
+                        <li class="mdl-menu__item">Dolor</li>
+                    </ul>
+
+                </section>
+
+                <!-- Naked Fish Card -->
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                    <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
+                        <!-- Insert Image here for POI-->
+                        <!--<i class="material-icons">play_circle_filled</i>-->
+                        <img src="images/naked-fish.jpg" alt="Naked Fish" style="width:220px;height:228px;">
+                    </header>
+
+                    <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div class="mdl-card__supporting-text">
+                            <h4>Naked Fish</h4>
+                        </div>
+                        <div class="mdl-card__actions">
+                            <a href="#" class="mdl-button">Read more</a>
+                        </div>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn-nf">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+
+                    <!-- Menu -->
+                    <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn-nf">
+                        <li class="mdl-menu__item">Lorem</li>
+                        <li class="mdl-menu__item" disabled>Ipsum</li>
+                        <li class="mdl-menu__item">Dolor</li>
+                    </ul>
+                </section>
+
+                <div id="Recommended">
+                    <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
+                        <b><h1>Recommended POIs</h1></b>
+                    </div>
+                    <%
+
+                    ArrayList<String> recommended = (ArrayList<String>)session.getAttribute("recommended");
+                    for(String s : recommended)
+                    out.println(
+                    "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
+                    "<div class=\"mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                    "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                    "<div class=\"mdl-card__supporting-text\">" +
+                        "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
+                        "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
+                        "<div class=\"mdl-card__supporting-text\">" +
+
+                            "<div><p><b>" + s + "</b></p></div>" +
+
+                            "</div>" +
+                        "</div>" +
+                    "</String>" +
+                    "</div>" +
+                "</div>" +
+            "</div>" +
+    "</section>");
+    %>
+    </div>
+    <section class="section--footer mdl-color--white mdl-grid">
+        <!--
+        <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+            <div class="section__circle-container__circle mdl-color--accent section__circle--big">
+            </div>
         </div>
-        <!--Details Section (Don't know what I'll use them for yet)-->
-        <!--
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-                <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-                    <h4 class="mdl-cell mdl-cell--12-col">Details</h4>
-                    <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                        <div class="section__circle-container__circle mdl-color--primary"></div>
-                    </div>
-                    <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                        <h5>Lorem ipsum dolor sit amet</h5>
-                        Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Duis nulla tempor do aute et eiusmod velit exercitation nostrud quis <a href="#">proident minim</a>.
-                    </div>
-                    <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                        <div class="section__circle-container__circle mdl-color--primary"></div>
-                    </div>
-                    <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                        <h5>Lorem ipsum dolor sit amet</h5>
-                        Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Duis nulla tempor do aute et eiusmod velit exercitation nostrud quis <a href="#">proident minim</a>.
-                    </div>
-                    <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                        <div class="section__circle-container__circle mdl-color--primary"></div>
-                    </div>
-                    <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                        <h5>Lorem ipsum dolor sit amet</h5>
-                        Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Duis nulla tempor do aute et eiusmod velit exercitation nostrud quis <a href="#">proident minim</a>.
-                    </div>
-                </div>
-                <div class="mdl-card__actions">
-                    <a href="#" class="mdl-button">Read our features</a>
-                </div>
-            </div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn2">
-                <i class="material-icons">more_vert</i>
-            </button>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn2">
-                <li class="mdl-menu__item">Lorem</li>
-                <li class="mdl-menu__item" disabled>Ipsum</li>
-                <li class="mdl-menu__item">Dolor</li>
-            </ul>
-        </section>
+        <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+            <h5>Lorem ipsum dolor sit amet</h5>
+            Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
+        </div>
+        <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+            <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
+        </div>
+        <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+            <h5>Lorem ipsum dolor sit amet</h5>
+            Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
+        </div>
         -->
-
-        <!--Another way of displaying the data but without an image-->
-        <!--
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-                <div class="mdl-card__supporting-text">
-                    <h4>Technology</h4>
-                    Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris labore nisi amet do dolor eu fugiat consectetur elit cillum esse. Pariatur occaecat nisi laboris tempor laboris eiusmod qui id Lorem esse commodo in. Exercitation aute dolore deserunt culpa consequat elit labore incididunt elit anim.
+    </section>
+    </div>
+    <!--Details Section (Don't know what I'll use them for yet)-->
+    <!--
+    <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+        <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+                <h4 class="mdl-cell mdl-cell--12-col">Details</h4>
+                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                    <div class="section__circle-container__circle mdl-color--primary"></div>
                 </div>
-                <div class="mdl-card__actions">
-                    <a href="#" class="mdl-button">Read our features</a>
+                <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Duis nulla tempor do aute et eiusmod velit exercitation nostrud quis <a href="#">proident minim</a>.
+                </div>
+                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                    <div class="section__circle-container__circle mdl-color--primary"></div>
+                </div>
+                <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Duis nulla tempor do aute et eiusmod velit exercitation nostrud quis <a href="#">proident minim</a>.
+                </div>
+                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                    <div class="section__circle-container__circle mdl-color--primary"></div>
+                </div>
+                <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Duis nulla tempor do aute et eiusmod velit exercitation nostrud quis <a href="#">proident minim</a>.
                 </div>
             </div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn3">
-                <i class="material-icons">more_vert</i>
-            </button>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn3">
-                <li class="mdl-menu__item">Lorem</li>
-                <li class="mdl-menu__item" disabled>Ipsum</li>
-                <li class="mdl-menu__item">Dolor</li>
-            </ul>
-        </section>
-        -->
+            <div class="mdl-card__actions">
+                <a href="#" class="mdl-button">Read our features</a>
+            </div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn2">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn2">
+            <li class="mdl-menu__item">Lorem</li>
+            <li class="mdl-menu__item" disabled>Ipsum</li>
+            <li class="mdl-menu__item">Dolor</li>
+        </ul>
+    </section>
+    -->
 
-        <!-- Cool circle things that I don't know what I'll use them for yet either -->
-        <!--
-        <section class="section--footer mdl-color--white mdl-grid">
-            <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
+    <!--Another way of displaying the data but without an image-->
+    <!--
+    <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+        <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text">
+                <h4>Technology</h4>
+                Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris labore nisi amet do dolor eu fugiat consectetur elit cillum esse. Pariatur occaecat nisi laboris tempor laboris eiusmod qui id Lorem esse commodo in. Exercitation aute dolore deserunt culpa consequat elit labore incididunt elit anim.
             </div>
-            <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                <h5>Lorem ipsum dolor sit amet</h5>
-                Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
+            <div class="mdl-card__actions">
+                <a href="#" class="mdl-button">Read our features</a>
             </div>
-            <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
-                <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
-            </div>
-            <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                <h5>Lorem ipsum dolor sit amet</h5>
-                Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
+        </div>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn3">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn3">
+            <li class="mdl-menu__item">Lorem</li>
+            <li class="mdl-menu__item" disabled>Ipsum</li>
+            <li class="mdl-menu__item">Dolor</li>
+        </ul>
+    </section>
+    -->
+
+    <!-- Cool circle things that I don't know what I'll use them for yet either -->
+    <!--
+    <section class="section--footer mdl-color--white mdl-grid">
+        <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+            <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
+        </div>
+        <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+            <h5>Lorem ipsum dolor sit amet</h5>
+            Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
+        </div>
+        <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+            <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
+        </div>
+        <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+            <h5>Lorem ipsum dolor sit amet</h5>
+            Qui sint ut et qui nisi cupidatat. Reprehenderit nostrud proident officia exercitation anim et pariatur ex.
+        </div>
+    </section>
+</div>
+-->
+
+    <!--For the features tab-->
+    <div class="mdl-layout__tab-panel" id="features">
+        <section class="section--center mdl-grid mdl-grid--no-spacing">
+            <div class="mdl-cell mdl-cell--12-col">
+                <h4>Favorites</h4>
+
+                <ul class="toc">
+                    <a>Jack Mormon</a>
+                    <a>Naked Fish</a>
+                    <a>Tosh's Ramen</a>
+                    <a>Eve's Bakery</a>
+                    <a>Starbucks</a>
+                </ul>
             </div>
         </section>
     </div>
-    -->
 
-        <!--For the features tab-->
-        <div class="mdl-layout__tab-panel" id="features">
-            <section class="section--center mdl-grid mdl-grid--no-spacing">
-                <div class="mdl-cell mdl-cell--12-col">
-                    <h4>Favorites</h4>
+    <!--For New Visit tab-->
 
-                    <ul class="toc">
-                        <a>Jack Mormon</a>
-                        <a>Naked Fish</a>
-                        <a>Tosh's Ramen</a>
-                        <a>Eve's Bakery</a>
-                        <a>Starbucks</a>
-                    </ul>
-                </div>
-            </section>
-        </div>
+    <form method=post action="index.jsp#addVisit">
+        <div class="mdl-layout__tab-panel" id="addVisit">
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
 
-        <!--For New Visit tab-->
+                <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                    <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div>
+                            <h4>New Visit</h4>
+                        </div>
+                        <div class="mdl-card__supporting-text">
 
-        <form method=post action="index.jsp#addVisit">
-            <div class="mdl-layout__tab-panel" id="addVisit">
-                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-
-                    <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div>
-                                <h4>New Visit</h4>
-                            </div>
-                            <div class="mdl-card__supporting-text">
-
-                                <!--POI Selection-->
-                                <div class="mdl-textfield">
-                                    <label class="input_label mdl-color-text--red-900">Select POI</label>
-                                    <input list="pois" name="poi">
-                                    <datalist id="pois">
-                                        <%
-                                        for(String s : poi.getPOIList(connector.stmt)){
-                                        out.println("<option value=\"" + s + "\">");
-                                        }
-                                        %>
-                                    </datalist>
-                                </div>
-
-                                <div class="dropdown">
-                                    <!--<button list="browsers1"class="mdl-button mdl-js-button dropdown-toggle mdl-color-text&#45;&#45;red-900" type="button" data-toggle="dropdown">-->
-                                        <!--<div class="marg">-->
-                                            <!--<strong>-->
-                                                <!--<h7>-->
-                                                    <!--Choose POI-->
-                                                    <!--<span class="caret"></span>-->
-                                                <!--</h7>-->
-                                            <!--</strong>-->
-                                        <!--</div>-->
-                                    <!--</button>-->
-                                    <!--<ul class="dropdown-menu mdl-color-text&#45;&#45;red-900">-->
-                                        <!--<%-->
-                                        <!--for(String s : poi.getPOIList(connector.stmt)){-->
-                                            <!--out.println("<li><a>" + s + "</a></li>");-->
-                                        <!--}-->
-                                        <!--%>-->
-                                    <!--</ul>-->
-                                </div>
-
-                                <!--Cost-->
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input name="cost-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="cost">
-                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Cost</label>
-                                    <span class="mdl-textfield__error">Input must be a number</span>
-                                </div>
-
-                                <!--Party Count-->
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input name="partyCount-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="partyCount">
-                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Number of people</label>
-                                    <span class="mdl-textfield__error">Input must be a number</span>
-                                </div>
-
-                                <!--Date-->
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" name="birthdate"/>
-                                </div>
-
-                                <div>
-                                    <div>
-                                        <button type="button" data-toggle="modal" data-target="#myModal"
-                                                class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
-                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900">
-                                            Add Visit
-                                        </button>
-                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="myModal" role="dialog">
-                                            <div class="modal-dialog">
-
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title">Modal Header</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Some text in the modal.</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
+                            <!--POI Selection-->
+                            <div class="mdl-textfield">
+                                <label class="input_label mdl-color-text--red-900">Select POI</label>
+                                <input list="pois" name="poi">
+                                <datalist id="pois">
                                     <%
-                                    String p = request.getParameter("poi");
-                                    String cost = request.getParameter("cost-in");
-                                    String partyCount = request.getParameter("partyCount-in");
-                                    String date = request.getParameter("date-in");
-
-                                    if(poi != null && cost != null && partyCount != null && date != null)
-                                    {
-                                        //int pid = user.addVisit(p, cost, partyCount, date, connector.stmt, connector._con);
-                                        out.println("It worked!!!!");
-                                        out.println(date);
+                                    for(String s : poi.getPOIList(connector.stmt)){
+                                    out.println("<option value=\"" + s + "\">");
                                     }
                                     %>
+                                </datalist>
+                            </div>
+
+                            <div class="dropdown">
+                                <!--<button list="browsers1"class="mdl-button mdl-js-button dropdown-toggle mdl-color-text&#45;&#45;red-900" type="button" data-toggle="dropdown">-->
+                                <!--<div class="marg">-->
+                                <!--<strong>-->
+                                <!--<h7>-->
+                                <!--Choose POI-->
+                                <!--<span class="caret"></span>-->
+                                <!--</h7>-->
+                                <!--</strong>-->
+                                <!--</div>-->
+                                <!--</button>-->
+                                <!--<ul class="dropdown-menu mdl-color-text&#45;&#45;red-900">-->
+                                <!--<%-->
+                                <!--for(String s : poi.getPOIList(connector.stmt)){-->
+                                <!--out.println("<li><a>" + s + "</a></li>");-->
+                                <!--}-->
+                                <!--%>-->
+                                <!--</ul>-->
+                            </div>
+
+                            <!--Cost-->
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input name="cost-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="cost">
+                                <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="cost">Cost</label>
+                                <span class="mdl-textfield__error">Input must be a number</span>
+                            </div>
+
+                            <!--Party Count-->
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input name="partyCount-in" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="partyCount">
+                                <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="partyCount">Number of people</label>
+                                <span class="mdl-textfield__error">Input must be a number</span>
+                            </div>
+
+                            <!--Date-->
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input" type="text" name="birthdate"/>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <button type="button" data-toggle="modal" data-target="#myModal"
+                                            class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900">
+                                        Add Visit
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="myModal" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Modal Header</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Some text in the modal.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
+
+
+                                <%
+                                String p = request.getParameter("poi");
+                                String cost = request.getParameter("cost-in");
+                                String partyCount = request.getParameter("partyCount-in");
+                                String date = request.getParameter("date-in");
+
+                                if(poi != null && cost != null && partyCount != null && date != null)
+                                {
+                                //int pid = user.addVisit(p, cost, partyCount, date, connector.stmt, connector._con);
+                                out.println("It worked!!!!");
+                                out.println(date);
+                                }
+                                %>
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
-        </form>
+                </div>
+            </section>
+        </div>
+    </form>
 
 
-        <%
-        int limit = 10;
-        //String popPOI = poi.getCostliestForEachCategory(limit, connector.stmt, connector._con);
-        ArrayList<String> popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
+    <%
+    int limit = 10;
+    //String popPOI = poi.getCostliestForEachCategory(limit, connector.stmt, connector._con);
+    ArrayList<String> popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
         int size = popPOI.size();
 
         //String[] ps = popPOI.split("\n");
@@ -542,119 +557,153 @@
         "<section class=\"section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp\">" +
         "<div class=\"mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone\">" +
         "<div class=\"mdl-card__supporting-text\">" +
-        "<b>" + popPOI.get(i) + "</b>" +
-        "</div>" +
+            "<b>" + popPOI.get(i) + "</b>" +
+            "</div>" +
         "<div class=\"mdl-card__actions\">" +
-        "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
+            "<a href=\"#\" class=\"mdl-button\">Read more</a>" +
+            "</div>" +
         "</div>" +
-        "</div>" +
-"</section>";
+        "</section>";
 
-}
-%>
-<!--For the popular tab-->
-<form id="form">
-<div class="mdl-layout__tab-panel" id="view">
-    <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-        <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-            <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
-                    <b><h2 id="here1">View</h2></b>
-                </div>
-                    <% String poiname = (String)session.getAttribute("POIFeedback");%>
+        }
+        %>
+        <!--For the popular tab-->
+        <form id="form">
+            <div class="mdl-layout__tab-panel" id="view">
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                    <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                            <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
+                                <b><h2 id="here1">View</h2></b>
+                            </div>
+                            <% String poiname = (String)session.getAttribute("POIFeedback");%>
 
-                <div class="mdl-card__supporting-text">
-                    <select id="viewBy">
-                        <option value="Most Popular">Most Popular</option>
-                        <option value="Most Expensive">Most Expensive</option>
-                        <option value="Highest Rated">Highest Rated</option>
-                        <option value="Most Useful Users">Most Useful Users</option>
-                        <option value="Most Trusted Users">Most Trusted Users</option>
-                    </select>
+                            <div class="mdl-card__supporting-text">
+                                <select id="viewBy">
+                                    <option value="Most Popular">Most Popular</option>
+                                    <option value="Most Expensive">Most Expensive</option>
+                                    <option value="Highest Rated">Highest Rated</option>
+                                    <option value="Most Useful Users">Most Useful Users</option>
+                                    <option value="Most Trusted Users">Most Trusted Users</option>
+                                </select>
 
-                    <div style="width:100px;"  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input name="amount" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="amount" value="10">
-                        <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="amount">Amount</label>
-                        <span class="mdl-textfield__error">Input must be a number</span>
-                    </div>
-                    <div>
-                    <input type="button" onclick="view()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                <div style="width:100px;"  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input name="amount" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="amount" value="10">
+                                    <label class="mdl-textfield__label input_label mdl-color-text--red-900" for="amount">Amount</label>
+                                    <span class="mdl-textfield__error">Input must be a number</span>
+                                </div>
+                                <div>
+                                    <input type="button" onclick="view()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
                                                 mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
-                           value="Search"/>
+                                           value="Search"/>
+                                </div>
+
+                            </div>
+                            <div id="here"></div>
+                        </div>
+
+
                     </div>
+                </section>
 
-                </div>
-                <div id="here"></div>
             </div>
+        </form>
 
 
+
+        <form id="DOSform">
+            <div class="mdl-layout__tab-panel" id="degrees">
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                    <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                        <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                            <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
+                                <b><h2>Degrees of Separation</h2></b>
+                            </div>
+
+                            <b>View the degrees of separation between you and someone else</b>
+                            <div class="mdl-card__supporting-text">
+
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input name="o_username" class="mdl-textfield__input" type="text" id="o_username">
+                                    <label class="mdl-textfield__label input_label" for="o_username">Username</label>
+                                </div>
+                                <div>
+                                    <input type="button" onclick="DOS()" class="btn-sm mdl-button btn-theme btn-primary mdl-js-button
+                                                mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--red-900"
+                                           value="View"/>
+                                </div>
+
+                            </div>
+                            <div id="DOShere"></div>
+                        </div>
+
+
+                    </div>
+                </section>
+
+            </div>
+        </form>
+        <!-- Footer Information-->
+        <footer class="mdl-mega-footer">
+            <div class="mdl-mega-footer--middle-section">
+                <div class="mdl-mega-footer--drop-down-section">
+                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+                    <h1 class="mdl-mega-footer--heading">Features</h1>
+                    <ul class="mdl-mega-footer--link-list">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Updates</a></li>
+                    </ul>
+                </div>
+                <div class="mdl-mega-footer--drop-down-section">
+                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+                    <h1 class="mdl-mega-footer--heading">Details</h1>
+                    <ul class="mdl-mega-footer--link-list">
+                        <li><a href="#">Spec</a></li>
+                        <li><a href="#">Tools</a></li>
+                        <li><a href="#">Resources</a></li>
+                    </ul>
+                </div>
+                <div class="mdl-mega-footer--drop-down-section">
+                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+                    <h1 class="mdl-mega-footer--heading">Technology</h1>
+                    <ul class="mdl-mega-footer--link-list">
+                        <li><a href="#">How it works</a></li>
+                        <li><a href="#">Patterns</a></li>
+                        <li><a href="#">Usage</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Contracts</a></li>
+                    </ul>
+                </div>
+                <div class="mdl-mega-footer--drop-down-section">
+                    <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+                    <h1 class="mdl-mega-footer--heading">FAQ</h1>
+                    <ul class="mdl-mega-footer--link-list">
+                        <li><a href="#">Questions</a></li>
+                        <li><a href="#">Answers</a></li>
+                        <li><a href="#">Contact us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--
+            <div class="mdl-mega-footer--bottom-section">
+                <div class="mdl-logo">
+                    More Information
+                </div>
+                <ul class="mdl-mega-footer--link-list">
+                    <li><a href="https://developers.google.com/web/starter-kit/">Web Starter Kit</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Privacy and Terms</a></li>
+                </ul>
+            </div>
+            -->
+        </footer>
+
+
+        </main>
         </div>
-    </section>
 
-</div>
-</form>
-
-<!-- Footer Information-->
-<footer class="mdl-mega-footer">
-    <div class="mdl-mega-footer--middle-section">
-        <div class="mdl-mega-footer--drop-down-section">
-            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-            <h1 class="mdl-mega-footer--heading">Features</h1>
-            <ul class="mdl-mega-footer--link-list">
-                <li><a href="#">About</a></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Partners</a></li>
-                <li><a href="#">Updates</a></li>
-            </ul>
-        </div>
-        <div class="mdl-mega-footer--drop-down-section">
-            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-            <h1 class="mdl-mega-footer--heading">Details</h1>
-            <ul class="mdl-mega-footer--link-list">
-                <li><a href="#">Spec</a></li>
-                <li><a href="#">Tools</a></li>
-                <li><a href="#">Resources</a></li>
-            </ul>
-        </div>
-        <div class="mdl-mega-footer--drop-down-section">
-            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-            <h1 class="mdl-mega-footer--heading">Technology</h1>
-            <ul class="mdl-mega-footer--link-list">
-                <li><a href="#">How it works</a></li>
-                <li><a href="#">Patterns</a></li>
-                <li><a href="#">Usage</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">Contracts</a></li>
-            </ul>
-        </div>
-        <div class="mdl-mega-footer--drop-down-section">
-            <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
-            <h1 class="mdl-mega-footer--heading">FAQ</h1>
-            <ul class="mdl-mega-footer--link-list">
-                <li><a href="#">Questions</a></li>
-                <li><a href="#">Answers</a></li>
-                <li><a href="#">Contact us</a></li>
-            </ul>
-        </div>
-    </div>
-    <!--
-    <div class="mdl-mega-footer--bottom-section">
-        <div class="mdl-logo">
-            More Information
-        </div>
-        <ul class="mdl-mega-footer--link-list">
-            <li><a href="https://developers.google.com/web/starter-kit/">Web Starter Kit</a></li>
-            <li><a href="#">Help</a></li>
-            <li><a href="#">Privacy and Terms</a></li>
-        </ul>
-    </div>
-    -->
-</footer>
-
-
-</main>
-</div>
-
-<script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+        <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 </body>
 </html>

@@ -41,6 +41,8 @@ POI poi = (POI)session.getAttribute("poi");
 
 String view = request.getParameter("view");
 
+String dos = request.getParameter("dos");
+
 if(view != null && view.equals("true")){
     String viewBy = request.getParameter("viewBy");
     String lim = request.getParameter("limit");
@@ -82,6 +84,14 @@ if(view != null && view.equals("true")){
     }
 
 
+}
+else if(dos != null && dos.equals("true")){
+
+    String ouname = request.getParameter("ouname");
+    String myuname = (String)session.getAttribute("username");
+
+    out.println("The degree('s) of separation between " + myuname + " and " + ouname + " is/are ");
+    out.println("<div>" + user.degreesOfSeperation(myuname, ouname, connector.stmt) + "</div>");
 }
 
 

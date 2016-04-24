@@ -35,20 +35,15 @@ if(submit != null && submit.equals("true")){
             out.println(user);
             out.println(user);
 
-
-            out.println("hereee");
-            //user.addVisit(vst.pname, vst.cost, vst.numOfPeople, vst.date, connector.stmt, connector._con);
-            //user.setLogin("user2");
             out.println("<p>" + user.getLogin() + "</p>");
-
-            //int pid = user.addVisit(vst.pname, 1000000, 300000, "03-03-1990", connector.stmt, connector._con);
 
             int pid = -1;
 
             try{
                 int cst = Integer.parseInt(vst.cost);
                 int np = Integer.parseInt(vst.numOfPeople);
-                pid = user.addVisit(vst.pname, cst, np, vst.date, connector.stmt, connector._con);
+                String us = (String)session.getAttribute("username");
+                pid = user.addVisit(us, vst.pname, cst, np, vst.date, connector.stmt, connector._con);
 
             }catch(Exception e){
                   out.println(e.toString());
