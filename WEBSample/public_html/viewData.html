@@ -45,7 +45,6 @@ if(view != null && view.equals("true")){
     String viewBy = request.getParameter("viewBy");
     String lim = request.getParameter("limit");
 
-    out.println(viewBy);
     int limit = 10;
     try{
         limit = Integer.parseInt(lim);
@@ -56,13 +55,25 @@ if(view != null && view.equals("true")){
         out.print("Most Popular");
         popPOI = poi.getPopularForEachCategoryArray(limit, connector.stmt, connector._con);
     }
+
     else if(viewBy.equals("Most Expensive")){
         out.print("Most Expensive");
         popPOI = poi.getCostliestForEachCategoryArr(limit, connector.stmt, connector._con);
     }
-    else{
+
+    else if (viewBy.equals("Highest Rated")){
         out.print("Highest Rated");
         popPOI = poi.getBestRatedForEachCategoryArr(limit, connector.stmt, connector._con);
+    }
+
+    else if (viewBy.equals("Most Useful Users")){
+        out.print("i'm useful");
+        popPOI = user.getMostUsefulUsersArr(limit, connector.stmt, connector._con);
+    }
+
+    else if (viewBy.equals("Most Trusted Users")){
+        out.print("i'm trusted");
+        popPOI = user.getMostTrustedArr(limit, connector.stmt, connector._con);
     }
 
     ArrayList<String> resultArr = view(popPOI);

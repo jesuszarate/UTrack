@@ -158,7 +158,7 @@
             <a href="#overview" class="mdl-layout__tab is-active">Home</a>
             <a href="#features" class="mdl-layout__tab">Favorites</a>
             <a href="browse.jsp" class="mdl-layout__tab">Browse</a>
-            <a href="#popular" class="mdl-layout__tab">Popular</a>
+            <a href="#view" class="mdl-layout__tab">View Top</a>
             <a href="#addVisit" class="mdl-layout__tab">FAQ</a>
             <%if(username == null){%>
             <a href="signin.jsp" class="mdl-layout__tab">Sign in</a>
@@ -554,33 +554,22 @@
 %>
 <!--For the popular tab-->
 <form id="form">
-<div class="mdl-layout__tab-panel" id="popular">
+<div class="mdl-layout__tab-panel" id="view">
     <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
         <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
             <div class="mdl-card mdl-cell mdl-cell--12-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
                 <div class="android-be-together-section mdl-typography--text-center mdl-text--grey-900">
                     <b><h2 id="here1">View</h2></b>
                 </div>
-                <!--<div class="mdl-card__supporting-text">-->
                     <% String poiname = (String)session.getAttribute("POIFeedback");%>
-
-                    <!--<h4><%out.println(poiname);%></h4>-->
-                    <!--<%-->
-                    <!--HashMap<String, String> mp = poi.getPOI(poiname, connector.stmt);-->
-                    <!--Iterator it = mp.entrySet().iterator();-->
-                    <!--while (it.hasNext()) {-->
-                    <!--Map.Entry pair = (Map.Entry)it.next();-->
-                    <!--out.println("<div><b>" + pair.getKey() + " : " + pair.getValue() + "</b></div>");-->
-                    <!--it.remove(); // avoids a ConcurrentModificationException-->
-                    <!--}-->
-                    <!--%>-->
-                <!--</div>-->
 
                 <div class="mdl-card__supporting-text">
                     <select id="viewBy">
                         <option value="Most Popular">Most Popular</option>
                         <option value="Most Expensive">Most Expensive</option>
                         <option value="Highest Rated">Highest Rated</option>
+                        <option value="Most Useful Users">Most Useful Users</option>
+                        <option value="Most Trusted Users">Most Trusted Users</option>
                     </select>
 
                     <div style="width:100px;"  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -601,16 +590,7 @@
 
         </div>
     </section>
-    <!--<section class="section&#45;&#45;center mdl-grid mdl-grid&#45;&#45;no-spacing">-->
-        <!--<div class="mdl-cell mdl-cell&#45;&#45;12-col">-->
-            <!--<h4>Popular</h4>-->
-            <!--<%-->
-            <!--for(int i = 0; i < size; i++){-->
-            <!--out.println(pois[i]);-->
-            <!--}-->
-            <!--%>-->
-        <!--</div>-->
-    <!--</section>-->
+
 </div>
 </form>
 
